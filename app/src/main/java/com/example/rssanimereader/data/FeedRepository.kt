@@ -1,6 +1,5 @@
 package com.example.rssanimereader.data
 
-import android.os.Handler
 import com.example.rssanimereader.util.NetManager
 
 class FeedRepository(val netManager: NetManager) {
