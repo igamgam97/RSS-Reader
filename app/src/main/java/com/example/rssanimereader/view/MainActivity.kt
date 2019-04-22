@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity(), FeedRecyclerViewAdapter.OnItemClickLis
         viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
             it?.let {
                 feedRecyclerViewAdapter.replaceData(it)
-                Log.d("baging", it.size.toString())
             }
         })
     }
