@@ -1,4 +1,4 @@
-package com.example.rssanimereader.data
+package com.example.rssanimereader.util.feedUtil
 
 import android.annotation.SuppressLint
 import android.util.Xml
@@ -16,7 +16,7 @@ class Parser {
         private const val TAG_CHANNEL = "channel"
         private const val TAG_ITEM = "item"
         private const val TAG_TITLE = "title"
-        private const val TAG_DESCIPTION = "description"
+        private const val TAG_DESCRIPTION = "description"
         private const val TAG_LINK = "link"
         private const val TAG_PUBLISHED = "pubDate"
     }
@@ -38,7 +38,10 @@ class Parser {
         var entries: List<FeedItem> = ArrayList()
 
         // Search for <feed> tags.
-        parser.require(XmlPullParser.START_TAG, ns, TAG_FEED)
+        parser.require(XmlPullParser.START_TAG,
+            ns,
+            TAG_FEED
+        )
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
@@ -57,7 +60,10 @@ class Parser {
     private fun readChannel(parser: XmlPullParser): List<FeedItem> {
         val episodes = ArrayList<FeedItem>()
 
-        parser.require(XmlPullParser.START_TAG, ns, TAG_CHANNEL)
+        parser.require(XmlPullParser.START_TAG,
+            ns,
+            TAG_CHANNEL
+        )
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
@@ -75,7 +81,10 @@ class Parser {
     @SuppressLint("SimpleDateFormat")
     @Throws(XmlPullParserException::class, IOException::class, ParseException::class)
     private fun readItem(parser: XmlPullParser): FeedItem {
-        parser.require(XmlPullParser.START_TAG, ns, TAG_ITEM)
+        parser.require(XmlPullParser.START_TAG,
+            ns,
+            TAG_ITEM
+        )
         var title: String? = null
         var subtitle: String? = null
         var link: String? = null
@@ -85,10 +94,18 @@ class Parser {
                 continue
             }
             when (parser.name) {
-                TAG_TITLE -> title = readBasicTag(parser, TAG_TITLE)
-                TAG_DESCIPTION -> subtitle = readBasicTag(parser, TAG_DESCIPTION)
-                TAG_LINK -> link = readBasicTag(parser, TAG_LINK)
-                TAG_PUBLISHED -> publishedDate = readBasicTag(parser, TAG_PUBLISHED)
+                TAG_TITLE -> title = readBasicTag(parser,
+                    TAG_TITLE
+                )
+                TAG_DESCRIPTION -> subtitle = readBasicTag(parser,
+                    TAG_DESCRIPTION
+                )
+                TAG_LINK -> link = readBasicTag(parser,
+                    TAG_LINK
+                )
+                TAG_PUBLISHED -> publishedDate = readBasicTag(parser,
+                    TAG_PUBLISHED
+                )
                 else -> skip(parser)
             }
         }
