@@ -1,11 +1,13 @@
-package com.example.rssanimereader.data
+package com.example.rssanimereader.model
 
+import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
+import com.example.rssanimereader.util.feedUtil.FeedItem
 import com.example.rssanimereader.util.NetManager
 
-class FeedRepository(val netManager: NetManager) {
+class FeedRepository(private val netManager: NetManager, downloadUrlSourceManager: DownloadUrlSourceManager) {
 
     val localDataSource = FeedRepoLocalDataSource()
-    val remoteDataSource = FeedRepoRemoteDataSource()
+    val remoteDataSource = FeedRepoRemoteDataSource(downloadUrlSourceManager)
 
     fun getFeeds(onRepositoryReadyCallback: OnRepositoryReadyCallback) {
 
@@ -13,7 +15,7 @@ class FeedRepository(val netManager: NetManager) {
             if (it) {
                 remoteDataSource.getFeeds(object : OnRepoRemoteReadyCallback {
                     override fun onRemoteDataReady(data: ArrayList<FeedItem>) {
-                        localDataSource.saveRepositories(data)
+                        remoteDataSource.saveRepositories(data)
                         onRepositoryReadyCallback.onDataReady(data)
                     }
                 })
