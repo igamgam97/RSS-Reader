@@ -43,6 +43,8 @@ class RSSDownloadService : IntentService("RSSDownloadService") {
         } catch (ex: ConnectException) {
 
             throw ConnectException("Error connection")
+        } finally {
+            httpConnection.disconnect()
         }
 
     }
