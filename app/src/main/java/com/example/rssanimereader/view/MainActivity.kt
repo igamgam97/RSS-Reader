@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rssanimereader.FeedRecyclerViewAdapter
 import com.example.rssanimereader.R
-import com.example.rssanimereader.util.feedUtil.FeedItem
+import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.databinding.ActivityMainBinding
 import com.example.rssanimereader.viewmodel.MainViewModel
 

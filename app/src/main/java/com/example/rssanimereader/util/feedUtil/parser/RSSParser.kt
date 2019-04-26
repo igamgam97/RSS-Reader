@@ -1,7 +1,8 @@
-package com.example.rssanimereader.util.feedUtil
+package com.example.rssanimereader.util.feedUtil.parser
 
 import android.annotation.SuppressLint
 import android.util.Xml
+import com.example.rssanimereader.entity.FeedItem
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
 import org.xmlpull.v1.XmlPullParserException
@@ -9,7 +10,7 @@ import java.io.IOException
 import java.text.ParseException
 
 
-class Parser {
+class RSSParser(private val source: String) : Parser<FeedItem> {
     companion object {
         private val ns: String? = null
         private const val TAG_FEED = "rss"
@@ -22,14 +23,14 @@ class Parser {
     }
 
 
-    fun parse(input: InputStream): List<FeedItem> {
+    override fun parse(input: InputStream): List<FeedItem> {
         input.use {
             val parser = Xml.newPullParser().apply {
                 setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
                 setInput(input, null)
             }
             parser.nextTag()
-            return this@Parser.readFeed(parser)
+            return this@RSSParser.readFeed(parser)
         }
     }
 
@@ -38,7 +39,8 @@ class Parser {
         var entries: List<FeedItem> = ArrayList()
 
         // Search for <feed> tags.
-        parser.require(XmlPullParser.START_TAG,
+        parser.require(
+            XmlPullParser.START_TAG,
             ns,
             TAG_FEED
         )
@@ -60,7 +62,8 @@ class Parser {
     private fun readChannel(parser: XmlPullParser): List<FeedItem> {
         val episodes = ArrayList<FeedItem>()
 
-        parser.require(XmlPullParser.START_TAG,
+        parser.require(
+            XmlPullParser.START_TAG,
             ns,
             TAG_CHANNEL
         )
@@ -81,7 +84,8 @@ class Parser {
     @SuppressLint("SimpleDateFormat")
     @Throws(XmlPullParserException::class, IOException::class, ParseException::class)
     private fun readItem(parser: XmlPullParser): FeedItem {
-        parser.require(XmlPullParser.START_TAG,
+        parser.require(
+            XmlPullParser.START_TAG,
             ns,
             TAG_ITEM
         )
@@ -94,29 +98,45 @@ class Parser {
                 continue
             }
             when (parser.name) {
-                TAG_TITLE -> title = readBasicTag(parser,
+                TAG_TITLE -> title = readBasicTag(
+                    parser,
                     TAG_TITLE
                 )
-                TAG_DESCRIPTION -> subtitle = readBasicTag(parser,
+                TAG_DESCRIPTION -> subtitle = readBasicTag(
+                    parser,
                     TAG_DESCRIPTION
                 )
-                TAG_LINK -> link = readBasicTag(parser,
+                TAG_LINK -> link = readBasicTag(
+                    parser,
                     TAG_LINK
                 )
-                TAG_PUBLISHED -> publishedDate = readBasicTag(parser,
+                TAG_PUBLISHED -> publishedDate = readBasicTag(
+                    parser,
                     TAG_PUBLISHED
                 )
                 else -> skip(parser)
             }
         }
-        return FeedItem(title!!, subtitle!!, link!!, publishedDate!!)
+        return FeedItem(
+            title!!,
+            subtitle!!,
+            link!!,
+            publishedDate!!,
+            source
+        )
     }
 
     @Throws(IOException::class, XmlPullParserException::class)
     private fun readBasicTag(parser: XmlPullParser, tag: String): String? {
-        parser.require(XmlPullParser.START_TAG, ns, tag)
+        parser.require(
+            XmlPullParser.START_TAG,
+            ns, tag
+        )
         val result = readText(parser)
-        parser.require(XmlPullParser.END_TAG, ns, tag)
+        parser.require(
+            XmlPullParser.END_TAG,
+            ns, tag
+        )
         return result
     }
 

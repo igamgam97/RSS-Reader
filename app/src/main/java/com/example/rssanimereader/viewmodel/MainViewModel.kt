@@ -5,13 +5,14 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
-import com.example.rssanimereader.util.feedUtil.FeedItem
+import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.model.FeedRepository
 import com.example.rssanimereader.model.OnRepositoryReadyCallback
 import com.example.rssanimereader.util.NetManager
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    var feedRepository: FeedRepository = FeedRepository(NetManager(getApplication()),
+    var feedRepository: FeedRepository = FeedRepository(
+        NetManager(getApplication()),
         DownloadUrlSourceManager(getApplication())
     )
 
