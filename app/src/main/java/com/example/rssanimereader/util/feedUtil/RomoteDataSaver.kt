@@ -1,6 +1,6 @@
 package com.example.rssanimereader.util.feedUtil
 
-import com.example.rssanimereader.util.feedUtil.parser.Parser
+import java.io.InputStream
 import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
@@ -8,15 +8,15 @@ import java.net.URL
 
 class RomoteDataSaver<T>(
     private val urlPath: String,
-    private val parser: Parser<T>,
-    private val dbInsertAllFeeds: DBInsertAllFeeds<T>
+    private val remoteDataParser: RemoteDataParser<T>,
+    private val saveRemoteDataInterface: SaveRemoteDataInterface<T>
 ) {
 
     fun validateData() {
         val data = getData()
-        dbInsertAllFeeds.open()
-        dbInsertAllFeeds.insertAll(data)
-        dbInsertAllFeeds.close()
+        saveRemoteDataInterface.open()
+        saveRemoteDataInterface.insertAll(data)
+        saveRemoteDataInterface.close()
     }
 
     @Throws(MalformedURLException::class)
@@ -33,7 +33,7 @@ class RomoteDataSaver<T>(
         val responseCode = httpConnection.responseCode
         try {
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                return parser.parse(httpConnection.inputStream)
+                return remoteDataParser.parse(httpConnection.inputStream)
             } else throw ConnectException("Error connection")
         } finally {
             httpConnection.disconnect()
@@ -41,4 +41,16 @@ class RomoteDataSaver<T>(
 
     }
 
+}
+
+interface SaveRemoteDataInterface<T> {
+    fun insertAll(items: List<T>)
+
+    fun open(): SaveRemoteDataInterface<T>
+
+    fun close()
+}
+
+interface RemoteDataParser<T> {
+    fun parse(input: InputStream): List<T>
 }

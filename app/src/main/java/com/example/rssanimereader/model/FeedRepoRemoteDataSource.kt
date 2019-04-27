@@ -3,6 +3,7 @@ package com.example.rssanimereader.model
 import android.os.Handler
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.util.feedUtil.onDownloadUrlSourceManagerCallback
 
 class FeedRepoRemoteDataSource(private val downloadUrlSourceManager: DownloadUrlSourceManager) {
 
@@ -35,12 +36,17 @@ class FeedRepoRemoteDataSource(private val downloadUrlSourceManager: DownloadUrl
                 "bla"
             )
         )
+        downloadUrlSourceManager.getData("https://habr.com/ru/rss/all/all/", object : onDownloadUrlSourceManagerCallback{
+            override fun onDataReady(data: ArrayList<FeedItem>) {
+                onRepositoryReadyCallback.onRemoteDataReady(arrayList)
+            }
 
-        Handler().postDelayed({ onRepositoryReadyCallback.onRemoteDataReady(arrayList) }, 2000)
+        })
+        //Handler().postDelayed({ onRepositoryReadyCallback.onRemoteDataReady(arrayList) }, 2000)
     }
 
     fun saveRepositories(arrayList: ArrayList<FeedItem>) {
-        downloadUrlSourceManager.getData("https://habr.com/ru/rss/all/all/")
+
         //todo save repositories in DB
     }
 }

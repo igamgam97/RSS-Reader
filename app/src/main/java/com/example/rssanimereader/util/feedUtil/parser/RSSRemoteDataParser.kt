@@ -3,6 +3,7 @@ package com.example.rssanimereader.util.feedUtil.parser
 import android.annotation.SuppressLint
 import android.util.Xml
 import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.util.feedUtil.RemoteDataParser
 import org.xmlpull.v1.XmlPullParser
 import java.io.InputStream
 import org.xmlpull.v1.XmlPullParserException
@@ -10,7 +11,7 @@ import java.io.IOException
 import java.text.ParseException
 
 
-class RSSParser(private val source: String) : Parser<FeedItem> {
+class RSSRemoteDataParser(private val source: String) : RemoteDataParser<FeedItem> {
     companion object {
         private val ns: String? = null
         private const val TAG_FEED = "rss"
@@ -30,7 +31,7 @@ class RSSParser(private val source: String) : Parser<FeedItem> {
                 setInput(input, null)
             }
             parser.nextTag()
-            return this@RSSParser.readFeed(parser)
+            return this@RSSRemoteDataParser.readFeed(parser)
         }
     }
 

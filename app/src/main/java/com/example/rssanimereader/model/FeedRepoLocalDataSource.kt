@@ -34,7 +34,7 @@ class FeedRepoLocalDataSource() {
                 "df"
             )
         )
-        Handler().postDelayed({ onRepositoryReadyCallback.onLocalDataReady(arrayList) }, 2000)
+       // Handler().postDelayed({ onRepositoryReadyCallback.onLocalDataReady(arrayList) }, 2000)
     }
 }
 

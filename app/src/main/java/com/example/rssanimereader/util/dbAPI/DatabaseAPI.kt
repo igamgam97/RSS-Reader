@@ -8,10 +8,10 @@ import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.entity.TitleFeedItem
-import com.example.rssanimereader.util.feedUtil.DBInsertAllFeeds
+import com.example.rssanimereader.util.feedUtil.SaveRemoteDataInterface
 
 
-class DatabaseAPI(context: Context) : DBInsertAllFeeds<FeedItem> {
+class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>,GetLocalDataInterface {
 
     private val dbHelper: DatabaseHelper =
         DatabaseHelper(context.applicationContext)
@@ -28,47 +28,47 @@ class DatabaseAPI(context: Context) : DBInsertAllFeeds<FeedItem> {
             return database!!.query(DatabaseHelper.TABLE, columns, null, null, null, null, null)
         }
 
-    val items: List<FeedItem>
-        get() {
-            val items = ArrayList<FeedItem>()
-            val cursor = allEntries
-            if (cursor.moveToFirst()) {
-                do {
-                    val id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID))
-                    val title = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TITLE))
-                    val description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION))
-                    val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LINK))
-                    val pubDate = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PUBDATE))
-                    val source = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_SOURCE))
-                    items.add(
-                        FeedItem(
-                            id,
-                            title,
-                            description,
-                            link,
-                            pubDate,
-                            source
-                        )
+    override fun getItemFeeds(): List<FeedItem> {
+        val items = ArrayList<FeedItem>()
+        val cursor = allEntries
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID))
+                val title = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TITLE))
+                val description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION))
+                val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LINK))
+                val pubDate = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PUBDATE))
+                val source = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_SOURCE))
+                items.add(
+                    FeedItem(
+                        id,
+                        title,
+                        description,
+                        link,
+                        pubDate,
+                        source
                     )
-                } while (cursor.moveToNext())
-            }
-            cursor.close()
-            return items
+                )
+            } while (cursor.moveToNext())
         }
-    val itemsTitle: List<TitleFeedItem>
-        get() {
-            val items = ArrayList<TitleFeedItem>()
-            val cursor = allEntries
-            if (cursor.moveToFirst()) {
-                do {
-                    val id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID))
-                    val title = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TITLE))
-                    items.add(TitleFeedItem(id, title))
-                } while (cursor.moveToNext())
-            }
-            cursor.close()
-            return items
+        cursor.close()
+        return items
+    }
+
+    fun itemsTitleByChannel(): List<TitleFeedItem> {
+        val items = ArrayList<TitleFeedItem>()
+        val cursor = allEntries
+        if (cursor.moveToFirst()) {
+            do {
+                val id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID))
+                val title = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TITLE))
+                items.add(TitleFeedItem(id, title))
+            } while (cursor.moveToNext())
         }
+        cursor.close()
+        return items
+    }
+
     val count: Long
         get() = DatabaseUtils.queryNumEntries(database, DatabaseHelper.TABLE)
 
