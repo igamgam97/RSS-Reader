@@ -7,50 +7,19 @@ import com.example.rssanimereader.util.feedUtil.onDownloadUrlSourceManagerCallba
 
 class FeedRepoRemoteDataSource(private val downloadUrlSourceManager: DownloadUrlSourceManager) {
 
-    fun getFeeds(onRepositoryReadyCallback: OnRepoRemoteReadyCallback) {
-        val arrayList = ArrayList<FeedItem>()
-        arrayList.add(
-            FeedItem(
-                "First",
-                "Owner 1",
-                "link 1",
-                "Sat, 20 Apr 2019 17:55:23 GMT",
-                "bl"
-            )
-        )
-        arrayList.add(
-            FeedItem(
-                "Second",
-                "Owner 2",
-                "link 2",
-                "Sat, 20 Apr 2019 17:55:23 GMT",
-                "b"
-            )
-        )
-        arrayList.add(
-            FeedItem(
-                "Third",
-                "Owner 3",
-                "link 3",
-                "Sat, 20 Apr 2019 17:55:23 GMT",
-                "bla"
-            )
-        )
-        downloadUrlSourceManager.getData("https://habr.com/ru/rss/all/all/", object : onDownloadUrlSourceManagerCallback{
-            override fun onDataReady(data: ArrayList<FeedItem>) {
-                onRepositoryReadyCallback.onRemoteDataReady(arrayList)
-            }
+    fun getFeeds(onRemoteDataReady : (ArrayList<FeedItem>) ->Unit) {
 
-        })
-        //Handler().postDelayed({ onRepositoryReadyCallback.onRemoteDataReady(arrayList) }, 2000)
+        downloadUrlSourceManager.getData("https://habr.com/ru/rss/all/all/") {
+                data -> onRemoteDataReady(data)}
     }
 
     fun saveRepositories(arrayList: ArrayList<FeedItem>) {
 
         //todo save repositories in DB
     }
+    interface OnRepoRemoteReadyCallback {
+        fun onRemoteDataReady(data: ArrayList<FeedItem>)
+    }
 }
 
-interface OnRepoRemoteReadyCallback {
-    fun onRemoteDataReady(data: ArrayList<FeedItem>)
-}
+

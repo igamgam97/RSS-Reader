@@ -23,11 +23,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadFeeds() {
         isLoading.set(true)
-        feedRepository.getFeeds(object : OnRepositoryReadyCallback {
-            override fun onDataReady(data: ArrayList<FeedItem>) {
+        feedRepository.getFeeds { data ->
+            run {
                 isLoading.set(false)
                 feeds.value = data
             }
-        })
+        }
     }
 }

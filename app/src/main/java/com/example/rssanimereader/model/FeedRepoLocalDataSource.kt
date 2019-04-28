@@ -5,7 +5,7 @@ import com.example.rssanimereader.entity.FeedItem
 
 class FeedRepoLocalDataSource() {
 
-    fun getFeeds(onRepositoryReadyCallback: OnRepoLocalReadyCallback) {
+    fun getFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
         val arrayList = ArrayList<FeedItem>()
         arrayList.add(
             FeedItem(
@@ -34,7 +34,7 @@ class FeedRepoLocalDataSource() {
                 "df"
             )
         )
-       // Handler().postDelayed({ onRepositoryReadyCallback.onLocalDataReady(arrayList) }, 2000)
+       Handler().postDelayed({ onDataReady(arrayList) }, 2000)
     }
 }
 

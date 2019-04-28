@@ -1,30 +1,22 @@
 package com.example.rssanimereader.model
 
+import android.util.Log
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.NetManager
 
 class FeedRepository(private val netManager: NetManager, downloadUrlSourceManager: DownloadUrlSourceManager) {
 
-    val localDataSource = FeedRepoLocalDataSource()
-    val remoteDataSource = FeedRepoRemoteDataSource(downloadUrlSourceManager)
+    private val localDataSource = FeedRepoLocalDataSource()
+    private val remoteDataSource = FeedRepoRemoteDataSource(downloadUrlSourceManager)
 
-    fun getFeeds(onRepositoryReadyCallback: OnRepositoryReadyCallback) {
+    fun getFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
 
         netManager.isConnectedToInternet?.let {
             if (it) {
-                remoteDataSource.getFeeds(object : OnRepoRemoteReadyCallback {
-                    override fun onRemoteDataReady(data: ArrayList<FeedItem>) {
-                        remoteDataSource.saveRepositories(data)
-                        onRepositoryReadyCallback.onDataReady(data)
-                    }
-                })
+                remoteDataSource.getFeeds { data -> onDataReady(data) }
             } else {
-                localDataSource.getFeeds(object : OnRepoLocalReadyCallback {
-                    override fun onLocalDataReady(data: ArrayList<FeedItem>) {
-                        onRepositoryReadyCallback.onDataReady(data)
-                    }
-                })
+                localDataSource.getFeeds { data -> onDataReady(data) }
             }
         }
     }
