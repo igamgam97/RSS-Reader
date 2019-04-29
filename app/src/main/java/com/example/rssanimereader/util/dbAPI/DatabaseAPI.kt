@@ -11,7 +11,7 @@ import com.example.rssanimereader.entity.TitleFeedItem
 import com.example.rssanimereader.util.feedUtil.SaveRemoteDataInterface
 
 
-class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>,GetLocalDataInterface {
+class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLocalDataInterface {
 
     private val dbHelper: DatabaseHelper =
         DatabaseHelper(context.applicationContext)

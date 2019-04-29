@@ -7,8 +7,8 @@ import com.example.rssanimereader.entity.FeedItem
 
 
 class DataBaseLoader(private val context: Context) {
-    private lateinit var mWorkerThread : MyWorkerThread
-    fun getData(onDataReady :(ArrayList<FeedItem>)-> Unit) {
+    private lateinit var mWorkerThread: MyWorkerThread
+    fun getData(onDataReady: (ArrayList<FeedItem>) -> Unit) {
         val mUiHandler = Handler()
         mWorkerThread = MyWorkerThread("myWorkerThread")
         val task = Runnable {
@@ -25,10 +25,11 @@ class DataBaseLoader(private val context: Context) {
 
     }
 
-    fun close(){
+    fun close() {
         mWorkerThread.quit()
     }
-    inner class MyWorkerThread(name: String) : HandlerThread(name) {
+
+    private inner class MyWorkerThread(name: String) : HandlerThread(name) {
 
         private var mWorkerHandler: Handler? = null
 

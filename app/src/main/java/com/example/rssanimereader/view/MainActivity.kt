@@ -2,41 +2,22 @@ package com.example.rssanimereader.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.rssanimereader.FeedRecyclerViewAdapter
 import com.example.rssanimereader.R
-import com.example.rssanimereader.databinding.ActivityMainBinding
-import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.viewmodel.MainViewModel
 
-class MainActivity : AppCompatActivity(), FeedRecyclerViewAdapter.OnItemClickListener {
+class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
-    private val feedRecyclerViewAdapter = FeedRecyclerViewAdapter(arrayListOf(), this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
-        binding.viewModel = viewModel
-        binding.executePendingBindings()
+        setContentView(R.layout.activity_main_layout)
 
-        binding.feedRv.layoutManager = LinearLayoutManager(this)
-        binding.feedRv.adapter = feedRecyclerViewAdapter
-        viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
-            it?.let {
-                feedRecyclerViewAdapter.replaceData(it)
-            }
-        })
+        supportFragmentManager.beginTransaction().add(
+            R.id.frag_container,
+            FeedListFragment()
+        ).commit()
 
-
-    }
-
-    override fun onItemClick(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
+
+

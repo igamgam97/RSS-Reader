@@ -46,10 +46,23 @@
                 android:clickable="@{viewModel.isLoading ? false : true}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0"
         />
+        <EditText
+                android:id="@+id/editText1"
+                android:layout_width="255dp"
+                android:layout_height="33dp"
+                android:ems="10"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toStartOf="@+id/refresh_button"
+                android:layout_marginEnd="8dp" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.326"
+                android:hint="@string/sites_and_feeds"
+                app:layout_constraintVertical_bias="1.0" android:inputType="text"
+                android:text="@={viewModel.channel}"
+                android:importantForAutofill="no" tools:targetApi="o"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
