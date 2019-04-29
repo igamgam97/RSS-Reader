@@ -1,9 +1,8 @@
 package com.example.rssanimereader.model
 
-import android.util.Log
-import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.NetManager
+import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 
 class FeedRepository(private val netManager: NetManager, downloadUrlSourceManager: DownloadUrlSourceManager) {
 

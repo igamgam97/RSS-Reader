@@ -1,15 +1,15 @@
 package com.example.rssanimereader.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rssanimereader.FeedRecyclerViewAdapter
 import com.example.rssanimereader.R
-import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.databinding.ActivityMainBinding
+import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity(), FeedRecyclerViewAdapter.OnItemClickListener {

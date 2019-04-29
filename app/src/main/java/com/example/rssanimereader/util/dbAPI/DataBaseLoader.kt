@@ -2,16 +2,8 @@ package com.example.rssanimereader.util.dbAPI
 
 import android.content.Context
 import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.os.HandlerThread
-import android.util.Log
-import android.widget.Toast
 import com.example.rssanimereader.entity.FeedItem
-import javax.xml.datatype.DatatypeConstants.SECONDS
-import javax.xml.datatype.DatatypeConstants.SECONDS
-
-
 
 
 class DataBaseLoader(private val context: Context) {

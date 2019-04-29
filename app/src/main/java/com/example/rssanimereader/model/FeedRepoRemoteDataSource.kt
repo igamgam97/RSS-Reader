@@ -1,9 +1,7 @@
 package com.example.rssanimereader.model
 
-import android.os.Handler
-import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.util.feedUtil.onDownloadUrlSourceManagerCallback
+import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 
 class FeedRepoRemoteDataSource(private val downloadUrlSourceManager: DownloadUrlSourceManager) {
 

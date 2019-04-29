@@ -3,8 +3,8 @@ package com.example.rssanimereader
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.databinding.RvItemFeedBinding
+import com.example.rssanimereader.entity.FeedItem
 
 class FeedRecyclerViewAdapter(
     private var items: ArrayList<FeedItem>,

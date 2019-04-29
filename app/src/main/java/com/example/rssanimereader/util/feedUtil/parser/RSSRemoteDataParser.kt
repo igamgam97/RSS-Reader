@@ -5,9 +5,9 @@ import android.util.Xml
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.feedUtil.RemoteDataParser
 import org.xmlpull.v1.XmlPullParser
-import java.io.InputStream
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
+import java.io.InputStream
 import java.text.ParseException
 
 

@@ -4,7 +4,6 @@ import android.app.IntentService
 import android.content.Intent
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
-import java.io.InputStream
 
 
 class RSSDownloadService : IntentService("RSSDownloadService") {

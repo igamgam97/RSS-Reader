@@ -4,10 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.util.Log
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.dbAPI.DataBaseLoader
-import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 
 class DownloadUrlSourceManager(private val context: Context) {
 
