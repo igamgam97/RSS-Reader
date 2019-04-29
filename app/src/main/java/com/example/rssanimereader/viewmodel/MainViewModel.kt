@@ -11,7 +11,7 @@ import com.example.rssanimereader.util.dbAPI.DataBaseLoader
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
-    var feedRepository: FeedRepository = FeedRepository(
+    private var feedRepository: FeedRepository = FeedRepository(
         NetManager(getApplication()),
         DownloadUrlSourceManager(getApplication()),
         DataBaseLoader(getApplication())

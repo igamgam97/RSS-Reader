@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import com.example.rssanimereader.entity.FeedItem
 
 class DownloadUrlSourceManager(private val context: Context) {
 
@@ -31,6 +30,3 @@ class DownloadUrlSourceManager(private val context: Context) {
 
 }
 
-interface onDownloadUrlSourceManagerCallback {
-    fun onDataReady(data: ArrayList<FeedItem>)
-}

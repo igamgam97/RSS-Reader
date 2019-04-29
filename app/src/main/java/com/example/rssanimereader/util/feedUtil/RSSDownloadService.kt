@@ -12,7 +12,7 @@ class RSSDownloadService : IntentService("RSSDownloadService") {
     override fun onHandleIntent(intent: Intent) {
         val urlPath = intent.getStringExtra(FeedUtilConstants.URL)
 
-        val dbAPI = RomoteDataSaver(urlPath, RSSRemoteDataParser(urlPath), DatabaseAPI(this))
+        val dbAPI = RemoteDataSaver(urlPath, RSSRemoteDataParser(urlPath), DatabaseAPI(this))
 
         dbAPI.validateData()
         isDataPublishedSuccessful(true)

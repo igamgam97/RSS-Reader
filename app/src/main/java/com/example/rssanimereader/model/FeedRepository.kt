@@ -28,6 +28,3 @@ class FeedRepository(
     }
 }
 
-interface OnRepositoryReadyCallback {
-    fun onDataReady(data: ArrayList<FeedItem>)
-}

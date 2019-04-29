@@ -27,9 +27,6 @@ class FeedRepoRemoteDataSource(
         //todo save repositories in DB
     }
 
-    interface OnRepoRemoteReadyCallback {
-        fun onRemoteDataReady(data: ArrayList<FeedItem>)
-    }
 }
 
 

@@ -14,7 +14,3 @@ class FeedRepoLocalDataSource(private val dataBaseLoader: DataBaseLoader) {
         }
     }
 }
-
-interface OnRepoLocalReadyCallback {
-    fun onLocalDataReady(data: ArrayList<FeedItem>)
-}

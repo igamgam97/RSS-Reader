@@ -18,7 +18,6 @@ import com.example.rssanimereader.viewmodel.MainViewModel
 
 
 class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener {
-    private lateinit var binding: FragmentFeedListBinding
     private val feedRecyclerViewAdapter = FeedRecyclerViewAdapter(arrayListOf(), this)
 
     override fun onCreateView(
@@ -37,8 +36,8 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         binding.feedRv.layoutManager = LinearLayoutManager(activity)
         binding.feedRv.adapter = feedRecyclerViewAdapter
         viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
-            it?.let {
-                feedRecyclerViewAdapter.replaceData(it)
+            it?.let {data->
+                feedRecyclerViewAdapter.replaceData(data)
             }
         })
         return binding.root

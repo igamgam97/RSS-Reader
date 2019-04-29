@@ -22,7 +22,7 @@ class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLoca
             val columns = arrayOf(
                 DatabaseHelper.COLUMN_ID,
                 DatabaseHelper.COLUMN_TITLE, DatabaseHelper.COLUMN_DESCRIPTION,
-                DatabaseHelper.COLUMN_LINK, DatabaseHelper.COLUMN_PUBDATE,
+                DatabaseHelper.COLUMN_LINK, DatabaseHelper.COLUMN_PUB_DATE,
                 DatabaseHelper.COLUMN_SOURCE
             )
             return database!!.query(DatabaseHelper.TABLE, columns, null, null, null, null, null)
@@ -37,7 +37,7 @@ class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLoca
                 val title = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TITLE))
                 val description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION))
                 val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LINK))
-                val pubDate = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PUBDATE))
+                val pubDate = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PUB_DATE))
                 val source = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_SOURCE))
                 items.add(
                     FeedItem(
@@ -89,7 +89,7 @@ class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLoca
             val title = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_TITLE))
             val description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_DESCRIPTION))
             val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_LINK))
-            val pubDate = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PUBDATE))
+            val pubDate = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_PUB_DATE))
             val source = cursor.getString(cursor.getColumnIndex(DatabaseHelper.COLUMN_SOURCE))
             item =
                 FeedItem(id, title, description, link, pubDate, source)
@@ -103,7 +103,7 @@ class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLoca
         cv.put(DatabaseHelper.COLUMN_TITLE, item.itemTitle)
         cv.put(DatabaseHelper.COLUMN_DESCRIPTION, item.itemDesc)
         cv.put(DatabaseHelper.COLUMN_LINK, item.itemLink)
-        cv.put(DatabaseHelper.COLUMN_PUBDATE, item.itemPubDate)
+        cv.put(DatabaseHelper.COLUMN_PUB_DATE, item.itemPubDate)
         cv.put(DatabaseHelper.COLUMN_SOURCE, item.source)
         return database!!.insert(DatabaseHelper.TABLE, null, cv)
     }
@@ -115,7 +115,7 @@ class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLoca
             cv.put(DatabaseHelper.COLUMN_TITLE, it.itemTitle)
             cv.put(DatabaseHelper.COLUMN_DESCRIPTION, it.itemDesc)
             cv.put(DatabaseHelper.COLUMN_LINK, it.itemLink)
-            cv.put(DatabaseHelper.COLUMN_PUBDATE, it.itemPubDate)
+            cv.put(DatabaseHelper.COLUMN_PUB_DATE, it.itemPubDate)
             cv.put(DatabaseHelper.COLUMN_SOURCE, it.source)
             database!!.insert(DatabaseHelper.TABLE, null, cv)
         }
@@ -137,7 +137,7 @@ class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLoca
         cv.put(DatabaseHelper.COLUMN_TITLE, item.itemTitle)
         cv.put(DatabaseHelper.COLUMN_DESCRIPTION, item.itemDesc)
         cv.put(DatabaseHelper.COLUMN_LINK, item.itemLink)
-        cv.put(DatabaseHelper.COLUMN_PUBDATE, item.itemPubDate)
+        cv.put(DatabaseHelper.COLUMN_PUB_DATE, item.itemPubDate)
         cv.put(DatabaseHelper.COLUMN_SOURCE, item.source)
         return database!!.update(DatabaseHelper.TABLE, cv, whereClause, null).toLong()
     }

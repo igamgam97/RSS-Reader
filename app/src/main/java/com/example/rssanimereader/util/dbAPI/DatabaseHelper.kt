@@ -19,7 +19,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
                     COLUMN_TITLE + " TEXT, " +
                     COLUMN_DESCRIPTION + " TEXT, " +
                     COLUMN_LINK + " TEXT, " +
-                    COLUMN_PUBDATE + " TEXT, " +
+                    COLUMN_PUB_DATE + " TEXT, " +
                     COLUMN_SOURCE + " TEXT);"
         )
     }
@@ -37,7 +37,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
         const val COLUMN_TITLE = "title"
         const val COLUMN_DESCRIPTION = "description"
         const val COLUMN_LINK = "feed_link"
-        const val COLUMN_PUBDATE = "pubDate"
+        const val COLUMN_PUB_DATE = "pubDate"
         const val COLUMN_SOURCE = "source"
     }
 }

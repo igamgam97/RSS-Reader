@@ -6,7 +6,7 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 
-class RomoteDataSaver<T>(
+class RemoteDataSaver<T>(
     private val urlPath: String,
     private val remoteDataParser: RemoteDataParser<T>,
     private val saveRemoteDataInterface: SaveRemoteDataInterface<T>
