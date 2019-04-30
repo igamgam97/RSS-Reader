@@ -18,28 +18,31 @@ import com.example.rssanimereader.viewmodel.MainViewModel
 
 
 class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener {
+
     private val feedRecyclerViewAdapter = FeedRecyclerViewAdapter(arrayListOf(), this)
+    lateinit var viewModel: MainViewModel
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
+        viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
+            it?.let { data ->
+                feedRecyclerViewAdapter.replaceData(data)
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val binding: FragmentFeedListBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_feed_list, container, false
         )
-        //todo к чему прикрепить теперь
-        val viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+
         binding.viewModel = viewModel
         binding.executePendingBindings()
-
         binding.feedRv.layoutManager = LinearLayoutManager(activity)
         binding.feedRv.adapter = feedRecyclerViewAdapter
-        viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
-            it?.let {data->
-                feedRecyclerViewAdapter.replaceData(data)
-            }
-        })
         return binding.root
     }
 

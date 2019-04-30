@@ -10,6 +10,7 @@ import com.example.rssanimereader.util.NetManager
 import com.example.rssanimereader.util.dbAPI.DataBaseLoader
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 
+
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var feedRepository: FeedRepository = FeedRepository(
         NetManager(getApplication()),
@@ -32,4 +33,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
         }
     }
+
+
 }
