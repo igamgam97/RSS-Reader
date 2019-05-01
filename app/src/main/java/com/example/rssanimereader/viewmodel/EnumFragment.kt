@@ -1,6 +1,6 @@
 package com.example.rssanimereader.viewmodel
 
-enum class State {
+enum class EnumFragment {
     FeedFragment,
     FeedListFragment,
     SearchFragment

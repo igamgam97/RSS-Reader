@@ -27,7 +27,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val channel = ObservableField<String>()
 
-    fun loadFeeds() {
+    init {
         isLoading.set(true)
         feedRepository.getFeeds { data ->
             run {

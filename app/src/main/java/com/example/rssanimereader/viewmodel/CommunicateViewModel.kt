@@ -6,24 +6,26 @@ import androidx.lifecycle.ViewModel
 
 
 class CommunicateViewModel : ViewModel() {
-    private val mState: MutableLiveData<State> = MutableLiveData<State>()
+    private val mEnumFragment: MutableLiveData<EnumFragment> = MutableLiveData<EnumFragment>()
 
-    val state: LiveData<State>
-        get() = mState
+    val enumFragment: LiveData<EnumFragment>
+        get() = mEnumFragment
 
     init {
-        mState.value = State.FeedListFragment
+        mEnumFragment.value = EnumFragment.SearchFragment
     }
 
     fun onFeedListFramgentState() {
-        mState.value = State.FeedListFragment
+        mEnumFragment.value = EnumFragment.FeedListFragment
     }
 
     fun onSerchFramentState() {
-        mState.value = State.SearchFragment
+        mEnumFragment.value = EnumFragment.SearchFragment
     }
 
     fun onFeedFramentState() {
-        mState.value = State.FeedFragment
+        mEnumFragment.value = EnumFragment.FeedFragment
     }
+
+    var targetChannel = ""
 }

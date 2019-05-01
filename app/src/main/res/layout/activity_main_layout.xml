@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <data>
-
-        <import type="android.view.View"/>
-
-        <variable
-                name="communicateViewModel"
-                type="com.example.rssanimereader.viewmodel.CommunicateViewModel"/>
-    </data>
     <FrameLayout
                  android:id="@+id/frag_container"
                  android:layout_width="match_parent"

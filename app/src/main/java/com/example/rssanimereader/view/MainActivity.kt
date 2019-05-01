@@ -1,22 +1,19 @@
 package com.example.rssanimereader.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.ActivityMainLayoutBinding
-import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
-import com.example.rssanimereader.viewmodel.MainViewModel
-import com.example.rssanimereader.viewmodel.State
+import com.example.rssanimereader.viewmodel.EnumFragment
 
 class MainActivity : AppCompatActivity(), FragmentChangeListener {
 
     lateinit var binding: ActivityMainLayoutBinding
-    lateinit var viewModel:CommunicateViewModel
+    lateinit var viewModel: CommunicateViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,25 +21,15 @@ class MainActivity : AppCompatActivity(), FragmentChangeListener {
         //setContentView(R.layout.activity_main_layout)
         // при смене конфигурации создается еще раз
         viewModel = ViewModelProviders.of(this).get(CommunicateViewModel::class.java)
-        viewModel.state.observe(this, Observer<State> {
+        viewModel.enumFragment.observe(this, Observer<EnumFragment> {
             it?.let {
-                Log.d("bag",it.toString())
-                when(it){
-                    State.FeedListFragment -> setFeedListFragment()
-                    State.FeedFragment -> setFeedFragment()
-                    else -> ""
+                when (it) {
+                    EnumFragment.FeedListFragment -> setFeedListFragment()
+                    EnumFragment.FeedFragment -> setFeedFragment()
+                    EnumFragment.SearchFragment -> setSearchFragment()
                 }
             }
         })
-
-        /*
-        val feedListFragment = FeedListFragment()
-        feedListFragment.retainInstance = true
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.frag_container, feedListFragment)
-            .commit()
-        */
     }
 
     override fun setFeedListFragment() {
@@ -60,6 +47,15 @@ class MainActivity : AppCompatActivity(), FragmentChangeListener {
         feedFragment.retainInstance = true
         supportFragmentManager.beginTransaction()
             .replace(R.id.frag_container, feedFragment, "FeedFragmentTag")
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun setSearchFragment() {
+        val searchFragment = SearchFragment()
+        searchFragment.retainInstance = true
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frag_container, searchFragment, "SearchFragmentTag")
             .addToBackStack(null)
             .commit()
     }
