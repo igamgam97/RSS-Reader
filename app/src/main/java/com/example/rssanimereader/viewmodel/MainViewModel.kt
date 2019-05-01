@@ -1,8 +1,10 @@
 package com.example.rssanimereader.viewmodel
 
 import android.app.Application
+import android.content.ClipData
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.model.FeedRepository
@@ -17,6 +19,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         DownloadUrlSourceManager(getApplication()),
         DataBaseLoader(getApplication())
     )
+    private val selected = MutableLiveData<FeedItem>()
 
     val isLoading = ObservableField(false)
 
@@ -34,5 +37,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+
+    fun select(item: FeedItem) {
+        selected.value = item
+    }
+
+    fun getSelected(): LiveData<FeedItem> {
+        return selected
+    }
 
 }

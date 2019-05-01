@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/frag_container"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-</FrameLayout>
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+                name="communicateViewModel"
+                type="com.example.rssanimereader.viewmodel.CommunicateViewModel"/>
+    </data>
+    <FrameLayout
+                 android:id="@+id/frag_container"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent">
+
+    </FrameLayout>
+</layout>

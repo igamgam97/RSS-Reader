@@ -5,5 +5,7 @@ import androidx.lifecycle.ViewModel
 
 class FeedViewViewModel : ViewModel() {
 
-    val htmlData = ObservableField<String>()
+
+
+
 }
