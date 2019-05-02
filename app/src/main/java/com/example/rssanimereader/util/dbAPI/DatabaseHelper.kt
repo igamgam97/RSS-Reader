@@ -31,7 +31,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 
     companion object {
         private const val DATABASE_NAME = "rss_reader_store.db"
-        private const val SCHEMA = 6
+        private const val SCHEMA = 7
         internal const val TABLE = "feeds"
         const val COLUMN_ID = "_id"
         const val COLUMN_TITLE = "title"

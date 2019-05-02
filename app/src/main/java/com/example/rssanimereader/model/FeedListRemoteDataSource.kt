@@ -4,7 +4,7 @@ import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.dbAPI.DataBaseLoader
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 
-class FeedRepoRemoteDataSource(
+class FeedListRemoteDataSource(
     private val downloadUrlSourceManager: DownloadUrlSourceManager,
     private val dataBaseLoader: DataBaseLoader
 ) {

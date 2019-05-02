@@ -16,18 +16,18 @@ import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.FragmentFeedListBinding
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
-import com.example.rssanimereader.viewmodel.MainViewModel
+import com.example.rssanimereader.viewmodel.FeedListViewModel
 
 
 class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener {
 
     private val feedRecyclerViewAdapter = FeedRecyclerViewAdapter(arrayListOf(), this)
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModel: FeedListViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(MainViewModel::class.java)
+        viewModel = ViewModelProviders.of(activity!!).get(FeedListViewModel::class.java)
         viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
-            it?.let (feedRecyclerViewAdapter::replaceData)
+            it?.let(feedRecyclerViewAdapter::replaceData)
         })
     }
 
@@ -36,11 +36,12 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         savedInstanceState: Bundle?
     ): View? {
         val binding = (DataBindingUtil.inflate(
-            inflater, R.layout.fragment_feed_list, container, false)
+            inflater, R.layout.fragment_feed_list, container, false
+        )
                 as FragmentFeedListBinding)
         // don't work with apply and with
         binding.viewModel = viewModel
-        with(binding){
+        with(binding) {
             executePendingBindings()
             feedRv.layoutManager = LinearLayoutManager(activity)
             feedRv.adapter = feedRecyclerViewAdapter
@@ -50,10 +51,8 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
     }
 
     override fun onItemClick(position: Int) {
-        Log.d("bag","click")
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         communicateViewModel.onFeedFramentState()
-        //(activity as FragmentChangeListener).setFeedListFragment()
-        viewModel.select(viewModel.feeds.value!![position])
+        communicateViewModel.selectedFeed = viewModel.feeds.value!![position]
     }
 }

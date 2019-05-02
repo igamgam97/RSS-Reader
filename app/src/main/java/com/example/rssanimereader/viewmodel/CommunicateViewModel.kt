@@ -3,6 +3,7 @@ package com.example.rssanimereader.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.rssanimereader.entity.FeedItem
 
 
 class CommunicateViewModel : ViewModel() {
@@ -27,5 +28,7 @@ class CommunicateViewModel : ViewModel() {
         mEnumFragment.value = EnumFragment.FeedFragment
     }
 
-    var targetChannel = ""
+    lateinit var targetChannel: String
+
+    lateinit var selectedFeed: FeedItem
 }

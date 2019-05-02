@@ -7,7 +7,7 @@
 
         <variable
                 name="viewModel"
-                type="com.example.rssanimereader.viewmodel.MainViewModel"/>
+                type="com.example.rssanimereader.viewmodel.FeedListViewModel"/>
 
     </data>
 
@@ -22,33 +22,23 @@
                 android:layout_height="48dp"
                 android:indeterminate="true"
                 android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
-                app:layout_constraintBottom_toTopOf="@+id/refresh_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/feed_rv"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:indeterminate="true"
                 android:visibility="@{viewModel.isLoading ? View.GONE : View.VISIBLE}"
-                app:layout_constraintBottom_toTopOf="@+id/refresh_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 tools:listitem="@layout/rv_item_feed"/>
 
-        <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/refresh_button"
-
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintVertical_bias="1.0"
-        />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

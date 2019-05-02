@@ -14,7 +14,6 @@ class SearchViewModel : ViewModel(){
 
     fun searchChannel(){
         if (!targetChannel.get().isNullOrEmpty()){
-            Log.d("bag",targetChannel.get().toString())
             isClickSearchButton.value = !(isClickSearchButton.value ?: false)
         }
     }

@@ -11,7 +11,10 @@ import java.io.InputStream
 import java.text.ParseException
 
 
-class RSSRemoteDataParser(private val source: String) : RemoteDataParser<FeedItem> {
+class RSSRemoteDataParser(
+    private val source: String,
+    private val htmlFormatter: HTMLFormatter<FeedItem>
+) : RemoteDataParser<FeedItem> {
     companion object {
         private val ns: String? = null
         private const val TAG_FEED = "rss"
@@ -103,10 +106,12 @@ class RSSRemoteDataParser(private val source: String) : RemoteDataParser<FeedIte
                     parser,
                     TAG_TITLE
                 )
-                TAG_DESCRIPTION -> subtitle = readBasicTag(
-                    parser,
-                    TAG_DESCRIPTION
-                )
+                TAG_DESCRIPTION -> {
+                    subtitle = readBasicTag(
+                        parser,
+                        TAG_DESCRIPTION
+                    )
+                }
                 TAG_LINK -> link = readBasicTag(
                     parser,
                     TAG_LINK
@@ -118,11 +123,19 @@ class RSSRemoteDataParser(private val source: String) : RemoteDataParser<FeedIte
                 else -> skip(parser)
             }
         }
-        return FeedItem(
+        val feedItem =FeedItem(
             title!!,
             subtitle!!,
             link!!,
             publishedDate!!,
+            source
+        )
+        val formatedSubtitle = htmlFormatter.generateHtml(feedItem)
+        return FeedItem(
+            title,
+            formatedSubtitle,
+            link,
+            publishedDate,
             source
         )
     }

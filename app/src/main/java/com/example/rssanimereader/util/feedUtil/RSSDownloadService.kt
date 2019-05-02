@@ -2,6 +2,7 @@ package com.example.rssanimereader.util.feedUtil
 
 import android.app.IntentService
 import android.content.Intent
+import com.example.rssanimereader.util.HTMLFeedFormater
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
 
@@ -12,7 +13,7 @@ class RSSDownloadService : IntentService("RSSDownloadService") {
     override fun onHandleIntent(intent: Intent) {
         val urlPath = intent.getStringExtra(FeedUtilConstants.URL)
 
-        val dbAPI = RemoteDataSaver(urlPath, RSSRemoteDataParser(urlPath), DatabaseAPI(this))
+        val dbAPI = RemoteDataSaver(urlPath, RSSRemoteDataParser(urlPath,HTMLFeedFormater()), DatabaseAPI(this))
 
         dbAPI.validateData()
         isDataPublishedSuccessful(true)
