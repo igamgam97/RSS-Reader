@@ -1,4 +1,4 @@
-package com.example.rssanimereader.model
+package com.example.rssanimereader.model.feedListDataSource
 
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.dbAPI.DataBaseLoader
@@ -7,24 +7,26 @@ import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 class FeedListRemoteDataSource(
     private val downloadUrlSourceManager: DownloadUrlSourceManager,
     private val dataBaseLoader: DataBaseLoader
-) {
+) : FeedListDataSource {
 
-    fun saveFeeds(onRemoteDataReady: () -> Unit) {
+    private fun saveFeeds(onRemoteDataReady: () -> Unit) {
 
         downloadUrlSourceManager.getData("https://habr.com/ru/rss/all/all/") { onRemoteDataReady() }
 
 
     }
 
-    fun getFeeds(onRemoteDataReady: (ArrayList<FeedItem>) -> Unit) {
+    override fun getFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
         //todo check this part on logic
-        dataBaseLoader.getData { data ->
-            run {
-                onRemoteDataReady(data)
-                dataBaseLoader.close()
+        saveFeeds {
+            dataBaseLoader.getData { data ->
+                run {
+                    onDataReady(data)
+                    dataBaseLoader.close()
+                }
             }
         }
-        //todo save repositories in DB
+
     }
 
 }
