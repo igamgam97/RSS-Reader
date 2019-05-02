@@ -12,7 +12,7 @@ import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 
 
 class FeedListViewModel(application: Application) : AndroidViewModel(application) {
-    private var feedListRepository: FeedListRepository = FeedListRepository(
+    private val feedListRepository: FeedListRepository = FeedListRepository(
         NetManager(getApplication()),
         DownloadUrlSourceManager(getApplication()),
         DataBaseLoader(getApplication())
