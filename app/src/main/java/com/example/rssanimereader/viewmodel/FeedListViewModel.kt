@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.model.FeedListRepository
 import com.example.rssanimereader.util.NetManager
@@ -11,12 +12,7 @@ import com.example.rssanimereader.util.dbAPI.DataBaseLoader
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 
 
-class FeedListViewModel(application: Application) : AndroidViewModel(application) {
-    private val feedListRepository: FeedListRepository = FeedListRepository(
-        NetManager(getApplication()),
-        DownloadUrlSourceManager(getApplication()),
-        DataBaseLoader(getApplication())
-    )
+class FeedListViewModel(feedListRepository: FeedListRepository) : ViewModel() {
 
     val isLoading = ObservableField(false)
 

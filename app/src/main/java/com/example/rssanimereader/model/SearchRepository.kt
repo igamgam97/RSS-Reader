@@ -1,6 +1,7 @@
 package com.example.rssanimereader.model
 
 import android.content.Context
+import android.util.Log
 
 class SearchRepository(private val context: Context) {
 
@@ -15,6 +16,7 @@ class SearchRepository(private val context: Context) {
 
         val listOfExistingChannels =
             preferences.getStringSet(KEY_CHANNEL, null) ?: HashSet<String>()
+        Log.d("bag", listOfExistingChannels.toString())
         val editor = preferences.edit()
         val newSet = HashSet<String>()
         listOfExistingChannels.add(targetChannels)

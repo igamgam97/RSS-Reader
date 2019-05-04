@@ -25,7 +25,7 @@ class FeedFragment : Fragment() {
     lateinit var viewModel: FeedListViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(FeedListViewModel::class.java)
+        //viewModel = ViewModelProviders.of(activity!!).get(FeedListViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -38,7 +38,6 @@ class FeedFragment : Fragment() {
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         val selectedFeed = communicateViewModel.selectedFeed.itemDesc
         binding.wvMindorks.settings.loadWithOverviewMode = true
-        //binding.wvMindorks.settings.useWideViewPort = true
         binding.wvMindorks.loadData(selectedFeed, "text/html", "UTF-8")
 
         return binding.root

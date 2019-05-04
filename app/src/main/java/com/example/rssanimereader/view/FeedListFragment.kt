@@ -2,7 +2,6 @@ package com.example.rssanimereader.view
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,15 +16,20 @@ import com.example.rssanimereader.databinding.FragmentFeedListBinding
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
 import com.example.rssanimereader.viewmodel.FeedListViewModel
+import com.example.rssanimereader.di.FeedListViewModelFactory
+import com.example.rssanimereader.di.Injection
 
 
 class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener {
 
     private val feedRecyclerViewAdapter = FeedRecyclerViewAdapter(arrayListOf(), this)
     lateinit var viewModel: FeedListViewModel
+    lateinit var feedListViewModelFactory: FeedListViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(activity!!).get(FeedListViewModel::class.java)
+        feedListViewModelFactory = Injection.provideMainViewModelFactory(context!!)
+        viewModel = ViewModelProviders.of(this, feedListViewModelFactory)
+            .get(FeedListViewModel::class.java)
         viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
             it?.let(feedRecyclerViewAdapter::replaceData)
         })
