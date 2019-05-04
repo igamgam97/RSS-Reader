@@ -1,9 +1,8 @@
-package com.example.rssanimereader.model
+package com.example.rssanimereader.model.repository
 
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.util.HTMLFeedFormater
 
-class FeedRepository() {
+class FeedRepository() :Repository {
 
     fun getHTMLTFeed(item :FeedItem,onDataReady: (String) -> Unit) {
     }

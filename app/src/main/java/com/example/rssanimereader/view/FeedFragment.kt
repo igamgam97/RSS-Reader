@@ -2,7 +2,6 @@ package com.example.rssanimereader.view
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.FragmentFeedBinding
-import com.example.rssanimereader.util.HTMLFeedFormater
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
 import com.example.rssanimereader.viewmodel.FeedListViewModel
 

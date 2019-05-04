@@ -1,11 +1,10 @@
 package com.example.rssanimereader.util
 
-import android.util.Log
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.feedUtil.parser.HTMLFormatter
 import java.util.regex.Pattern
 
-class HTMLFeedFormater : HTMLFormatter<FeedItem> {
+class HTMLFeedFormatter : HTMLFormatter<FeedItem> {
     override fun generateHtml(item: FeedItem): String {
 
         val pattern = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>")

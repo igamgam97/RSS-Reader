@@ -1,4 +1,4 @@
-package com.example.rssanimereader.model
+package com.example.rssanimereader.model.dataSource
 
 class FeedDataSource {
 

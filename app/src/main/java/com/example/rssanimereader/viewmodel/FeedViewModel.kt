@@ -4,7 +4,7 @@ package com.example.rssanimereader.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.model.FeedRepository
+import com.example.rssanimereader.model.repository.FeedRepository
 
 class FeedViewModel : ViewModel() {
 

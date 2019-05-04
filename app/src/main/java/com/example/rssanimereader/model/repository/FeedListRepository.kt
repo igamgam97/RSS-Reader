@@ -1,13 +1,13 @@
-package com.example.rssanimereader.model
+package com.example.rssanimereader.model.repository
 
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.model.feedListDataSource.FeedListDataSourceFactory
+import com.example.rssanimereader.model.dataSource.feedListDataSource.FeedListDataSourceFactory
 import com.example.rssanimereader.util.NetManager
 
 class FeedListRepository(
     private val netManager: NetManager,
     private val feedListDataSourceFactory: FeedListDataSourceFactory
-) {
+) : Repository {
 
 
     fun getFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {

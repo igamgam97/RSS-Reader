@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.entity.TitleFeedItem
 import com.example.rssanimereader.util.feedUtil.SaveRemoteDataInterface
@@ -140,5 +141,11 @@ class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLoca
         cv.put(DatabaseHelper.COLUMN_PUB_DATE, item.itemPubDate)
         cv.put(DatabaseHelper.COLUMN_SOURCE, item.source)
         return database!!.update(DatabaseHelper.TABLE, cv, whereClause, null).toLong()
+    }
+
+    fun deleteByChannel(channel: String):Long {
+        val whereClause = "source = ?"
+        val whereArgs = arrayOf(channel)
+        return database!!.delete(DatabaseHelper.TABLE, whereClause, whereArgs ).toLong()
     }
 }

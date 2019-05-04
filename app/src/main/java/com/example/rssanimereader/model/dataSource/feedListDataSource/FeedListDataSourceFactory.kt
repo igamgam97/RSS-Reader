@@ -1,4 +1,4 @@
-package com.example.rssanimereader.model.feedListDataSource
+package com.example.rssanimereader.model.dataSource.feedListDataSource
 
 import com.example.rssanimereader.util.dbAPI.DataBaseLoader
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
