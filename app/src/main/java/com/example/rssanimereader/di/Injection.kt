@@ -3,6 +3,7 @@ package com.example.rssanimereader.di
 import android.content.Context
 import androidx.fragment.app.Fragment
 import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.model.dataSource.ChannelListDataSource
 import com.example.rssanimereader.model.dataSource.feedListDataSource.FeedListDataSourceFactory
 import com.example.rssanimereader.model.repository.FeedListRepository
 import com.example.rssanimereader.model.repository.SearchRepository
@@ -15,6 +16,7 @@ import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 import com.example.rssanimereader.util.feedUtil.RemoteDataSaver
 import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
+import com.example.rssanimereader.view.ChannelListFragment
 import com.example.rssanimereader.view.FeedListFragment
 import com.example.rssanimereader.view.SearchFragment
 
@@ -65,11 +67,18 @@ object Injection {
         return SearchViewModelFactory(searchRepository)
     }
 
+    private fun provideChannelListViewModelFactory(context: Context) : ChannelListViewModelFactory{
+
+        val channelListDataSource = ChannelListDataSource()
+
+        return ChannelListViewModelFactory(channelListDataSource)
+    }
+
     fun provideViewModelFactory(fragment:Fragment) =
             when(fragment){
                 is FeedListFragment -> provideFeedListViewModelFactory(fragment.context!!)
                 is SearchFragment -> provideSearchViewModelFactory(fragment.context!!)
-
+                is ChannelListFragment -> provideChannelListViewModelFactory(fragment.context!!)
                 else -> throw IllegalArgumentException("Unknown ViewModelFactory Class")
             }
 }

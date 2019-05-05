@@ -33,6 +33,7 @@ class FeedFragment : Fragment() {
         val binding: FragmentFeedBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_feed, container, false
         )
+
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         val selectedFeed = communicateViewModel.selectedFeed.itemDesc
         binding.wvMindorks.settings.loadWithOverviewMode = true

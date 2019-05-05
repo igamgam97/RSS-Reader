@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+                name="channel"
+                type="com.example.rssanimereader.entity.ChannelItem"/>
+    </data>
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dp">
+
+
+        <TextView
+                android:id="@+id/channel_title"
+                android:minHeight="60sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:text="@{channel.nameChanel}"
+                android:textSize="@dimen/feed_title_text_size"
+                tools:text="Modern Android App"/>
+
+    </androidx.cardview.widget.CardView>
+</layout>
