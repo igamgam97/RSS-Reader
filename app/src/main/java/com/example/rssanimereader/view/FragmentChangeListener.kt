@@ -5,4 +5,5 @@ interface FragmentChangeListener {
     fun setFeedListFragment()
     fun setFeedFragment()
     fun setSearchFragment()
+    fun setChannelListFragment()
 }

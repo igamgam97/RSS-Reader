@@ -4,4 +4,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_favorite">favorite_channels</string>
+    <string name="action_search">search_channel</string>
+    <string name="action_settings">settings_application</string>
 </resources>

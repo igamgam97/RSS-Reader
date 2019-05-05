@@ -3,6 +3,7 @@ package com.example.rssanimereader.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.R
@@ -27,9 +28,11 @@ class MainActivity : AppCompatActivity(), FragmentChangeListener {
                     EnumFragment.FeedListFragment -> setFeedListFragment()
                     EnumFragment.FeedFragment -> setFeedFragment()
                     EnumFragment.SearchFragment -> setSearchFragment()
+                    EnumFragment.ChannelListFragment -> setChannelListFragment()
                 }
             }
         })
+        binding.mainViewModel = viewModel
     }
 
     override fun setFeedListFragment() {
@@ -44,18 +47,26 @@ class MainActivity : AppCompatActivity(), FragmentChangeListener {
 
     override fun setFeedFragment() {
         val feedFragment = FeedFragment()
-        feedFragment.retainInstance = true
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frag_container, feedFragment, "FeedFragmentTag")
-            .addToBackStack(null)
-            .commit()
+        openFragment(feedFragment, "FeedFragmentTag")
     }
 
     override fun setSearchFragment() {
         val searchFragment = SearchFragment()
-        searchFragment.retainInstance = true
+        openFragment(searchFragment, "SearchFragmentTag")
+    }
+
+
+
+
+    override fun setChannelListFragment() {
+        val channelListFragment =  ChannelListFragment()
+        openFragment(channelListFragment, "ChannelListFragment")
+    }
+
+    fun openFragment (fragment:Fragment,nameFragment:String){
+        fragment.retainInstance = true
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frag_container, searchFragment, "SearchFragmentTag")
+            .replace(R.id.frag_container, fragment, nameFragment)
             .addToBackStack(null)
             .commit()
     }

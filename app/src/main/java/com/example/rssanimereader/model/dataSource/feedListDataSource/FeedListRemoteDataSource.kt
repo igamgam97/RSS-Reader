@@ -11,8 +11,8 @@ class FeedListRemoteDataSource(
 
     private fun saveFeeds(onRemoteDataReady: () -> Unit) {
 
-        downloadUrlSourceManager.getData("https://habr.com/ru/rss/all/all/") { onRemoteDataReady() }
-
+       // downloadUrlSourceManager.getData("https://habr.com/ru/rss/all/all/") { onRemoteDataReady() }
+        downloadUrlSourceManager.getData("https://www.newswise.com/legacy/feed/channels.php?channel=149") { onRemoteDataReady() }
 
     }
 

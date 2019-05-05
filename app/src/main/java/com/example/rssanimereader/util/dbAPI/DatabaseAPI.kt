@@ -6,7 +6,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
-import android.util.Log
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.entity.TitleFeedItem
 import com.example.rssanimereader.util.feedUtil.SaveRemoteDataInterface
@@ -18,20 +17,19 @@ class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLoca
         DatabaseHelper(context.applicationContext)
     private var database: SQLiteDatabase? = null
 
-    private val allEntries: Cursor
-        get() {
-            val columns = arrayOf(
-                DatabaseHelper.COLUMN_ID,
-                DatabaseHelper.COLUMN_TITLE, DatabaseHelper.COLUMN_DESCRIPTION,
-                DatabaseHelper.COLUMN_LINK, DatabaseHelper.COLUMN_PUB_DATE,
-                DatabaseHelper.COLUMN_SOURCE
-            )
-            return database!!.query(DatabaseHelper.TABLE, columns, null, null, null, null, null)
-        }
+    private fun getEntriesByClause(whereClause: String? = null, whereArgs: Array<String>? = null): Cursor {
+        val columns = arrayOf(
+            DatabaseHelper.COLUMN_ID,
+            DatabaseHelper.COLUMN_TITLE, DatabaseHelper.COLUMN_DESCRIPTION,
+            DatabaseHelper.COLUMN_LINK, DatabaseHelper.COLUMN_PUB_DATE,
+            DatabaseHelper.COLUMN_SOURCE
+        )
+        return database!!.query(DatabaseHelper.TABLE, columns, whereClause, whereArgs, null, null, null)
+    }
 
-    override fun getItemFeeds(): List<FeedItem> {
+    override fun getItemFeeds(whereClause: String?, whereArgs: Array<String>?): List<FeedItem> {
         val items = ArrayList<FeedItem>()
-        val cursor = allEntries
+        val cursor = getEntriesByClause(whereClause,whereArgs)
         if (cursor.moveToFirst()) {
             do {
                 val id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID))
@@ -58,7 +56,7 @@ class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLoca
 
     fun itemsTitleByChannel(): List<TitleFeedItem> {
         val items = ArrayList<TitleFeedItem>()
-        val cursor = allEntries
+        val cursor = getEntriesByClause()
         if (cursor.moveToFirst()) {
             do {
                 val id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.COLUMN_ID))
@@ -143,9 +141,16 @@ class DatabaseAPI(context: Context) : SaveRemoteDataInterface<FeedItem>, GetLoca
         return database!!.update(DatabaseHelper.TABLE, cv, whereClause, null).toLong()
     }
 
-    fun deleteByChannel(channel: String):Long {
+
+    fun deleteByChannel(channel: String): Long {
         val whereClause = "source = ?"
         val whereArgs = arrayOf(channel)
-        return database!!.delete(DatabaseHelper.TABLE, whereClause, whereArgs ).toLong()
+        return database!!.delete(DatabaseHelper.TABLE, whereClause, whereArgs).toLong()
+    }
+
+    fun getFeedsByChannel(channel:String){
+        val whereClause = "source = ?"
+        val whereArgs = arrayOf(channel)
+        getItemFeeds(whereClause, whereArgs)
     }
 }

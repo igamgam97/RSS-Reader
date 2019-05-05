@@ -1,8 +1,11 @@
 package com.example.rssanimereader.viewmodel
 
+import android.util.Log
+import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.rssanimereader.R
 import com.example.rssanimereader.entity.FeedItem
 
 
@@ -28,7 +31,21 @@ class CommunicateViewModel : ViewModel() {
         mEnumFragment.value = EnumFragment.FeedFragment
     }
 
+    fun onChannelListFramentState() {
+        mEnumFragment.value = EnumFragment.ChannelListFragment
+    }
+
     lateinit var targetChannel: String
 
     lateinit var selectedFeed: FeedItem
+
+    fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        when (item!!.itemId) {
+            R.id.app_bar_channels -> onChannelListFramentState()
+            R.id.app_bar_search -> onSerchFramentState()
+        }
+
+        return true
+    }
 }
