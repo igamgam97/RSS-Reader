@@ -1,38 +1,48 @@
 package com.example.rssanimereader.viewmodel
 
-import android.util.Log
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
 import com.example.rssanimereader.entity.FeedItem
+import java.util.*
 
 
 class CommunicateViewModel : ViewModel() {
-    private val mEnumFragment: MutableLiveData<EnumFragment> = MutableLiveData<EnumFragment>()
+    val mEnumFragment: MutableLiveData<Stack<EnumFragment>> = MutableLiveData()
 
-    val enumFragment: LiveData<EnumFragment>
+    val enumFragment: LiveData<Stack<EnumFragment>>
         get() = mEnumFragment
 
     init {
-        mEnumFragment.value = EnumFragment.SearchFragment
+        val stack = Stack<EnumFragment>()
+        stack.push(EnumFragment.SearchFragment)
+        mEnumFragment.value = stack
     }
 
     fun onFeedListFramgentState() {
-        mEnumFragment.value = EnumFragment.FeedListFragment
+        val stack = mEnumFragment.value
+        stack!!.push(EnumFragment.FeedListFragment)
+        mEnumFragment.value = stack
     }
 
     fun onSerchFramentState() {
-        mEnumFragment.value = EnumFragment.SearchFragment
+        val stack = mEnumFragment.value
+        stack!!.push(EnumFragment.SearchFragment)
+        mEnumFragment.value = stack
     }
 
     fun onFeedFramentState() {
-        mEnumFragment.value = EnumFragment.FeedFragment
+        val stack = mEnumFragment.value
+        stack!!.push(EnumFragment.FeedFragment)
+        mEnumFragment.value = stack
     }
 
     fun onChannelListFramentState() {
-        mEnumFragment.value = EnumFragment.ChannelListFragment
+        val stack = mEnumFragment.value
+        stack!!.push(EnumFragment.ChannelListFragment)
+        mEnumFragment.value = stack
     }
 
     lateinit var targetChannel: String
