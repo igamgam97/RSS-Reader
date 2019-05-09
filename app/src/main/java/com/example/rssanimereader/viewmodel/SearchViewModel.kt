@@ -1,6 +1,7 @@
 package com.example.rssanimereader.viewmodel
 
 import android.app.Application
+import android.webkit.URLUtil
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -17,10 +18,12 @@ class SearchViewModel(val searchRepository: SearchRepository) : ViewModel() {
 
     val targetChannel = ObservableField<String>()
 
+    //todo add URLUtil.isValidUrl(url)
+
     fun searchChannel() {
 
         targetChannel.get()?.let {
-            if (it.isNotEmpty()) {
+            if (it.isNotEmpty() && URLUtil.isValidUrl(it)) {
                 searchRepository.getData(it) {
                     isClickSearchButton.value = !(isClickSearchButton.value ?: false)
                 }

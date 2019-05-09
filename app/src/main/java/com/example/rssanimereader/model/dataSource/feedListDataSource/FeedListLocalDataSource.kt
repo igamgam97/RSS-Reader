@@ -1,16 +1,25 @@
 package com.example.rssanimereader.model.dataSource.feedListDataSource
 
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.util.dbAPI.DataBaseLoader
+import com.example.rssanimereader.util.dbAPI.FeedApi
 
-class FeedListLocalDataSource(private val dataBaseLoader: DataBaseLoader) :
+class FeedListLocalDataSource(private val feedApi: FeedApi) :
     FeedListDataSource {
 
-    override fun getFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
-        dataBaseLoader.getData { data ->
+    override fun getFeedsByChannel(linkChannel:String, onDataReady: (ArrayList<FeedItem>) -> Unit) {
+
+        feedApi.getFeedsByChannel(linkChannel) { data ->
             run {
                 onDataReady(data)
-                dataBaseLoader.close()
+
+            }
+        }
+    }
+
+    override fun getAllFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
+        feedApi.getAllFeeds { data ->
+            run {
+                onDataReady(data)
             }
         }
     }

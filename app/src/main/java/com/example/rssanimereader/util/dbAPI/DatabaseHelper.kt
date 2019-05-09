@@ -13,31 +13,43 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 
     override fun onCreate(db: SQLiteDatabase) {
 
-        db.execSQL(
-            "CREATE TABLE " + TABLE + " (" +
-                    COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    COLUMN_TITLE + " TEXT, " +
-                    COLUMN_DESCRIPTION + " TEXT, " +
-                    COLUMN_LINK + " TEXT, " +
-                    COLUMN_PUB_DATE + " TEXT, " +
-                    COLUMN_SOURCE + " TEXT);"
-        )
+        db.execSQL(CREATE_TABLE_FEED)
+        db.execSQL(CREATE_TABLE_CHANNEL)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE")
+        db.execSQL("DROP TABLE IF EXISTS $FEED_TABLE")
+        db.execSQL("DROP TABLE IF EXISTS $CHANNEL_TABLE")
         onCreate(db)
     }
 
     companion object {
-        private const val DATABASE_NAME = "rss_reader_store.db"
-        private const val SCHEMA = 7
-        internal const val TABLE = "feeds"
-        const val COLUMN_ID = "_id"
-        const val COLUMN_TITLE = "title"
-        const val COLUMN_DESCRIPTION = "description"
-        const val COLUMN_LINK = "feed_link"
-        const val COLUMN_PUB_DATE = "pubDate"
-        const val COLUMN_SOURCE = "source"
+        private const val DATABASE_NAME="rss_reader_store.db"
+        private const val SCHEMA=9
+        const val FEED_TABLE="feeds"
+        const val FEED_COLUMN_ID="_id"
+        const val FEED_COLUMN_TITLE="title"
+        const val FEED_COLUMN_DESCRIPTION="description"
+        const val FEED_COLUMN_LINK="feed_link"
+        const val FEED_COLUMN_PUB_DATE="pubDate"
+        const val FEED_COLUMN_SOURCE="source"
+        const val CREATE_TABLE_FEED="""CREATE TABLE $FEED_TABLE (
+            $FEED_COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            $FEED_COLUMN_TITLE TEXT,
+            $FEED_COLUMN_DESCRIPTION TEXT,
+            $FEED_COLUMN_LINK TEXT,
+            $FEED_COLUMN_PUB_DATE  TEXT,
+            $FEED_COLUMN_SOURCE  TEXT);"""
+
+        const val CHANNEL_TABLE="channels"
+        const val CHANNEL_LINK = "link"
+        const val CHANNEL_COLUMN_NAME="name"
+        const val CHANNEL_COLUMN_PATH_IMAGE="path_image"
+        const val CREATE_TABLE_CHANNEL="""CREATE TABLE $CHANNEL_TABLE (
+            $CHANNEL_COLUMN_NAME TEXT PRIMARY KEY,
+            $CHANNEL_COLUMN_PATH_IMAGE TEXT);"""
+
     }
+
+
 }

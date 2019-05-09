@@ -8,7 +8,7 @@ class SearchRepository(private val channelSubscriptionsAPI: ChannelSubscriptions
     fun getData(targetChannels: String, onDataReady: () -> Unit) {
         //val preferences = context.getSharedPreferences(FAVORITE_CHANNELS, Context.MODE_PRIVATE)
         //val channelSubscriptionsAPI = ChannelSubscriptionsAPI(context,preferences)
-        channelSubscriptionsAPI.addChannel(targetChannels)
+        //channelSubscriptionsAPI.addChannel(targetChannels)
         onDataReady()
 
     }

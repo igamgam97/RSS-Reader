@@ -1,5 +1,6 @@
 package com.example.rssanimereader
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -12,31 +13,35 @@ class ChannelRecyclerViewAdapter(
 ) : RecyclerView.Adapter<ChannelRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = RvItemChannelBinding.inflate(layoutInflater, parent, false)
+        val layoutInflater=LayoutInflater.from(parent.context)
+        val binding=RvItemChannelBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position], listener)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int)=holder.bind(items[position], listener)
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int=items.size
 
     fun replaceData(items: ArrayList<ChannelItem>) {
-        this.items = items
+        this.items=items
+        notifyDataSetChanged()
+        Log.d("bag", "there")
     }
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
+        fun onDeleteItemClick(position: Int):Boolean
     }
+
 
     class ViewHolder(private var binding: RvItemChannelBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(channel: ChannelItem, listener: OnItemClickListener?) {
-            binding.channel = channel
+            binding.channel=channel
             if (listener != null) binding.root.setOnClickListener { listener.onItemClick(layoutPosition) }
-
-            binding.executePendingBindings()
+            if (listener != null) binding.root.setOnLongClickListener{listener.onDeleteItemClick(layoutPosition)}
+                binding.executePendingBindings()
         }
     }
 }

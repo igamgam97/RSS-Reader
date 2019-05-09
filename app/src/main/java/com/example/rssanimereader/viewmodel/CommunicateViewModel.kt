@@ -17,7 +17,7 @@ class CommunicateViewModel : ViewModel() {
 
     init {
         val stack = Stack<EnumFragment>()
-        stack.push(EnumFragment.SearchFragment)
+        stack.push(EnumFragment.FeedListFragment)
         mEnumFragment.value = stack
     }
 
@@ -45,12 +45,11 @@ class CommunicateViewModel : ViewModel() {
         mEnumFragment.value = stack
     }
 
-    lateinit var targetChannel: String
+    val targetChannel = MutableLiveData<String>()
 
     lateinit var selectedFeed: FeedItem
 
     fun onOptionsItemSelected(item: MenuItem?): Boolean {
-
         when (item!!.itemId) {
             R.id.app_bar_channels -> onChannelListFramentState()
             R.id.app_bar_search -> onSerchFramentState()

@@ -7,4 +7,8 @@
     <string name="action_favorite">favorite_channels</string>
     <string name="action_search">search_channel</string>
     <string name="action_settings">settings_application</string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

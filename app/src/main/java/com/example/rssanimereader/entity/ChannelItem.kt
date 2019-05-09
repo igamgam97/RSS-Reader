@@ -1,5 +1,7 @@
 package com.example.rssanimereader.entity
 
 class ChannelItem(
-    val nameChanel: String
+    val linkChannel: String,
+    val nameChannel:String,
+    val pathImage: String
 )

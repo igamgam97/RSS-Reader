@@ -1,12 +1,16 @@
 package com.example.rssanimereader.model.dataSource
 
 import com.example.rssanimereader.entity.ChannelItem
+import com.example.rssanimereader.util.channelAPI.ChannelSubscriptionsAPI
 
-class ChannelListDataSource(){
-    fun getChannels(onDataReady: (ArrayList<ChannelItem>)-> Unit){
-        val channels = arrayListOf<ChannelItem>(ChannelItem("first"),
-            ChannelItem("second")
-        )
-        onDataReady(channels)
+class ChannelListDataSource(val channelApi: ChannelSubscriptionsAPI) {
+    fun getChannels(onDataReady: (ArrayList<ChannelItem>) -> Unit) {
+
+        channelApi.getChannels(onDataReady)
+
+    }
+
+    fun deleteChannels(nameChannel:String,onDataReady: ( (ArrayList<ChannelItem>)) -> Unit){
+        channelApi.deleteChannel(nameChannel,onDataReady)
     }
 }

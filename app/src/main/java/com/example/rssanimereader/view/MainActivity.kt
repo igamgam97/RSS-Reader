@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_layout)
-        // при смене конфигурации создается еще раз
         viewModel = ViewModelProviders.of(this).get(CommunicateViewModel::class.java)
         viewModel.enumFragment.observe(this, Observer {
             it?.let {
@@ -35,7 +34,6 @@ class MainActivity : AppCompatActivity() {
 
         val currentFragment = supportFragmentManager
             .findFragmentByTag(tagFragment.toString())
-
         if (currentFragment == null) {
             val fragment = when (tagFragment) {
                 EnumFragment.FeedListFragment -> FeedListFragment()
@@ -45,11 +43,7 @@ class MainActivity : AppCompatActivity() {
             }
             openFragment(fragment, tagFragment.toString())
         } else {
-            supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.frag_container, currentFragment)
-                .addToBackStack(null)
-                .commit()
+            openFragment(currentFragment, tagFragment.toString())
         }
     }
 
@@ -62,9 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Log.d("bag",viewModel.mEnumFragment.value!!.toString())
         viewModel.mEnumFragment.value!!.pop()!!
-        Log.d("bag",viewModel.mEnumFragment.value!!.toString())
         if (viewModel.mEnumFragment.value!!.isNotEmpty()) {
             val state = viewModel.mEnumFragment.value!!.peek()
             setFragment(state)
@@ -72,6 +64,8 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
+
+
 }
 
 

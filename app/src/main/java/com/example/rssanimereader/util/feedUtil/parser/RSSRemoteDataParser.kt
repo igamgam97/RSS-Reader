@@ -1,7 +1,9 @@
 package com.example.rssanimereader.util.feedUtil.parser
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.util.Xml
+import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.feedUtil.RemoteDataParser
 import org.xmlpull.v1.XmlPullParser
@@ -14,20 +16,24 @@ import java.text.ParseException
 class RSSRemoteDataParser(
     private val source: String,
     private val htmlFormatter: HTMLFormatter<FeedItem>
-) : RemoteDataParser<FeedItem> {
+) : RemoteDataParser {
     companion object {
         private val ns: String? = null
         private const val TAG_FEED = "rss"
         private const val TAG_CHANNEL = "channel"
+        private const val TAG_IMAGE = "image"
         private const val TAG_ITEM = "item"
         private const val TAG_TITLE = "title"
+        private const val TAG_CHANNEL_URL_IMAGE = "url"
         private const val TAG_DESCRIPTION = "description"
         private const val TAG_LINK = "link"
         private const val TAG_PUBLISHED = "pubDate"
+        private const val TAG__CHANNEL_TITLE = "title"
+
     }
 
 
-    override fun parse(input: InputStream): List<FeedItem> {
+    override fun parse(input: InputStream): Pair<ArrayList<FeedItem>,ChannelItem> {
         input.use {
             val parser = Xml.newPullParser().apply {
                 setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
@@ -39,9 +45,8 @@ class RSSRemoteDataParser(
     }
 
     @Throws(XmlPullParserException::class, IOException::class, ParseException::class)
-    private fun readFeed(parser: XmlPullParser): List<FeedItem> {
-        var entries: List<FeedItem> = ArrayList()
-
+    private fun readFeed(parser: XmlPullParser): Pair<ArrayList<FeedItem>,ChannelItem> {
+        var pair: Pair<ArrayList<FeedItem>,ChannelItem>? = null
         // Search for <feed> tags.
         parser.require(
             XmlPullParser.START_TAG,
@@ -53,19 +58,19 @@ class RSSRemoteDataParser(
                 continue
             }
             // Look for the <channel> tag.
-            if (parser.name == TAG_CHANNEL) {
-                entries = readChannel(parser)
-            } else {
-                skip(parser)
+            when(parser.name){
+                TAG_CHANNEL ->  pair = readChannel(parser)
+                else -> skip(parser)
             }
         }
-        return entries
+        return pair!!
     }
 
     @Throws(XmlPullParserException::class, IOException::class, ParseException::class)
-    private fun readChannel(parser: XmlPullParser): List<FeedItem> {
+    private fun readChannel(parser: XmlPullParser): Pair<ArrayList<FeedItem>,ChannelItem> {
         val episodes = ArrayList<FeedItem>()
-
+        var channelImageURl:String? = null
+        var channelTitle:String? = null
         parser.require(
             XmlPullParser.START_TAG,
             ns,
@@ -75,14 +80,19 @@ class RSSRemoteDataParser(
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
             }
-            if (parser.name == TAG_ITEM) {
-                episodes.add(readItem(parser))
-            } else {
-                skip(parser)
+            when(parser.name){
+                TAG_ITEM ->  episodes.add(readItem(parser))
+                TAG_IMAGE ->  channelImageURl = readImageItem(parser)
+                TAG__CHANNEL_TITLE -> channelTitle = readBasicTag(
+                    parser,
+                    TAG__CHANNEL_TITLE
+                )
+                else -> skip(parser)
             }
         }
+        val channel = ChannelItem(source, channelTitle!!,channelImageURl!!)
 
-        return episodes
+        return Pair(episodes,channel)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -138,6 +148,30 @@ class RSSRemoteDataParser(
             publishedDate,
             source
         )
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    @Throws(XmlPullParserException::class, IOException::class, ParseException::class)
+    private fun readImageItem(parser: XmlPullParser): String? {
+        parser.require(
+            XmlPullParser.START_TAG,
+            ns,
+            TAG_IMAGE
+        )
+        var imageURL: String? = ""
+        while (parser.next() != XmlPullParser.END_TAG) {
+            if (parser.eventType != XmlPullParser.START_TAG) {
+                continue
+            }
+            when (parser.name) {
+                TAG_CHANNEL_URL_IMAGE -> imageURL = readBasicTag(
+                    parser,
+                    TAG_CHANNEL_URL_IMAGE
+                )
+                else -> skip(parser)
+            }
+        }
+        return imageURL
     }
 
     @Throws(IOException::class, XmlPullParserException::class)

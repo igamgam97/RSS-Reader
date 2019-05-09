@@ -1,33 +1,41 @@
 package com.example.rssanimereader.model.dataSource.feedListDataSource
 
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.util.dbAPI.DataBaseLoader
+import com.example.rssanimereader.util.dbAPI.FeedApi
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 
 class FeedListRemoteDataSource(
     private val downloadUrlSourceManager: DownloadUrlSourceManager,
-    private val dataBaseLoader: DataBaseLoader
+    private val feedApi: FeedApi
 ) : FeedListDataSource {
 
-    private fun saveFeeds(onRemoteDataReady: () -> Unit) {
+    private fun saveFeeds(linkChannel: String, onRemoteDataReady: () -> Unit) {
 
-       // downloadUrlSourceManager.getData("https://habr.com/ru/rss/all/all/") { onRemoteDataReady() }
-        downloadUrlSourceManager.getData("https://www.newswise.com/legacy/feed/channels.php?channel=149") { onRemoteDataReady() }
+        // downloadUrlSourceManager.getAllFeeds("https://habr.com/ru/rss/all/all/") { onRemoteDataReady() }
+        downloadUrlSourceManager.getData(linkChannel) { onRemoteDataReady() }
 
     }
 
-    override fun getFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
+    override fun getFeedsByChannel(linkChannel: String, onDataReady: (ArrayList<FeedItem>) -> Unit) {
         //todo check this part on logic
-        saveFeeds {
-            dataBaseLoader.getData { data ->
+        saveFeeds(linkChannel) {
+            feedApi.getFeedsByChannel(linkChannel) { data ->
                 run {
                     onDataReady(data)
-                    dataBaseLoader.close()
                 }
             }
         }
-
     }
+
+    override fun getAllFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
+        feedApi.getAllFeeds { data ->
+            run {
+                onDataReady(data)
+                downloadUrlSourceManager.onDisconnect()
+            }
+        }
+    }
+
 
 }
 

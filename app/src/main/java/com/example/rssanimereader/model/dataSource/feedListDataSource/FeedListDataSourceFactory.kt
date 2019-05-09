@@ -1,19 +1,19 @@
 package com.example.rssanimereader.model.dataSource.feedListDataSource
 
-import com.example.rssanimereader.util.dbAPI.DataBaseLoader
+import com.example.rssanimereader.util.dbAPI.FeedApi
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 
 class FeedListDataSourceFactory(
     private val downloadUrlSourceManager: DownloadUrlSourceManager,
-    private val dataBaseLoader: DataBaseLoader
+    private val feedApi: FeedApi
 ) {
 
 
     operator fun invoke(isConnected: Boolean) = when (isConnected) {
-        false -> FeedListLocalDataSource(dataBaseLoader)
+        false -> FeedListLocalDataSource(feedApi)
         true -> FeedListRemoteDataSource(
             downloadUrlSourceManager,
-            dataBaseLoader
+            feedApi
         )
     }
 }

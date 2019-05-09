@@ -6,22 +6,18 @@
     <item
             android:id="@+id/app_bar_channels"
             android:icon="@drawable/baseline_channels_menu_white"
-            android:title="@string/action_favorite"
-            app:showAsAction="ifRoom"/>
+            android:title="@string/action_favorite"/>
     <item
             android:id="@+id/app_bar_fav"
             android:icon="@drawable/baseline_favorite_white"
-            android:title="@string/action_favorite"
-            app:showAsAction="ifRoom"/>
+            android:title="@string/action_favorite"/>
 
     <item
             android:id="@+id/app_bar_search"
             android:icon="@drawable/baseline_search_white"
-            android:title="@string/action_search"
-            app:showAsAction="ifRoom"/>
+            android:title="@string/action_search"/>
     <item
             android:id="@+id/app_bar_settings"
             android:icon="@drawable/baseline_settings_white"
-            android:title="@string/action_settings"
-            app:showAsAction="never"/>
+            android:title="@string/action_settings"/>
 </menu>

@@ -11,7 +11,7 @@ import com.example.rssanimereader.util.HTMLFeedFormatter
 import com.example.rssanimereader.util.NetManager
 import com.example.rssanimereader.util.channelAPI.ChannelSubscriptionsAPI
 import com.example.rssanimereader.util.channelAPI.ChannelSubscriptionsAPI.Companion.FAVORITE_CHANNELS
-import com.example.rssanimereader.util.dbAPI.DataBaseLoader
+import com.example.rssanimereader.util.dbAPI.FeedApi
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 import com.example.rssanimereader.util.feedUtil.RemoteDataSaver
@@ -22,6 +22,7 @@ import com.example.rssanimereader.view.SearchFragment
 
 object Injection {
 
+
     fun provideRemoteDataSaver(context: Context, urlPath:String) : RemoteDataSaver<FeedItem>{
         val databaseAPI = DatabaseAPI(context)
         val htmlFeedFormatter = HTMLFeedFormatter()
@@ -29,11 +30,14 @@ object Injection {
         return RemoteDataSaver(urlPath, rssRemoteDataParser,databaseAPI)
     }
 
-    fun provideDataBaseLoader(context: Context):DataBaseLoader{
-        return DataBaseLoader(context)
+    fun provideDataBaseLoader(context: Context):FeedApi{
+        return FeedApi(context)
     }
 
     private fun provideFeedListViewModelFactory(context: Context): FeedListViewModelFactory {
+
+
+
         val dataBaseLoader = provideDataBaseLoader(context)
 
         val netManager = NetManager(context)
@@ -60,7 +64,7 @@ object Injection {
 
         val preferences = context.getSharedPreferences(FAVORITE_CHANNELS, Context.MODE_PRIVATE)
 
-        val chanellSubscriptionsAPI = ChannelSubscriptionsAPI(context, preferences, dataBaseLoader)
+        val chanellSubscriptionsAPI = ChannelSubscriptionsAPI(context)
 
         val searchRepository = SearchRepository(chanellSubscriptionsAPI)
 
@@ -69,7 +73,9 @@ object Injection {
 
     private fun provideChannelListViewModelFactory(context: Context) : ChannelListViewModelFactory{
 
-        val channelListDataSource = ChannelListDataSource()
+        val channelApi = ChannelSubscriptionsAPI(context)
+
+        val channelListDataSource = ChannelListDataSource(channelApi)
 
         return ChannelListViewModelFactory(channelListDataSource)
     }
