@@ -7,8 +7,9 @@ import android.content.IntentFilter
 import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
+import java.io.Closeable
 
-class DownloadUrlSourceManager(private val context: Context) {
+class DownloadUrlSourceManager(private val context: Context)  {
 
     lateinit var broadcastReceiver: BroadcastReceiver
 

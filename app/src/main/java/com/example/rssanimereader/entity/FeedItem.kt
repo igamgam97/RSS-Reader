@@ -6,11 +6,11 @@ data class FeedItem(
     var id: Long?,
     val itemTitle: String, val itemDesc: String,
     val itemLink: String, val itemPubDate: String,
-    val source: String
+    val itemFavorite:Boolean, val linkChannel: String
 ) : Serializable {
     constructor(
         itemTitle: String, itemDesc: String,
         itemLink: String, itemPubDate: String,
-        source: String
-    ) : this(null, itemTitle, itemDesc, itemLink, itemPubDate, source)
+        itemFavorite: Boolean, source: String
+    ) : this(null, itemTitle, itemDesc, itemLink, itemPubDate,itemFavorite, source)
 }

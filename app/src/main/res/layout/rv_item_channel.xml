@@ -14,8 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="1dp">
-
-
+        <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+                      tools:ignore="UseCompoundDrawables">
+        <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/feedImage"
+                android:loadImage="@{channel.image}" android:contentDescription="@string/channelImage"/>
         <TextView
                 android:id="@+id/channel_title"
                 android:minHeight="60sp"
@@ -23,9 +28,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
-                android:text="@{channel.linkChannel}"
+                android:text="@{channel.nameChannel}"
                 android:textSize="@dimen/feed_title_text_size"
                 tools:text="Modern Android App"/>
-
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </layout>

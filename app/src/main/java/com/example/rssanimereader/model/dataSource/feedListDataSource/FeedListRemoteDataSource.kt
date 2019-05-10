@@ -22,6 +22,7 @@ class FeedListRemoteDataSource(
             feedApi.getFeedsByChannel(linkChannel) { data ->
                 run {
                     onDataReady(data)
+                    downloadUrlSourceManager.onDisconnect()
                 }
             }
         }
@@ -31,7 +32,7 @@ class FeedListRemoteDataSource(
         feedApi.getAllFeeds { data ->
             run {
                 onDataReady(data)
-                downloadUrlSourceManager.onDisconnect()
+
             }
         }
     }

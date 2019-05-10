@@ -1,5 +1,7 @@
 package com.example.rssanimereader.util.feedUtil
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
@@ -18,12 +20,11 @@ class RemoteDataSaver<T>(
 
     fun validateData() {
         val (data, channel) = getData()
+        Log.d("bag",channel.nameChannel)
         saveRemoteDataInterface.open().use {
-            if(!it.isExistChannel(urlPath)){
-                Log.d("bag","yep")
-                it.insertChannel(ChannelItem(urlPath,"",""))
-            }else{
-                Log.d("bag","exist")
+            if(!it.isExistChannel(urlPath)) {
+                channel.image =      downloadImage(channel.pathImage)
+                it.insertChannel(channel)
             }
             it.insertAll(data)
         }
@@ -51,6 +52,21 @@ class RemoteDataSaver<T>(
         } finally {
             httpConnection.disconnect()
         }
+
+    }
+
+    private fun downloadImage(urlPath:String): Bitmap {
+        val url = URL(urlPath)
+        val httpConnection = (url.openConnection() as HttpURLConnection).apply {
+            connectTimeout = FeedUtilConstants.CONNECT_TIMEOUT_VALUE
+            readTimeout = FeedUtilConstants.READ_TIMEOUT_VALUE
+            requestMethod = "GET"
+            doInput = true
+        }
+
+        httpConnection.connect()
+        val input=httpConnection.inputStream
+        return BitmapFactory.decodeStream(input)
 
     }
 

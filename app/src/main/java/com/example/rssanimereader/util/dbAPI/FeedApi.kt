@@ -30,15 +30,5 @@ class FeedApi(private val context: Context) {
 
     }
 
-    fun deleteFeedsofChannel(channel: String) {
-        taskInOtherThread {
-
-            val dataBaseAPI=DatabaseAPI(context).open()
-            dataBaseAPI.use {
-                it.deleteFeedsByChannel(channel)
-            }
-        }
-    }
-
 
 }

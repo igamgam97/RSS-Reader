@@ -29,6 +29,7 @@ class RSSRemoteDataParser(
         private const val TAG_LINK = "link"
         private const val TAG_PUBLISHED = "pubDate"
         private const val TAG__CHANNEL_TITLE = "title"
+        private val TAG_ENCLOSURE="enclosure"
 
     }
 
@@ -47,7 +48,7 @@ class RSSRemoteDataParser(
     @Throws(XmlPullParserException::class, IOException::class, ParseException::class)
     private fun readFeed(parser: XmlPullParser): Pair<ArrayList<FeedItem>,ChannelItem> {
         var pair: Pair<ArrayList<FeedItem>,ChannelItem>? = null
-        // Search for <feed> tags.
+
         parser.require(
             XmlPullParser.START_TAG,
             ns,
@@ -107,6 +108,7 @@ class RSSRemoteDataParser(
         var subtitle: String? = null
         var link: String? = null
         var publishedDate: String? = null
+        var tempLink: String? = null
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
                 continue
@@ -130,6 +132,9 @@ class RSSRemoteDataParser(
                     parser,
                     TAG_PUBLISHED
                 )
+
+                TAG_ENCLOSURE ->   tempLink = readEnclosure(parser) ?: null
+
                 else -> skip(parser)
             }
         }
@@ -138,6 +143,7 @@ class RSSRemoteDataParser(
             subtitle!!,
             link!!,
             publishedDate!!,
+            false,
             source
         )
         val formatedSubtitle = htmlFormatter.generateHtml(feedItem)
@@ -146,6 +152,7 @@ class RSSRemoteDataParser(
             formatedSubtitle,
             link,
             publishedDate,
+            false,
             source
         )
     }
@@ -196,6 +203,15 @@ class RSSRemoteDataParser(
             parser.nextTag()
         }
         return result
+    }
+
+    @Throws(IOException::class, XmlPullParserException::class)
+    private fun readEnclosure(parser: XmlPullParser): String {
+        parser.require(XmlPullParser.START_TAG, ns, TAG_ENCLOSURE)
+        val link=parser.getAttributeValue(null, "url")
+            ?: throw XmlPullParserException("Failed to parse <enclosure>")
+        parser.nextTag()
+        return link
     }
 
     /**

@@ -1,36 +1,16 @@
-package com.example.rssanimereader.util.channelAPI
+package com.example.rssanimereader.util.dbAPI
 
 import android.content.Context
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.util.TaskInOtherThread
-import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 
-class ChannelSubscriptionsAPI(
+class ChannelAPI(
     val context: Context
 ) {
 
 
     val taskInOtherThread: TaskInOtherThread=TaskInOtherThread()
 
-    /* fun addChannel(targetChannel: String) {
-         val listOfExistingChannels = getListChannel()
-         val newSet = HashSet<String>()
-         newSet.addAll(listOfExistingChannels)
-         newSet.add(targetChannel)
-         preferences
-             .edit()
-             .putStringSet(KEY_CHANNEL, newSet)
-             .apply()
-     }*/
-
-    /*fun getListChannel(): MutableSet<String> {
-
-        return preferences.getStringSet(KEY_CHANNEL, HashSet<String>()) ?: HashSet()
-    }*/
-
-    fun deleteChannel(channel: String) {
-
-    }
 
     fun getChannels(onDataReady : (ArrayList<ChannelItem>) -> Unit) {
         taskInOtherThread {

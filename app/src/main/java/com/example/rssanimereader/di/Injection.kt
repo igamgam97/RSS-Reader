@@ -9,8 +9,8 @@ import com.example.rssanimereader.model.repository.FeedListRepository
 import com.example.rssanimereader.model.repository.SearchRepository
 import com.example.rssanimereader.util.HTMLFeedFormatter
 import com.example.rssanimereader.util.NetManager
-import com.example.rssanimereader.util.channelAPI.ChannelSubscriptionsAPI
-import com.example.rssanimereader.util.channelAPI.ChannelSubscriptionsAPI.Companion.FAVORITE_CHANNELS
+import com.example.rssanimereader.util.dbAPI.ChannelAPI
+import com.example.rssanimereader.util.dbAPI.ChannelAPI.Companion.FAVORITE_CHANNELS
 import com.example.rssanimereader.util.dbAPI.FeedApi
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
@@ -64,7 +64,7 @@ object Injection {
 
         val preferences = context.getSharedPreferences(FAVORITE_CHANNELS, Context.MODE_PRIVATE)
 
-        val chanellSubscriptionsAPI = ChannelSubscriptionsAPI(context)
+        val chanellSubscriptionsAPI =ChannelAPI(context)
 
         val searchRepository = SearchRepository(chanellSubscriptionsAPI)
 
@@ -73,7 +73,7 @@ object Injection {
 
     private fun provideChannelListViewModelFactory(context: Context) : ChannelListViewModelFactory{
 
-        val channelApi = ChannelSubscriptionsAPI(context)
+        val channelApi =ChannelAPI(context)
 
         val channelListDataSource = ChannelListDataSource(channelApi)
 

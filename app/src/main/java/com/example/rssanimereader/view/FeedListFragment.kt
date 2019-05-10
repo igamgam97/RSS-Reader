@@ -47,26 +47,21 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
             Log.d("bag",it.toString())
             viewModel.getFeedsByChannel(communicateViewModel.targetChannel.value!!)
         })
-
+        Log.d("bag","onCreate")
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val binding=(DataBindingUtil.inflate(
-            inflater, R.layout.fragment_feed_list, container, false
-        )
-                as FragmentFeedListBinding)
-        // don't work with apply and with
-        binding.viewModel=viewModel
-        with(binding) {
+    ): View? =
+        FragmentFeedListBinding.inflate(inflater, container, false).apply {
+            viewModel=this@FeedListFragment.viewModel
             executePendingBindings()
             feedRv.layoutManager=LinearLayoutManager(activity)
             feedRv.adapter=feedRecyclerViewAdapter
-        }
-        return binding.root
-    }
+
+
+        }.root
 
     override fun onItemClick(position: Int) {
         val communicateViewModel=ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)

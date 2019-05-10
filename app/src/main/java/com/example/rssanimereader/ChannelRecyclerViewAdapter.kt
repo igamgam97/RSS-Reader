@@ -1,6 +1,5 @@
 package com.example.rssanimereader
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -25,12 +24,11 @@ class ChannelRecyclerViewAdapter(
     fun replaceData(items: ArrayList<ChannelItem>) {
         this.items=items
         notifyDataSetChanged()
-        Log.d("bag", "there")
     }
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
-        fun onDeleteItemClick(position: Int):Boolean
+        fun onDeleteItemClick(position: Int): Boolean
     }
 
 
@@ -40,8 +38,8 @@ class ChannelRecyclerViewAdapter(
         fun bind(channel: ChannelItem, listener: OnItemClickListener?) {
             binding.channel=channel
             if (listener != null) binding.root.setOnClickListener { listener.onItemClick(layoutPosition) }
-            if (listener != null) binding.root.setOnLongClickListener{listener.onDeleteItemClick(layoutPosition)}
-                binding.executePendingBindings()
+            if (listener != null) binding.root.setOnLongClickListener { listener.onDeleteItemClick(layoutPosition) }
+            binding.executePendingBindings()
         }
     }
 }
