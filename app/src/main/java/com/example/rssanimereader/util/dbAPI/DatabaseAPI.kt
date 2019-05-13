@@ -6,14 +6,10 @@ import android.content.Context
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
-import android.graphics.Bitmap
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
-import java.io.ByteArrayOutputStream
+import com.example.rssanimereader.util.ImageUtil
 import java.io.Closeable
-import android.graphics.BitmapFactory
-
-
 
 
 class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
@@ -23,42 +19,42 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     }
 
 
-    private val dbHelper: DatabaseHelper=
-        DatabaseHelper(context.applicationContext)
-    private var database: SQLiteDatabase?=null
+    private val dbHelper: DatabaseHelper =
+            DatabaseHelper(context.applicationContext)
+    private var database: SQLiteDatabase? = null
 
-    private fun getEntriesByClause(whereClause: String?=null, whereArgs: Array<String>?=null): Cursor {
-        val columns=arrayOf(
-            DatabaseHelper.FEED_COLUMN_ID,
-            DatabaseHelper.FEED_COLUMN_TITLE, DatabaseHelper.FEED_COLUMN_DESCRIPTION,
-            DatabaseHelper.FEED_COLUMN_LINK, DatabaseHelper.FEED_COLUMN_PUB_DATE,
-            DatabaseHelper.FEED_COLUMN_FAVORITE,DatabaseHelper.FEED_COLUMN_LINK_CHANNEL
+    private fun getEntriesByClause(whereClause: String? = null, whereArgs: Array<String>? = null): Cursor {
+        val columns = arrayOf(
+                DatabaseHelper.FEED_COLUMN_ID,
+                DatabaseHelper.FEED_COLUMN_TITLE, DatabaseHelper.FEED_COLUMN_DESCRIPTION,
+                DatabaseHelper.FEED_COLUMN_LINK, DatabaseHelper.FEED_COLUMN_PUB_DATE,
+                DatabaseHelper.FEED_COLUMN_FAVORITE, DatabaseHelper.FEED_COLUMN_LINK_CHANNEL
         )
         return database!!.query(DatabaseHelper.FEED_TABLE, columns, whereClause, whereArgs, null, null, null)
     }
 
     override fun getItemFeeds(whereClause: String?, whereArgs: Array<String>?): List<FeedItem> {
-        val items=ArrayList<FeedItem>()
-        val cursor=getEntriesByClause(whereClause, whereArgs)
+        val items = ArrayList<FeedItem>()
+        val cursor = getEntriesByClause(whereClause, whereArgs)
         if (cursor.moveToFirst()) {
             do {
-                val id=cursor.getLong(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_ID))
-                val title=cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_TITLE))
-                val description=cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_DESCRIPTION))
-                val link=cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK))
-                val pubDate=cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PUB_DATE))
-                val favorite=cursor.getInt(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_FAVORITE)) == 1
-                val source=cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL))
+                val id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_ID))
+                val title = cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_TITLE))
+                val description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_DESCRIPTION))
+                val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK))
+                val pubDate = cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PUB_DATE))
+                val favorite = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_FAVORITE)) == 1
+                val source = cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL))
                 items.add(
-                    FeedItem(
-                        id,
-                        title,
-                        description,
-                        link,
-                        pubDate,
-                        favorite,
-                        source
-                    )
+                        FeedItem(
+                                id,
+                                title,
+                                description,
+                                link,
+                                pubDate,
+                                favorite,
+                                source
+                        )
                 )
             } while (cursor.moveToNext())
         }
@@ -67,10 +63,10 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     }
 
     val count: Long
-        get()=DatabaseUtils.queryNumEntries(database, DatabaseHelper.FEED_TABLE)
+        get() = DatabaseUtils.queryNumEntries(database, DatabaseHelper.FEED_TABLE)
 
     fun open(): DatabaseAPI {
-        database=dbHelper.writableDatabase
+        database = dbHelper.writableDatabase
         return this
     }
 
@@ -97,24 +93,27 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
 
     fun deleteChannel(channelLink: String): Long {
 
-        val whereClause="link = ?"
-        val whereArgs=arrayOf(channelLink)
+        val whereClause = "link = ?"
+        val whereArgs = arrayOf(channelLink)
         return database!!.delete(DatabaseHelper.CHANNEL_TABLE, whereClause, whereArgs).toLong()
     }
 
     fun getAllChannels(): ArrayList<ChannelItem> {
         val items = ArrayList<ChannelItem>()
-        val cursor=database!!.query(DatabaseHelper.CHANNEL_TABLE,
-            null, null, null, null, null, null)
+        val cursor = database!!.query(
+                DatabaseHelper.CHANNEL_TABLE,
+                null, null, null, null, null, null
+        )
         if (cursor.moveToFirst()) {
             do {
-                val link=cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_LINK))
-                val imagePath=cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE))
-                val nameChannel=cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL__COLUMN_NAME))
-                val image=decodeImage(cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_IMAGE)))
-                items.add(ChannelItem(link,nameChannel, imagePath, image))
+                val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_LINK))
+                val imagePath = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE))
+                val nameChannel = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL__COLUMN_NAME))
+                val image =
+                        ImageUtil.decodeImage(cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_IMAGE)))
+                items.add(ChannelItem(link, nameChannel, imagePath, image))
 
-            }while(cursor.moveToNext())
+            } while (cursor.moveToNext())
 
         }
         cursor.close()
@@ -122,7 +121,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     }
 
     fun insert(item: FeedItem): Long {
-        val cv=ContentValues()
+        val cv = ContentValues()
         cv.put(DatabaseHelper.FEED_COLUMN_TITLE, item.itemTitle)
         cv.put(DatabaseHelper.FEED_COLUMN_DESCRIPTION, item.itemDesc)
         cv.put(DatabaseHelper.FEED_COLUMN_LINK, item.itemLink)
@@ -135,7 +134,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     fun insertAll(items: List<FeedItem>) {
         database?.beginTransaction()
         items.forEach {
-            val cv=ContentValues()
+            val cv = ContentValues()
             cv.put(DatabaseHelper.FEED_COLUMN_TITLE, it.itemTitle)
             cv.put(DatabaseHelper.FEED_COLUMN_DESCRIPTION, it.itemDesc)
             cv.put(DatabaseHelper.FEED_COLUMN_LINK, it.itemLink)
@@ -148,26 +147,26 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     }
 
     fun insertChannel(channel: ChannelItem): Long {
-        val cv=ContentValues()
+        val cv = ContentValues()
         cv.put(DatabaseHelper.CHANNEL_COLUMN_LINK, channel.linkChannel)
         cv.put(DatabaseHelper.CHANNEL__COLUMN_NAME, channel.nameChannel)
         cv.put(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE, channel.pathImage)
-        cv.put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, parseBitmaptoByte(channel.image!!))
+        cv.put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, ImageUtil.parseBitmaptoByte(channel.image!!))
         return database!!.insert(DatabaseHelper.CHANNEL_TABLE, null, cv)
     }
 
 
     fun delete(itemFeedId: Long): Long {
 
-        val whereClause="_id = ?"
-        val whereArgs=arrayOf(itemFeedId.toString())
+        val whereClause = "_id = ?"
+        val whereArgs = arrayOf(itemFeedId.toString())
         return database!!.delete(DatabaseHelper.FEED_TABLE, whereClause, whereArgs).toLong()
     }
 
     fun update(item: FeedItem): Long {
 
-        val whereClause=DatabaseHelper.FEED_COLUMN_ID + "=" + item.id.toString()
-        val cv=ContentValues()
+        val whereClause = DatabaseHelper.FEED_COLUMN_ID + "=" + item.id.toString()
+        val cv = ContentValues()
         cv.put(DatabaseHelper.FEED_COLUMN_TITLE, item.itemTitle)
         cv.put(DatabaseHelper.FEED_COLUMN_DESCRIPTION, item.itemDesc)
         cv.put(DatabaseHelper.FEED_COLUMN_LINK, item.itemLink)
@@ -178,24 +177,26 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
 
 
     fun deleteFeedsByChannel(channel: String): Long {
-        val whereClause="linkChannel = ?"
-        val whereArgs=arrayOf(channel)
+        val whereClause = "linkChannel = ?"
+        val whereArgs = arrayOf(channel)
         return database!!.delete(DatabaseHelper.FEED_TABLE, whereClause, whereArgs).toLong()
     }
 
 
-    fun getFeedsByChannel(channel: String):ArrayList<FeedItem> {
-        val whereClause="linkChannel = ?"
-        val whereArgs=arrayOf(channel)
+    fun getFeedsByChannel(channel: String): ArrayList<FeedItem> {
+        val whereClause = "linkChannel = ?"
+        val whereArgs = arrayOf(channel)
         return getItemFeeds(whereClause, whereArgs) as ArrayList<FeedItem>
     }
 
-    fun isExistChannel(channel: String) :Boolean{
-        val whereClause="link = ?"
-        val whereArgs=arrayOf(channel)
+    fun isExistChannel(channel: String): Boolean {
+        val whereClause = "link = ?"
+        val whereArgs = arrayOf(channel)
 
-        val cursor=database!!.query(DatabaseHelper.CHANNEL_TABLE, null, whereClause,
-            whereArgs, null, null, null)
+        val cursor = database!!.query(
+                DatabaseHelper.CHANNEL_TABLE, null, whereClause,
+                whereArgs, null, null, null
+        )
         if (cursor.count <= 0) {
             cursor.close()
             return false
@@ -204,13 +205,5 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return true
     }
 
-    fun parseBitmaptoByte(bitmap:Bitmap): ByteArray? {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, byteArrayOutputStream)
-        return byteArrayOutputStream.toByteArray()
-    }
 
-    fun decodeImage(image: ByteArray): Bitmap {
-        return BitmapFactory.decodeByteArray(image, 0, image.size)
-    }
 }

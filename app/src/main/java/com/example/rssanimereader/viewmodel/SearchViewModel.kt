@@ -1,9 +1,7 @@
 package com.example.rssanimereader.viewmodel
 
-import android.app.Application
 import android.webkit.URLUtil
 import androidx.databinding.ObservableField
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.model.repository.SearchRepository

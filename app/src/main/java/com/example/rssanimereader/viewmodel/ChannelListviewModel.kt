@@ -12,13 +12,12 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
     var channels = MutableLiveData<ArrayList<ChannelItem>>()
 
 
-
     init {
         getAllChannels()
     }
 
-    fun getAllChannels(){
-        channelListDataSource.getChannels {data ->
+    fun getAllChannels() {
+        channelListDataSource.getChannels { data ->
             run {
                 channels.value = data
 
@@ -26,14 +25,14 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
         }
     }
 
-    fun deleteChannel(nameChannel:String){
-        channelListDataSource.deleteChannels(nameChannel){ data ->
+    fun deleteChannel(nameChannel: String) {
+        channelListDataSource.deleteChannels(nameChannel) { data ->
             channels.value = data
         }
     }
 
     //todo add dialogfragment and clear function
-   /* fun clearFeedsByChannel(nameChannel: String){
+    /* fun clearFeedsByChannel(nameChannel: String){
 
-    }*/
+     }*/
 }

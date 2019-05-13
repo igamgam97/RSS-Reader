@@ -5,14 +5,14 @@ import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.util.TaskInOtherThread
 
 class ChannelAPI(
-    val context: Context
+        val context: Context
 ) {
 
 
-    val taskInOtherThread: TaskInOtherThread=TaskInOtherThread()
+    val taskInOtherThread: TaskInOtherThread = TaskInOtherThread()
 
 
-    fun getChannels(onDataReady : (ArrayList<ChannelItem>) -> Unit) {
+    fun getChannels(onDataReady: (ArrayList<ChannelItem>) -> Unit) {
         taskInOtherThread {
             DatabaseAPI(context).open().use {
                 onDataReady(it.getAllChannels())
@@ -20,7 +20,7 @@ class ChannelAPI(
         }
     }
 
-    fun deleteChannel(channelName:String,onDataReady : (ArrayList<ChannelItem>) -> Unit) {
+    fun deleteChannel(channelName: String, onDataReady: (ArrayList<ChannelItem>) -> Unit) {
         taskInOtherThread {
             DatabaseAPI(context).open().use {
                 it.deleteFeedsByChannel(channelName)
@@ -31,8 +31,8 @@ class ChannelAPI(
     }
 
     companion object {
-        const val FAVORITE_CHANNELS="Favorite_Channels"
-        const val KEY_CHANNEL="KEY_CHANNEL"
+        const val FAVORITE_CHANNELS = "Favorite_Channels"
+        const val KEY_CHANNEL = "KEY_CHANNEL"
     }
 
 }

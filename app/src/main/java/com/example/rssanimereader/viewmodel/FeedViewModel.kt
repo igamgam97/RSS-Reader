@@ -12,9 +12,9 @@ class FeedViewModel : ViewModel() {
 
     val feedHTMLItem = MutableLiveData<String>()
 
-    fun loadGeneratedHTML(item:FeedItem){
-         feedRepository.getHTMLTFeed(item) { feedHTMLItem ->
-             this.feedHTMLItem.value = feedHTMLItem
-         }
+    fun loadGeneratedHTML(item: FeedItem) {
+        feedRepository.getHTMLTFeed(item) { feedHTMLItem ->
+            this.feedHTMLItem.value = feedHTMLItem
+        }
     }
 }

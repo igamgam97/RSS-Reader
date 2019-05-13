@@ -19,29 +19,29 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
         getAllFeeds()
     }
 
-    fun getFeedsByChannel(linkChannel:String){
+    fun getFeedsByChannel(linkChannel: String) {
         isLoading.set(true)
         feedListRepository.getFeedsByChannel(linkChannel) { data ->
             run {
                 isLoading.set(false)
                 feeds.value = data
-                Log.d("bag",data.size.toString())
+                Log.d("bag", data.size.toString())
             }
         }
     }
 
-    fun getAllFeeds(){
+    fun getAllFeeds() {
         isLoading.set(true)
-        feedListRepository.getAllFeeds{ data ->
+        feedListRepository.getAllFeeds { data ->
             run {
                 isLoading.set(false)
                 feeds.value = data
-                Log.d("bag",data.size.toString())
+                Log.d("bag", data.size.toString())
             }
         }
     }
 
-    fun onRefresh(){
+    fun onRefresh() {
         getAllFeeds()
     }
 

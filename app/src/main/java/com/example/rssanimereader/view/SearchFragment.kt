@@ -23,9 +23,9 @@ class SearchFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        searchViewModelFactory=Injection.provideViewModelFactory(this)
-        searchViewModel=ViewModelProviders.of(this, searchViewModelFactory)
-            .get(SearchViewModel::class.java)
+        searchViewModelFactory = Injection.provideViewModelFactory(this)
+        searchViewModel = ViewModelProviders.of(this, searchViewModelFactory)
+                .get(SearchViewModel::class.java)
 
 
         searchViewModel.isClickSearchButton.observe(this, Observer<Boolean> {
@@ -34,16 +34,16 @@ class SearchFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    )=FragmentSeerchBinding.inflate(inflater, container, false).apply {
-        searchViewModel=this@SearchFragment.searchViewModel
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+    ) = FragmentSeerchBinding.inflate(inflater, container, false).apply {
+        searchViewModel = this@SearchFragment.searchViewModel
     }.root
 
     fun onSearchClick() {
-        val communicateViewModel=ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
+        val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         communicateViewModel.onFeedListFramgentState()
-        communicateViewModel.targetChannel.value=searchViewModel.targetChannel.get()!!
+        communicateViewModel.targetChannel.value = searchViewModel.targetChannel.get()!!
     }
 
 }

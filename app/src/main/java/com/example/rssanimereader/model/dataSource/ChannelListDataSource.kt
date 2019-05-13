@@ -10,7 +10,7 @@ class ChannelListDataSource(private val channelApi: ChannelAPI) {
 
     }
 
-    fun deleteChannels(nameChannel:String,onDataReady: ( (ArrayList<ChannelItem>)) -> Unit){
-        channelApi.deleteChannel(nameChannel,onDataReady)
+    fun deleteChannels(nameChannel: String, onDataReady: ((ArrayList<ChannelItem>)) -> Unit) {
+        channelApi.deleteChannel(nameChannel, onDataReady)
     }
 }

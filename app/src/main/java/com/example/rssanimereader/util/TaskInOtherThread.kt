@@ -3,7 +3,7 @@ package com.example.rssanimereader.util
 import android.os.Handler
 import android.os.HandlerThread
 
-class TaskInOtherThread{
+class TaskInOtherThread {
 
     private lateinit var mWorkerThread: MyWorkerThread
 

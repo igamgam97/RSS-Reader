@@ -4,9 +4,9 @@ import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.dbAPI.FeedApi
 
 class FeedListLocalDataSource(private val feedApi: FeedApi) :
-    FeedListDataSource {
+        FeedListDataSource {
 
-    override fun getFeedsByChannel(linkChannel:String, onDataReady: (ArrayList<FeedItem>) -> Unit) {
+    override fun getFeedsByChannel(linkChannel: String, onDataReady: (ArrayList<FeedItem>) -> Unit) {
 
         feedApi.getFeedsByChannel(linkChannel) { data ->
             run {

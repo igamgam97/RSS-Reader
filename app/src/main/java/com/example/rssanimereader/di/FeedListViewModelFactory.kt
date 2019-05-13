@@ -9,7 +9,7 @@ import com.example.rssanimereader.viewmodel.ChannelListViewModel
 import com.example.rssanimereader.viewmodel.FeedListViewModel
 import com.example.rssanimereader.viewmodel.SearchViewModel
 
-class FeedListViewModelFactory(private val repository: FeedListRepository)  : ViewModelProvider.Factory {
+class FeedListViewModelFactory(private val repository: FeedListRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FeedListViewModel::class.java)) {
             return FeedListViewModel(repository) as T
@@ -21,7 +21,7 @@ class FeedListViewModelFactory(private val repository: FeedListRepository)  : Vi
 }
 
 
-class SearchViewModelFactory(private val repository: SearchRepository)  : ViewModelProvider.Factory {
+class SearchViewModelFactory(private val repository: SearchRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
             return SearchViewModel(repository) as T
@@ -32,7 +32,7 @@ class SearchViewModelFactory(private val repository: SearchRepository)  : ViewMo
 
 }
 
-class ChannelListViewModelFactory(private val dataSource: ChannelListDataSource)  : ViewModelProvider.Factory {
+class ChannelListViewModelFactory(private val dataSource: ChannelListDataSource) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ChannelListViewModel::class.java)) {
             return ChannelListViewModel(dataSource) as T

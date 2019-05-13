@@ -7,7 +7,7 @@ import com.example.rssanimereader.util.TaskInOtherThread
 
 class FeedApi(private val context: Context) {
 
-    val taskInOtherThread: TaskInOtherThread=TaskInOtherThread()
+    val taskInOtherThread: TaskInOtherThread = TaskInOtherThread()
 
     fun getAllFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
 

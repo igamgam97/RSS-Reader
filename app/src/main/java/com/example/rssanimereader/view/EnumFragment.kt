@@ -1,4 +1,4 @@
-package com.example.rssanimereader.viewmodel
+package com.example.rssanimereader.view
 
 enum class EnumFragment {
     FeedFragment,

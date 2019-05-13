@@ -13,16 +13,17 @@ class RSSDownloadService : IntentService("RSSDownloadService") {
 
         val remoteDataSaver = Injection.provideRemoteDataSaver(this, urlPath)
 
-        remoteDataSaver.validateData()
+        remoteDataSaver {
+            isDataPublishedSuccessful()
+        }
 
-        isDataPublishedSuccessful(true)
 
     }
 
 
-    private fun isDataPublishedSuccessful(statusData: Boolean) {
+    private fun isDataPublishedSuccessful() {
         val intent = Intent(FeedUtilConstants.BROADCAST_STATE_DATA_ACTION)
-        intent.putExtra(FeedUtilConstants.STATUS_DATA, statusData)
+        /*intent.putExtra(FeedUtilConstants.STATUS_DATA, statusData)*/
         sendBroadcast(intent)
     }
 }

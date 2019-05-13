@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
 import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.view.EnumFragment
 import java.util.*
 
 

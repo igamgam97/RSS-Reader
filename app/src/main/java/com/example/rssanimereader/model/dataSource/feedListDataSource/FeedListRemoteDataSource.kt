@@ -5,13 +5,12 @@ import com.example.rssanimereader.util.dbAPI.FeedApi
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
 
 class FeedListRemoteDataSource(
-    private val downloadUrlSourceManager: DownloadUrlSourceManager,
-    private val feedApi: FeedApi
+        private val downloadUrlSourceManager: DownloadUrlSourceManager,
+        private val feedApi: FeedApi
 ) : FeedListDataSource {
 
     private fun saveFeeds(linkChannel: String, onRemoteDataReady: () -> Unit) {
 
-        // downloadUrlSourceManager.getAllFeeds("https://habr.com/ru/rss/all/all/") { onRemoteDataReady() }
         downloadUrlSourceManager.getData(linkChannel) { onRemoteDataReady() }
 
     }
