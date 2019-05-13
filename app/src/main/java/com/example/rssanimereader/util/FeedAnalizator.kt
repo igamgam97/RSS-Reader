@@ -4,12 +4,28 @@ import com.example.rssanimereader.entity.FeedItem
 import java.util.regex.Pattern
 
 
-
-object FeedAnalizator{
-    operator fun invoke(feedItem:FeedItem){
-        if (DetectHtml(feedItem.itemDesc)){
-
+object FeedAnalizator {
+    operator fun invoke(feedList: ArrayList<FeedItem>) {
+        if (DetectHtml(feedList[0].itemDesc)) {
+            feedList.forEach {
+                it.itemDesc = HTMLFeedFormatter().generateHtml(it)
+            }
         }
+    }
+
+    fun convertRemoteURLToLocal(feedItem: FeedItem) {
+        val pathImage = getURLFromTagImage(feedItem.itemDesc)
+        val streamFromURLLoader = StreamFromURLLoader()
+        streamFromURLLoader(pathImage!!)
+
+    }
+
+    fun getURLFromTagImage(text: String): String? {
+        val pattern = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>")
+
+        val m = pattern.matcher(text)
+
+        return m.group(1)
     }
 
 
@@ -32,6 +48,7 @@ object FeedAnalizator{
             }
             return ret
         }
+
 
     }
 }

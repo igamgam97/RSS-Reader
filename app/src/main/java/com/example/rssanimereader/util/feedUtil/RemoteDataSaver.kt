@@ -5,18 +5,18 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.util.FeedAnalizator
 import com.example.rssanimereader.util.ImageSaver
+import com.example.rssanimereader.util.StreamFromURLLoader
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
+import com.example.rssanimereader.util.use
 import java.io.InputStream
-import java.net.ConnectException
-import java.net.HttpURLConnection
 import java.net.MalformedURLException
-import java.net.URL
 
 class RemoteDataSaver<T>(
-        private val urlPath: String,
-        private val remoteDataParser: RemoteDataParser,
-        private val saveRemoteDataInterface: DatabaseAPI
+    private val urlPath: String,
+    private val remoteDataParser: RemoteDataParser,
+    private val saveRemoteDataInterface: DatabaseAPI
 ) {
 
     operator fun invoke(onDataReady: () -> Unit) {
@@ -24,12 +24,12 @@ class RemoteDataSaver<T>(
 
         saveRemoteDataInterface.open().use {
             if (!it.isExistChannel(urlPath)) {
-                val image = downloadImage(channel.pathImage)
-                val path = ImageSaver.saveImageToInternalStorage(image,channel.nameChannel)
-                Log.d("bag", path.toString())
-                channel.image = image
+                val image = downloadImage(channel.urlImage)
+                val path = ImageSaver.saveImageToInternalStorage(image, channel.nameChannel)
+                channel.pathImage = path.toString()
                 it.insertChannel(channel)
             }
+
             it.insertAll(data)
 
         }
@@ -40,42 +40,23 @@ class RemoteDataSaver<T>(
     @Throws(MalformedURLException::class)
     private fun getData(): Pair<ArrayList<FeedItem>, ChannelItem> {
 
-        //todo add more check exception
-        val url = URL(urlPath)
-        val httpConnection = (url.openConnection() as HttpURLConnection).apply {
-            connectTimeout = FeedUtilConstants.CONNECT_TIMEOUT_VALUE
-            readTimeout = FeedUtilConstants.READ_TIMEOUT_VALUE
-            requestMethod = "GET"
-            doInput = true
-        }
+        val streamFromURLLoader = StreamFromURLLoader()
 
-        httpConnection.connect()
-        val responseCode = httpConnection.responseCode
-        try {
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                return remoteDataParser.parse(httpConnection.inputStream)
-            } else throw ConnectException("Error connection")
-        } finally {
-            httpConnection.disconnect()
+        streamFromURLLoader(urlPath).inputStream.use {
+            return remoteDataParser.parse(it)
         }
-
     }
 
     @Throws(MalformedURLException::class)
     private fun downloadImage(urlPath: String): Bitmap {
-        val url = URL(urlPath)
-        val httpConnection = (url.openConnection() as HttpURLConnection).apply {
-            connectTimeout = FeedUtilConstants.CONNECT_TIMEOUT_VALUE
-            readTimeout = FeedUtilConstants.READ_TIMEOUT_VALUE
-            requestMethod = "GET"
-            doInput = true
+
+        val streamFromURLLoader = StreamFromURLLoader()
+        streamFromURLLoader(urlPath).inputStream.use {
+            return BitmapFactory.decodeStream(it)
         }
 
-        httpConnection.connect()
-        val input = httpConnection.inputStream
-        return BitmapFactory.decodeStream(input)
-
     }
+
 
 }
 

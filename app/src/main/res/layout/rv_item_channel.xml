@@ -20,7 +20,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:id="@+id/feedImage"
-                android:loadImage="@{channel.image}" android:contentDescription="@string/channelImage"/>
+                android:loadImage="@{channel.pathImage}" android:contentDescription="@string/channelImage"/>
         <TextView
                 android:id="@+id/channel_title"
                 android:minHeight="60sp"

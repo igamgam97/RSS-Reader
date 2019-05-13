@@ -4,7 +4,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.net.Uri
-import com.example.rssanimereader.ProvideContextAplication
+import com.example.rssanimereader.ProvideContextApplication
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -14,7 +14,7 @@ import java.io.OutputStream
 object ImageSaver {
 
     fun saveImageToInternalStorage(bitmap: Bitmap, name: String): Uri {
-        val wrapper = ContextWrapper(ProvideContextAplication.applicationContext())
+        val wrapper = ContextWrapper(ProvideContextApplication.applicationContext())
 
         var file = wrapper.getDir("Images", MODE_PRIVATE)
 

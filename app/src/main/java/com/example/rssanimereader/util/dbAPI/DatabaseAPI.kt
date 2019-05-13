@@ -109,8 +109,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                 val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_LINK))
                 val imagePath = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE))
                 val nameChannel = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL__COLUMN_NAME))
-                val image =
-                        ImageUtil.decodeImage(cursor.getBlob(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_IMAGE)))
+                val image = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_IMAGE))
                 items.add(ChannelItem(link, nameChannel, imagePath, image))
 
             } while (cursor.moveToNext())
@@ -150,8 +149,8 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         val cv = ContentValues()
         cv.put(DatabaseHelper.CHANNEL_COLUMN_LINK, channel.linkChannel)
         cv.put(DatabaseHelper.CHANNEL__COLUMN_NAME, channel.nameChannel)
-        cv.put(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE, channel.pathImage)
-        cv.put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, ImageUtil.parseBitmaptoByte(channel.image!!))
+        cv.put(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE, channel.urlImage)
+        cv.put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, channel.pathImage!!)
         return database!!.insert(DatabaseHelper.CHANNEL_TABLE, null, cv)
     }
 
