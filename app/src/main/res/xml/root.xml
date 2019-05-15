@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+                  xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+            app:fragment="com.example.rssanimereader.SettingsPrefActivity$ThemeSettingsFragment"
+            android:icon="@drawable/ic_home_black_24dp"
+            app:title="@string/theme_settings" />
+</PreferenceScreen>
