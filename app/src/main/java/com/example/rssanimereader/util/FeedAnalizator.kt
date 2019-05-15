@@ -1,5 +1,7 @@
 package com.example.rssanimereader.util
 
+import android.graphics.BitmapFactory
+import android.net.Uri
 import com.example.rssanimereader.entity.FeedItem
 import java.util.regex.Pattern
 
@@ -13,14 +15,20 @@ object FeedAnalizator {
         }
     }
 
-    fun convertRemoteURLToLocal(feedItem: FeedItem) {
-        val pathImage = getURLFromTagImage(feedItem.itemDesc)
+    fun convertRemoteURLToLocal(feedItem: FeedItem) : Uri {
+        val remotePathImage = getURLFromTagImage(feedItem.itemDesc)
+
         val streamFromURLLoader = StreamFromURLLoader()
-        streamFromURLLoader(pathImage!!)
+
+        streamFromURLLoader(remotePathImage).inputStream.use {
+            return ImageSaver.saveImageToInternalStorage(BitmapFactory.decodeStream(it),feedItem.itemTitle)
+        }
+
+
 
     }
 
-    fun getURLFromTagImage(text: String): String? {
+    fun getURLFromTagImage(text: String): String {
         val pattern = Pattern.compile("<img[^>]+src\\s*=\\s*['\"]([^'\"]+)['\"][^>]*>")
 
         val m = pattern.matcher(text)

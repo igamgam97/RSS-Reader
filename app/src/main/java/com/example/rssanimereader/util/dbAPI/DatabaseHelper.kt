@@ -34,6 +34,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
         const val FEED_COLUMN_PUB_DATE = "pubDate"
         const val FEED_COLUMN_LINK_CHANNEL = "linkChannel"
         const val FEED_COLUMN_FAVORITE = "favorite"
+        const val FEED_COLUMN_PATH_IMAGE = "pathImage"
 
         const val CREATE_TABLE_FEED = """CREATE TABLE $FEED_TABLE (
             $FEED_COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,

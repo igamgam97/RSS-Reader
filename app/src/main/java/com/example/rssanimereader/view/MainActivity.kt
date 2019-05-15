@@ -2,6 +2,7 @@ package com.example.rssanimereader.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,25 +20,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_layout)
         viewModel = ViewModelProviders.of(this).get(CommunicateViewModel::class.java)
-        viewModel.enumFragment.observe(this, Observer {
+        viewModel.listOfTypeFragment.observe(this, Observer {
             it?.let { stack ->
                 setFragment(stack.peek())
             }
         })
         binding.mainViewModel = viewModel
+
+        delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+
     }
 
 
-    private fun setFragment(tagFragment: EnumFragment) {
+    private fun setFragment(tagFragment: ListOfTypeFragment) {
 
         val currentFragment = supportFragmentManager
                 .findFragmentByTag(tagFragment.toString())
         if (currentFragment == null) {
             val fragment = when (tagFragment) {
-                EnumFragment.FeedListFragment -> FeedListFragment()
-                EnumFragment.SearchFragment -> SearchFragment()
-                EnumFragment.FeedFragment -> FeedFragment()
-                EnumFragment.ChannelListFragment -> ChannelListFragment()
+                ListOfTypeFragment.FeedListFragment -> FeedListFragment()
+                ListOfTypeFragment.SearchFragment -> SearchFragment()
+                ListOfTypeFragment.FeedFragment -> FeedFragment()
+                ListOfTypeFragment.ChannelListFragment -> ChannelListFragment()
             }
             openFragment(fragment, tagFragment.toString())
         } else {
@@ -54,9 +58,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        viewModel.mEnumFragment.value!!.pop()!!
-        if (viewModel.mEnumFragment.value!!.isNotEmpty()) {
-            val state = viewModel.mEnumFragment.value!!.peek()
+        viewModel.mListOfTypeFragment.value!!.pop()!!
+        if (viewModel.mListOfTypeFragment.value!!.isNotEmpty()) {
+            val state = viewModel.mListOfTypeFragment.value!!.peek()
             setFragment(state)
         } else {
             finish()

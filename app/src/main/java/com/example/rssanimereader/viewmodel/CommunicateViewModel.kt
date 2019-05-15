@@ -6,44 +6,44 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.view.EnumFragment
+import com.example.rssanimereader.view.ListOfTypeFragment
 import java.util.*
 
 
 class CommunicateViewModel : ViewModel() {
-    val mEnumFragment: MutableLiveData<Stack<EnumFragment>> = MutableLiveData()
+    val mListOfTypeFragment: MutableLiveData<Stack<ListOfTypeFragment>> = MutableLiveData()
 
-    val enumFragment: LiveData<Stack<EnumFragment>>
-        get() = mEnumFragment
+    val listOfTypeFragment: LiveData<Stack<ListOfTypeFragment>>
+        get() = mListOfTypeFragment
 
     init {
-        val stack = Stack<EnumFragment>()
-        stack.push(EnumFragment.FeedListFragment)
-        mEnumFragment.value = stack
+        val stack = Stack<ListOfTypeFragment>()
+        stack.push(ListOfTypeFragment.FeedListFragment)
+        mListOfTypeFragment.value = stack
     }
 
     fun onFeedListFramgentState() {
-        val stack = mEnumFragment.value
-        stack!!.push(EnumFragment.FeedListFragment)
-        mEnumFragment.value = stack
+        val stack = mListOfTypeFragment.value
+        stack!!.push(ListOfTypeFragment.FeedListFragment)
+        mListOfTypeFragment.value = stack
     }
 
     fun onSerchFramentState() {
-        val stack = mEnumFragment.value
-        stack!!.push(EnumFragment.SearchFragment)
-        mEnumFragment.value = stack
+        val stack = mListOfTypeFragment.value
+        stack!!.push(ListOfTypeFragment.SearchFragment)
+        mListOfTypeFragment.value = stack
     }
 
     fun onFeedFramentState() {
-        val stack = mEnumFragment.value
-        stack!!.push(EnumFragment.FeedFragment)
-        mEnumFragment.value = stack
+        val stack = mListOfTypeFragment.value
+        stack!!.push(ListOfTypeFragment.FeedFragment)
+        mListOfTypeFragment.value = stack
     }
 
     fun onChannelListFramentState() {
-        val stack = mEnumFragment.value
-        stack!!.push(EnumFragment.ChannelListFragment)
-        mEnumFragment.value = stack
+        val stack = mListOfTypeFragment.value
+        stack!!.push(ListOfTypeFragment.ChannelListFragment)
+        mListOfTypeFragment.value = stack
     }
 
     val targetChannel = MutableLiveData<String>()
