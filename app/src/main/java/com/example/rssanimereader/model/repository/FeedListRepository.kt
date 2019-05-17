@@ -5,20 +5,31 @@ import com.example.rssanimereader.model.dataSource.feedListDataSource.FeedListDa
 import com.example.rssanimereader.util.NetManager
 
 class FeedListRepository(
-        private val netManager: NetManager,
-        private val feedListDataSourceFactory: FeedListDataSourceFactory
+    private val netManager: NetManager,
+    private val feedListDataSourceFactory: FeedListDataSourceFactory
 ) : Repository {
 
 
-    fun getFeedsByChannel(linkChannel: String, onDataReady: (ArrayList<FeedItem>) -> Unit) {
-        netManager.isConnectedToInternet?.let {
-            feedListDataSourceFactory(it).getFeedsByChannel(linkChannel, onDataReady)
+    fun getAllFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
+
+        if (netManager.isConnectedToInternet) {
+            feedListDataSourceFactory.provideFeedListRemoteDataSource().getAllFeeds(onDataReady)
+        } else {
+            feedListDataSourceFactory.provideFeedListLocalDataSource().getAllFeeds(onDataReady)
         }
 
     }
 
-    fun getAllFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
-        feedListDataSourceFactory(false).getAllFeeds(onDataReady)
+    fun getFeedsByChannel(linkChannel: String) = if (netManager.isConnectedToInternet) {
+        feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannel(linkChannel)
+    } else {
+        feedListDataSourceFactory.provideFeedListLocalDataSource().getFeedsByChannel(linkChannel)
+    }
+
+    fun getAllFeeds() = if (netManager.isConnectedToInternet) {
+        feedListDataSourceFactory.provideFeedListRemoteDataSource().getAllFeeds()
+    } else {
+        feedListDataSourceFactory.provideFeedListLocalDataSource().getAllFeeds()
     }
 }
 

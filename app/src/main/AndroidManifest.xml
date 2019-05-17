@@ -17,11 +17,7 @@
         <activity
                 android:name=".SettingsPrefActivity"
                 android:label="@string/title_activity_settings">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <service
@@ -30,7 +26,11 @@
         </service>
 
         <activity android:name=".view.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
 
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
         </activity>
     </application>
 

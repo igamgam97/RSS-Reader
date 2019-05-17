@@ -19,16 +19,22 @@ class FeedApi(private val context: Context) {
 
     }
 
-    fun getFeedsByChannel(linkChannel: String, onDataReady: (ArrayList<FeedItem>) -> Unit) {
 
-        taskInOtherThread {
-            DatabaseAPI(context).open().use {
-                onDataReady(it.getFeedsByChannel(linkChannel))
-            }
-
+    fun getFeedsByChannel(linkChannel: String): ArrayList<FeedItem> {
+        var feeds = ArrayList<FeedItem>()
+        DatabaseAPI(context).open().use {
+            feeds = it.getFeedsByChannel(linkChannel)
         }
-
+        return feeds
     }
 
-
+    fun getAllFeeds(): ArrayList<FeedItem> {
+        var feeds = ArrayList<FeedItem>()
+        DatabaseAPI(context).open().use {
+            feeds = it.getItemFeeds()
+        }
+        return feeds
+    }
 }
+
+

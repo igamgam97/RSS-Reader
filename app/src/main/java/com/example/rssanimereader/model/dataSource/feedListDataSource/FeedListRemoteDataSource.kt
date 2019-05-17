@@ -3,29 +3,15 @@ package com.example.rssanimereader.model.dataSource.feedListDataSource
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.dbAPI.FeedApi
 import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 class FeedListRemoteDataSource(
-        private val downloadUrlSourceManager: DownloadUrlSourceManager,
-        private val feedApi: FeedApi
+    private val downloadUrlSourceManager: DownloadUrlSourceManager,
+    private val feedApi: FeedApi
 ) : FeedListDataSource {
 
-    private fun saveFeeds(linkChannel: String, onRemoteDataReady: () -> Unit) {
 
-        downloadUrlSourceManager.getData(linkChannel) { onRemoteDataReady() }
-
-    }
-
-    override fun getFeedsByChannel(linkChannel: String, onDataReady: (ArrayList<FeedItem>) -> Unit) {
-        //todo check this part on logic
-        saveFeeds(linkChannel) {
-            feedApi.getFeedsByChannel(linkChannel) { data ->
-                run {
-                    onDataReady(data)
-                    downloadUrlSourceManager.onDisconnect()
-                }
-            }
-        }
-    }
 
     override fun getAllFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
         feedApi.getAllFeeds { data ->
@@ -36,6 +22,12 @@ class FeedListRemoteDataSource(
         }
     }
 
+    override fun getFeedsByChannel(linkChannel: String): Single<ArrayList<FeedItem>> =
+        downloadUrlSourceManager.valideData(linkChannel)
+            .flatMap{Single.fromCallable{feedApi.getFeedsByChannel(linkChannel)}}
+            .subscribeOn(Schedulers.io())
+
+    fun getAllFeeds() = Single.fromCallable{feedApi.getAllFeeds()}.subscribeOn(Schedulers.io())
 
 }
 

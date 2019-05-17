@@ -33,7 +33,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return database!!.query(DatabaseHelper.FEED_TABLE, columns, whereClause, whereArgs, null, null, null)
     }
 
-    override fun getItemFeeds(whereClause: String?, whereArgs: Array<String>?): List<FeedItem> {
+    override fun getItemFeeds(whereClause: String?, whereArgs: Array<String>?): ArrayList<FeedItem> {
         val items = ArrayList<FeedItem>()
         val cursor = getEntriesByClause(whereClause, whereArgs)
         if (cursor.moveToFirst()) {

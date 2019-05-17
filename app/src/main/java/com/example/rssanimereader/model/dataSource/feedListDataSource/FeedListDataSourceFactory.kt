@@ -9,11 +9,7 @@ class FeedListDataSourceFactory(
 ) {
 
 
-    operator fun invoke(isConnected: Boolean) = when (isConnected) {
-        false -> FeedListLocalDataSource(feedApi)
-        true -> FeedListRemoteDataSource(
-                downloadUrlSourceManager,
-                feedApi
-        )
-    }
+    fun provideFeedListLocalDataSource() = FeedListLocalDataSource(feedApi)
+
+    fun provideFeedListRemoteDataSource() = FeedListRemoteDataSource(downloadUrlSourceManager, feedApi)
 }

@@ -1,6 +1,5 @@
 package com.example.rssanimereader
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -31,7 +30,7 @@ class SettingsPrefActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val enabled = prefs.getBoolean("notifications_new_message", false)
+        val enabled = prefs.getBoolean("key_night_theme", false)
         Log.d("bag",enabled.toString())
         if (enabled){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -51,10 +50,9 @@ class SettingsPrefActivity : AppCompatActivity() {
     }
 
     class ThemeSettingsFragment : PreferenceFragmentCompat() {
-        @SuppressLint("PrivateResource")
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.pref_main, rootKey)
-            val switch = findPreference<SwitchPreference>("notifications_new_message")
+            val switch = findPreference<SwitchPreference>("key_night_theme")
             switch!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
                 if (switch.isChecked) {
                     Log.d("bag", "click")

@@ -21,7 +21,7 @@ import com.example.rssanimereader.view.SearchFragment
 
 object Injection {
 
-
+    // todo опрокинуть подключение к бд
     fun provideRemoteDataSaver(context: Context, urlPath: String): RemoteDataSaver<FeedItem> {
         val databaseAPI = DatabaseAPI(context)
         val htmlFeedFormatter = HTMLFeedFormatter()
