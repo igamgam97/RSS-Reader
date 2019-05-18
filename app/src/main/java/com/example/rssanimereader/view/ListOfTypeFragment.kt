@@ -4,5 +4,6 @@ enum class ListOfTypeFragment {
     FeedFragment,
     FeedListFragment,
     SearchFragment,
-    ChannelListFragment
+    ChannelListFragment,
+    SettingsFragment
 }

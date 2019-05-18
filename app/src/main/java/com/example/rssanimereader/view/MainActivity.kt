@@ -1,12 +1,14 @@
 package com.example.rssanimereader.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.preference.PreferenceManager
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.ActivityMainLayoutBinding
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
@@ -18,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("bag","onCreate")
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_layout)
         viewModel = ViewModelProviders.of(this).get(CommunicateViewModel::class.java)
         viewModel.listOfTypeFragment.observe(this, Observer {
@@ -27,8 +30,22 @@ class MainActivity : AppCompatActivity() {
         })
         binding.mainViewModel = viewModel
 
-        delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES
+      /*  delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES*/
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("bag","yes")
+        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+        val nightModeEnabled = prefs.getBoolean( "NIGHT_MODE_VALUE",false)
+        if (nightModeEnabled){
+            Log.d("bag","yes")
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else{
+            Log.d("bag","no")
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
     }
 
 
@@ -42,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                 ListOfTypeFragment.SearchFragment -> SearchFragment()
                 ListOfTypeFragment.FeedFragment -> FeedFragment()
                 ListOfTypeFragment.ChannelListFragment -> ChannelListFragment()
+                ListOfTypeFragment.SettingsFragment -> SettingsFragment()
             }
             openFragment(fragment, tagFragment.toString())
         } else {

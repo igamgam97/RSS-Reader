@@ -26,7 +26,7 @@
     <string name="summary_upload_video_quality">Specify video quality for uploads</string>
     <string name="pref_title_notifications">Notifications</string>
     <string name="summary_choose_ringtone">Choose notification sound</string>
->
+    >
     <string name="title_gallery_storage">Default Storage</string>
     <string name="title_vibrate">Vibrate</string>
     <string name="summary_vibrate">Vibrate on new notification</string>
@@ -64,6 +64,7 @@
     <string name="url_terms">https://www.androidhive.info/terms-of-service/</string>
     <string name="title_version">Version</string>
     <string name="choose_email_client">Choose email client</string>
+    <string name="night_mode">Night mode</string>
 
 
 </resources>

@@ -3,11 +3,13 @@ package com.example.rssanimereader.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.rssanimereader.model.dataSource.ChannelListDataSource
+import com.example.rssanimereader.model.dataSource.SettingsDataSource
 import com.example.rssanimereader.model.repository.FeedListRepository
 import com.example.rssanimereader.model.repository.SearchRepository
 import com.example.rssanimereader.viewmodel.ChannelListViewModel
 import com.example.rssanimereader.viewmodel.FeedListViewModel
 import com.example.rssanimereader.viewmodel.SearchViewModel
+import com.example.rssanimereader.viewmodel.SettingsViewModel
 
 class FeedListViewModelFactory(private val repository: FeedListRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -40,5 +42,14 @@ class ChannelListViewModelFactory(private val dataSource: ChannelListDataSource)
 
         throw IllegalArgumentException("Unknown ViewModel Class")
     }
+}
 
+class SettingsViewModelFactory(private val dataSource: SettingsDataSource) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(SettingsViewModel::class.java)) {
+            return SettingsViewModel(dataSource) as T
+        }
+
+        throw IllegalArgumentException("Unknown ViewModel Class")
+    }
 }

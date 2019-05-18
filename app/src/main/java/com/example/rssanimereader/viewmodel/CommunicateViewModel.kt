@@ -1,5 +1,6 @@
 package com.example.rssanimereader.viewmodel
 
+import android.util.Log
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -40,6 +41,12 @@ class CommunicateViewModel : ViewModel() {
         mListOfTypeFragment.value = stack
     }
 
+    fun onSettingsFramentState() {
+        val stack = mListOfTypeFragment.value
+        stack!!.push(ListOfTypeFragment.SettingsFragment)
+        mListOfTypeFragment.value = stack
+    }
+
     fun onChannelListFramentState() {
         val stack = mListOfTypeFragment.value
         stack!!.push(ListOfTypeFragment.ChannelListFragment)
@@ -54,6 +61,7 @@ class CommunicateViewModel : ViewModel() {
         when (item!!.itemId) {
             R.id.app_bar_channels -> onChannelListFramentState()
             R.id.app_bar_search -> onSerchFramentState()
+            R.id.app_bar_settings-> onSettingsFramentState()
         }
 
         return true

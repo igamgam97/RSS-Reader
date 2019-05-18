@@ -2,9 +2,11 @@ package com.example.rssanimereader.di
 
 import android.content.Context
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.example.rssanimereader.ProvideContextApplication
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.model.dataSource.ChannelListDataSource
+import com.example.rssanimereader.model.dataSource.SettingsDataSource
 import com.example.rssanimereader.model.dataSource.feedListDataSource.FeedListDataSourceFactory
 import com.example.rssanimereader.model.repository.FeedListRepository
 import com.example.rssanimereader.model.repository.SearchRepository
@@ -19,6 +21,8 @@ import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
 import com.example.rssanimereader.view.ChannelListFragment
 import com.example.rssanimereader.view.FeedListFragment
 import com.example.rssanimereader.view.SearchFragment
+import com.example.rssanimereader.view.SettingsFragment
+import com.example.rssanimereader.viewmodel.SettingsViewModel
 
 object Injection {
 
@@ -83,11 +87,24 @@ object Injection {
         return ChannelListViewModelFactory(channelListDataSource)
     }
 
+    private fun provideSettingsViewModelFactory(): SettingsViewModelFactory{
+
+        val context = ProvideContextApplication.applicationContext()
+
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val settingsDataSource = SettingsDataSource(prefs)
+
+        return SettingsViewModelFactory(settingsDataSource)
+
+    }
+
     fun provideViewModelFactory(fragment: Fragment) =
             when (fragment) {
                 is FeedListFragment -> provideFeedListViewModelFactory()
                 is SearchFragment -> provideSearchViewModelFactory()
                 is ChannelListFragment -> provideChannelListViewModelFactory()
+                is SettingsFragment -> provideSettingsViewModelFactory()
                 else -> throw IllegalArgumentException("Unknown ViewModelFactory Class")
             }
 }
