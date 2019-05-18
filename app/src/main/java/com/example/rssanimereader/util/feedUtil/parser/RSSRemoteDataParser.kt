@@ -4,8 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Xml
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.util.FeedAnalizator
-import com.example.rssanimereader.util.feedUtil.RemoteDataParser
+import com.example.rssanimereader.service.RemoteDataParser
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException

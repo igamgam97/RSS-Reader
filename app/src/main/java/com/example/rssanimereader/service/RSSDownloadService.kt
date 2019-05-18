@@ -1,4 +1,4 @@
-package com.example.rssanimereader.util.feedUtil
+package com.example.rssanimereader.service
 
 import android.app.IntentService
 import android.content.Intent
@@ -13,10 +13,10 @@ class RSSDownloadService : IntentService("RSSDownloadService") {
     override fun onHandleIntent(intent: Intent) {
         val urlPath = intent.getStringExtra(FeedUtilConstants.URL)
 
-        val remoteDataSaver = Injection.provideRemoteDataSaver(this, urlPath)
+        val remoteDataSaver = Injection.provideRemoteDataSaver(urlPath)
 
-        val disposable = remoteDataSaver.saveDataFromApi()
-            .subscribe({ isDataPublishedSuccessful() }, { error -> onError() })
+        val disposable = remoteDataSaver.saveDataFromApi(urlPath)
+            .subscribe({ isDataPublishedSuccessful() }, { error -> isDataPublishedError(error) })
 
         compositeDisposable.add(disposable)
 
@@ -29,13 +29,16 @@ class RSSDownloadService : IntentService("RSSDownloadService") {
         sendBroadcast(intent)
     }
 
+    private fun isDataPublishedError(error:Throwable) {
+        val intent = Intent(FeedUtilConstants.BROADCAST_STATE_DATA_ACTION)
+        intent.putExtra(FeedUtilConstants.STATUS_DATA, error)
+        sendBroadcast(intent)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable.clear()
     }
 
-    fun onError() {
-
-    }
 }
 

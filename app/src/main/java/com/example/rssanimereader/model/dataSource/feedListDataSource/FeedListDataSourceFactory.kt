@@ -1,11 +1,11 @@
 package com.example.rssanimereader.model.dataSource.feedListDataSource
 
 import com.example.rssanimereader.util.dbAPI.FeedApi
-import com.example.rssanimereader.util.feedUtil.DownloadUrlSourceManager
+import com.example.rssanimereader.service.DownloadUrlSourceManager
 
 class FeedListDataSourceFactory(
-        private val downloadUrlSourceManager: DownloadUrlSourceManager,
-        private val feedApi: FeedApi
+    private val downloadUrlSourceManager: DownloadUrlSourceManager,
+    private val feedApi: FeedApi
 ) {
 
 

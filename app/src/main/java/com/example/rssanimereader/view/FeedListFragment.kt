@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.rssanimereader.FeedRecyclerViewAdapter
+import com.example.rssanimereader.adapter.FeedRecyclerViewAdapter
 import com.example.rssanimereader.databinding.FragmentFeedListBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.entity.FeedItem
@@ -22,7 +22,8 @@ import com.example.rssanimereader.viewmodel.FeedListViewModel
 
 class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener {
 
-    private val feedRecyclerViewAdapter = FeedRecyclerViewAdapter(arrayListOf(), this)
+    private val feedRecyclerViewAdapter =
+        FeedRecyclerViewAdapter(arrayListOf(), this)
     lateinit var communicateViewModel: CommunicateViewModel
     lateinit var viewModel: FeedListViewModel
     lateinit var feedListViewModelFactory: ViewModelProvider.Factory

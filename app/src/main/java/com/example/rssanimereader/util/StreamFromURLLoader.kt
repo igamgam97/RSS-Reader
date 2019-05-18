@@ -1,14 +1,12 @@
 package com.example.rssanimereader.util
 
-import com.example.rssanimereader.util.feedUtil.FeedUtilConstants
+import com.example.rssanimereader.service.FeedUtilConstants
 import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 
 class StreamFromURLLoader  {
-
-    var httpConnection:HttpURLConnection? = null
 
     @Throws(MalformedURLException::class)
     operator fun invoke(path: String): HttpURLConnection {

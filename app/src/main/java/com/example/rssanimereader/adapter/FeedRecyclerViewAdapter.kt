@@ -1,4 +1,4 @@
-package com.example.rssanimereader
+package com.example.rssanimereader.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

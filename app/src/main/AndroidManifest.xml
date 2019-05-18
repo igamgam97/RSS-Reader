@@ -21,7 +21,7 @@
         </activity>
 
         <service
-                android:name=".util.feedUtil.RSSDownloadService"
+                android:name=".service.RSSDownloadService"
                 android:exported="false">
         </service>
 

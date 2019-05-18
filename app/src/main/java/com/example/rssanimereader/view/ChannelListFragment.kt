@@ -9,7 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.rssanimereader.ChannelRecyclerViewAdapter
+import com.example.rssanimereader.adapter.ChannelRecyclerViewAdapter
 import com.example.rssanimereader.databinding.FragmentChannelListBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.entity.ChannelItem
@@ -18,7 +18,8 @@ import com.example.rssanimereader.viewmodel.CommunicateViewModel
 
 class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickListener {
 
-    private val channelRecyclerViewAdapter = ChannelRecyclerViewAdapter(arrayListOf(), this)
+    private val channelRecyclerViewAdapter =
+        ChannelRecyclerViewAdapter(arrayListOf(), this)
     private lateinit var viewModel: ChannelListViewModel
     private lateinit var channelListViewModelFactory: ViewModelProvider.Factory
     private lateinit var communicateViewModel: CommunicateViewModel
