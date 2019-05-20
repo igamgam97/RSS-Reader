@@ -2,6 +2,7 @@ package com.example.rssanimereader.service
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.ImageSaver
@@ -23,8 +24,7 @@ class RemoteDataSaver<T>(
         val (feeds, channel) = getFeedsAndChannel(urlPath)
         saveRemoteDataInterface.open().use {
             if (!it.isExistChannel(urlPath)) {
-                val image = downloadImage(channel.urlImage)
-                val path = ImageSaver.saveImageToInternalStorage(image, channel.nameChannel)
+                val path = ImageSaver.saveImageToInternalStorage(channel.urlImage, channel.nameChannel)
                 channel.pathImage = path.toString()
                 it.insertChannel(channel)
             }
@@ -45,15 +45,7 @@ class RemoteDataSaver<T>(
         }
     }
 
-    @Throws(MalformedURLException::class)
-    private fun downloadImage(urlPath: String): Bitmap {
 
-        val streamFromURLLoader = StreamFromURLLoader()
-        streamFromURLLoader(urlPath).inputStream.use {
-            return BitmapFactory.decodeStream(it)
-        }
-
-    }
 
 
 }

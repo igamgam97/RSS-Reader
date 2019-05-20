@@ -6,9 +6,10 @@ import android.content.Context
 import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
+import androidx.core.database.getStringOrNull
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.util.ImageUtil
 import java.io.Closeable
 
 
@@ -20,15 +21,15 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
 
 
     private val dbHelper: DatabaseHelper =
-            DatabaseHelper(context.applicationContext)
+        DatabaseHelper(context.applicationContext)
     private var database: SQLiteDatabase? = null
 
     private fun getEntriesByClause(whereClause: String? = null, whereArgs: Array<String>? = null): Cursor {
         val columns = arrayOf(
-                DatabaseHelper.FEED_COLUMN_ID,
-                DatabaseHelper.FEED_COLUMN_TITLE, DatabaseHelper.FEED_COLUMN_DESCRIPTION,
-                DatabaseHelper.FEED_COLUMN_LINK, DatabaseHelper.FEED_COLUMN_PUB_DATE,
-                DatabaseHelper.FEED_COLUMN_FAVORITE, DatabaseHelper.FEED_COLUMN_LINK_CHANNEL
+            DatabaseHelper.FEED_COLUMN_ID,
+            DatabaseHelper.FEED_COLUMN_TITLE, DatabaseHelper.FEED_COLUMN_DESCRIPTION,
+            DatabaseHelper.FEED_COLUMN_LINK, DatabaseHelper.FEED_COLUMN_PUB_DATE,
+            DatabaseHelper.FEED_COLUMN_FAVORITE, DatabaseHelper.FEED_COLUMN_LINK_CHANNEL
         )
         return database!!.query(DatabaseHelper.FEED_TABLE, columns, whereClause, whereArgs, null, null, null)
     }
@@ -38,23 +39,24 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         val cursor = getEntriesByClause(whereClause, whereArgs)
         if (cursor.moveToFirst()) {
             do {
-                val id = cursor.getLong(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_ID))
                 val title = cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_TITLE))
                 val description = cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_DESCRIPTION))
                 val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK))
                 val pubDate = cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PUB_DATE))
                 val favorite = cursor.getInt(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_FAVORITE)) == 1
                 val source = cursor.getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL))
+                val pathImage = cursor.getStringOrNull(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PATH_IMAGE))
+                Log.d("bag",pathImage.toString())
                 items.add(
-                        FeedItem(
-                                id,
-                                title,
-                                description,
-                                link,
-                                pubDate,
-                                favorite,
-                                source
-                        )
+                    FeedItem(
+                        title,
+                        description,
+                        link,
+                        pubDate,
+                        favorite,
+                        source,
+                        pathImage
+                    )
                 )
             } while (cursor.moveToNext())
         }
@@ -101,8 +103,8 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     fun getAllChannels(): ArrayList<ChannelItem> {
         val items = ArrayList<ChannelItem>()
         val cursor = database!!.query(
-                DatabaseHelper.CHANNEL_TABLE,
-                null, null, null, null, null, null
+            DatabaseHelper.CHANNEL_TABLE,
+            null, null, null, null, null, null
         )
         if (cursor.moveToFirst()) {
             do {
@@ -139,6 +141,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
             cv.put(DatabaseHelper.FEED_COLUMN_LINK, it.itemLink)
             cv.put(DatabaseHelper.FEED_COLUMN_PUB_DATE, it.itemPubDate)
             cv.put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, it.linkChannel)
+            cv.put(DatabaseHelper.FEED_COLUMN_PATH_IMAGE, it.pathImage)
             database!!.insert(DatabaseHelper.FEED_TABLE, null, cv)
         }
         database?.setTransactionSuccessful()
@@ -161,6 +164,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         val whereArgs = arrayOf(itemFeedId.toString())
         return database!!.delete(DatabaseHelper.FEED_TABLE, whereClause, whereArgs).toLong()
     }
+/*
 
     fun update(item: FeedItem): Long {
 
@@ -173,6 +177,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         cv.put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, item.linkChannel)
         return database!!.update(DatabaseHelper.FEED_TABLE, cv, whereClause, null).toLong()
     }
+*/
 
 
     fun deleteFeedsByChannel(channel: String): Long {
@@ -193,8 +198,8 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         val whereArgs = arrayOf(channel)
 
         val cursor = database!!.query(
-                DatabaseHelper.CHANNEL_TABLE, null, whereClause,
-                whereArgs, null, null, null
+            DatabaseHelper.CHANNEL_TABLE, null, whereClause,
+            whereArgs, null, null, null
         )
         if (cursor.count <= 0) {
             cursor.close()

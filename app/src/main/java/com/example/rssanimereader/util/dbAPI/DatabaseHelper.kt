@@ -25,7 +25,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 
     companion object {
         private const val DATABASE_NAME = "rss_reader_store.db"
-        private const val SCHEMA = 13
+        private const val SCHEMA = 14
         const val FEED_TABLE = "feeds"
         const val FEED_COLUMN_ID = "_id"
         const val FEED_COLUMN_TITLE = "title"
@@ -43,6 +43,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
             $FEED_COLUMN_LINK TEXT,
             $FEED_COLUMN_PUB_DATE  TEXT,
             $FEED_COLUMN_FAVORITE INTEGER DEFAULT 0,
+            $FEED_COLUMN_PATH_IMAGE TEXT,
             $FEED_COLUMN_LINK_CHANNEL  TEXT);"""
 
         const val CHANNEL_TABLE = "channels"

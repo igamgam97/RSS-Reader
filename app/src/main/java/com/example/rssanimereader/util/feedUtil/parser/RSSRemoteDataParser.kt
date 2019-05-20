@@ -1,10 +1,12 @@
 package com.example.rssanimereader.util.feedUtil.parser
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.util.Xml
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.service.RemoteDataParser
+import com.example.rssanimereader.util.SaveImageForCashPage
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -63,7 +65,7 @@ class RSSRemoteDataParser(
                 else -> skip(parser)
             }
         }
-        return pair!!
+        if (pair != null) return pair else throw IOException()
     }
 
     @Throws(XmlPullParserException::class, IOException::class, ParseException::class)
@@ -90,9 +92,13 @@ class RSSRemoteDataParser(
                 else -> skip(parser)
             }
         }
-        val channel = ChannelItem(source, channelTitle!!, channelImageURl!!)
+        if (channelTitle !=null && channelImageURl !=null){
+            val channel = ChannelItem(source, channelTitle, channelImageURl)
+            return Pair(episodes, channel)
+        }else{
+            throw IOException()
+        }
 
-        return Pair(episodes, channel)
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -137,26 +143,23 @@ class RSSRemoteDataParser(
                 else -> skip(parser)
             }
         }
-        val feedItem = FeedItem(
-            title!!,
-            subtitle!!,
-            link!!,
-            publishedDate!!,
-            false,
-            source
-        )
-        /*val formatedSubtitle = htmlFormatter.generateHtml(feedItem)*/
 
-        val formatedSubtitle = subtitle
-        //Log.d("bag", formatedSubtitle)
-        return FeedItem(
-            title,
-            formatedSubtitle,
-            link,
-            publishedDate,
-            false,
-            source
-        )
+        if (title != null && subtitle !=null && link != null && publishedDate != null) {
+            val pathImage = SaveImageForCashPage(subtitle, title).toString()
+            Log.d("bag",pathImage)
+            return FeedItem(
+                title,
+                subtitle,
+                link,
+                publishedDate,
+                false,
+                source,
+                pathImage
+            )
+        }
+        else{
+            throw IOException()
+        }
     }
 
     @SuppressLint("SimpleDateFormat")

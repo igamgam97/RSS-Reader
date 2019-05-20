@@ -3,17 +3,31 @@ package com.example.rssanimereader.util
 import android.content.Context.MODE_PRIVATE
 import android.content.ContextWrapper
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import com.example.rssanimereader.ProvideContextApplication
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
+import java.net.MalformedURLException
 
 
 object ImageSaver {
 
-    fun saveImageToInternalStorage(bitmap: Bitmap, name: String): Uri {
+    @Throws(MalformedURLException::class)
+    private fun downloadImage(urlPath: String): Bitmap {
+
+        val streamFromURLLoader = StreamFromURLLoader()
+        streamFromURLLoader(urlPath).inputStream.use {
+            return BitmapFactory.decodeStream(it)
+        }
+
+    }
+
+    fun saveImageToInternalStorage(urlPath: String,name: String): Uri {
+        val bitmap = downloadImage(urlPath)
+
         val wrapper = ContextWrapper(ProvideContextApplication.applicationContext())
 
         var file = wrapper.getDir("Images", MODE_PRIVATE)

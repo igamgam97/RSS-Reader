@@ -20,7 +20,16 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-
+            <androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+                                               xmlns:app="http://schemas.android.com/apk/res-auto"
+                                               android:layout_width="match_parent"
+                                               android:id="@+id/feed_list_toolbar"
+                                               android:layout_height="?attr/actionBarSize"
+                                               android:elevation="4dp" app:layout_constraintStart_toStartOf="parent"
+                                               app:layout_constraintEnd_toEndOf="parent"
+                                               app:layout_constraintTop_toTopOf="parent"
+                                               app:menu="@menu/toolbar_feed_list"
+                                               android:visibility="visible"/>
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/feed_rv"
                     android:layout_width="0dp"
@@ -29,9 +38,9 @@
                     android:visibility="@{viewModel.isLoading ? View.GONE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    tools:listitem="@layout/rv_item_feed"/>
+                    tools:listitem="@layout/rv_item_feed"
+                    app:layout_constraintTop_toBottomOf="@+id/feed_list_toolbar"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

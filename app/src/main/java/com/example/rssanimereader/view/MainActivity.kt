@@ -1,7 +1,9 @@
 package com.example.rssanimereader.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
@@ -13,6 +15,7 @@ import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.ActivityMainLayoutBinding
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
 
+
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainLayoutBinding
@@ -20,7 +23,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("bag","onCreate")
+
+      /*  when(intent?.action) {
+             Intent.ACTION_VIEW -> {
+                handle(intent)
+            }
+        }
+*/
+        Log.d("bag", "onCreate")
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_layout)
         viewModel = ViewModelProviders.of(this).get(CommunicateViewModel::class.java)
         viewModel.listOfTypeFragment.observe(this, Observer {
@@ -30,20 +40,22 @@ class MainActivity : AppCompatActivity() {
         })
         binding.mainViewModel = viewModel
 
-      /*  delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES*/
+        /*  delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES*/
 
     }
 
+
+
     override fun onResume() {
         super.onResume()
-        Log.d("bag","yes")
+        Log.d("bag", "yes")
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val nightModeEnabled = prefs.getBoolean( "NIGHT_MODE_VALUE",false)
-        if (nightModeEnabled){
-            Log.d("bag","yes")
+        val nightModeEnabled = prefs.getBoolean("NIGHT_MODE_VALUE", false)
+        if (nightModeEnabled) {
+            Log.d("bag", "yes")
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else{
-            Log.d("bag","no")
+        } else {
+            Log.d("bag", "no")
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
@@ -52,12 +64,16 @@ class MainActivity : AppCompatActivity() {
     private fun setFragment(tagFragment: ListOfTypeFragment) {
 
         val currentFragment = supportFragmentManager
-                .findFragmentByTag(tagFragment.toString())
+            .findFragmentByTag(tagFragment.toString())
         if (currentFragment == null) {
             val fragment = when (tagFragment) {
-                ListOfTypeFragment.FeedListFragment -> FeedListFragment()
+                ListOfTypeFragment.FeedListFragment -> {
+                    FeedListFragment()
+                }
                 ListOfTypeFragment.SearchFragment -> SearchFragment()
-                ListOfTypeFragment.FeedFragment -> FeedFragment()
+                ListOfTypeFragment.FeedFragment -> {
+                    FeedFragment()
+                }
                 ListOfTypeFragment.ChannelListFragment -> ChannelListFragment()
                 ListOfTypeFragment.SettingsFragment -> SettingsFragment()
             }
@@ -70,9 +86,9 @@ class MainActivity : AppCompatActivity() {
     private fun openFragment(fragment: Fragment, nameFragment: String) {
         fragment.retainInstance = true
         supportFragmentManager.beginTransaction()
-                .replace(R.id.frag_container, fragment, nameFragment)
-                .addToBackStack(null)
-                .commit()
+            .replace(R.id.frag_container, fragment, nameFragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onBackPressed() {
@@ -84,7 +100,11 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
     }
-
+    private fun handle(intent: Intent) {
+        intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
+            Log.d("bag","there")
+        }
+    }
 
 }
 

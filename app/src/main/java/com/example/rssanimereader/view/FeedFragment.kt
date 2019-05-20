@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.FragmentFeedBinding
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
 import com.example.rssanimereader.viewmodel.FeedListViewModel
+import kotlinx.android.synthetic.main.fragment_feed.view.*
 
 
 /**

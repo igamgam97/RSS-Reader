@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
-    <WebView
-            android:id="@+id/wvMindorks"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+    <data>
+        <variable
+                name="feedViewModel"
+                type="com.example.rssanimereader.viewmodel.FeedViewModel"/>
+    </data>
+    <androidx.appcompat.widget.LinearLayoutCompat android:layout_width="match_parent" android:layout_height="match_parent"
+                  android:orientation="vertical">
+        <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:id="@+id/feed_toolbar"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="4dp"
+                app:menu="@menu/feed_toolbar"  />
+               <!-- android:onMenuClick="@{feedViewModel.onMenuItemClick}"-->
+
+        <WebView
+                android:id="@+id/wvMindorks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

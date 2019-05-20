@@ -2,7 +2,9 @@ package com.example.rssanimereader.bindingAdapter
 
 import android.graphics.Bitmap
 import android.net.Uri
+import android.view.MenuItem
 import android.widget.ImageView
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
@@ -16,9 +18,11 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
                 method = "setOnNavigationItemSelectedListener"
         )
 )
-class DataBindingAdapter {
+class NavigationViewDataBindingAdapter {
 
 }
+
+
 
 object SimpleBindingAdapter {
     @BindingAdapter("android:loadImage")
@@ -26,4 +30,6 @@ object SimpleBindingAdapter {
     fun setImageViewResource(imageView: ImageView, path:String) {
         imageView.setImageURI(Uri.parse(path))
     }
+
+
 }

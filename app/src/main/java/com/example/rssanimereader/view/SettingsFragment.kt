@@ -1,12 +1,15 @@
 package com.example.rssanimereader.view
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.FragmentSettingsBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.viewmodel.SearchViewModel
@@ -28,6 +31,9 @@ class SettingsFragment : Fragment() {
         settingsViewModelFactory = Injection.provideViewModelFactory(this)
         settingsViewModel = ViewModelProviders.of(this, settingsViewModelFactory)
             .get(SettingsViewModel::class.java)
+        settingsViewModel.settingsNightMode.observe(this, Observer {
+            changeTheme()
+        })
 
     }
 
@@ -39,4 +45,15 @@ class SettingsFragment : Fragment() {
     }.root
 
 
+    fun changeTheme(){
+        val intent = Intent(context, MainActivity::class.java)
+        intent.putExtra(SETTING_FRAGMENT, true)
+        startActivity(intent)
+        activity?.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
+        activity?.finish()
+    }
+
+    companion object {
+        private const val SETTING_FRAGMENT = "settings_fragment"
+    }
 }
