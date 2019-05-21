@@ -1,8 +1,13 @@
 package com.example.rssanimereader.model.dataSource
 
-class FeedDataSource {
+import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.util.dbAPI.FeedApi
+import io.reactivex.Completable
+import io.reactivex.schedulers.Schedulers
 
-    fun getData() {
+class FeedDataSource(private val feedApi: FeedApi) {
 
+    fun setFavorite(feed:FeedItem) : Completable {
+        return Completable.fromCallable {feedApi.setFavorite(feed)}.subscribeOn(Schedulers.io())
     }
 }

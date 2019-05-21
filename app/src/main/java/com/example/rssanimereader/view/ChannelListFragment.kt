@@ -53,7 +53,6 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
 
     override fun onItemClick(position: Int) {
         communicateViewModel.targetChannel.value = viewModel.channels.value!![position].linkChannel
-        Log.d("bag", communicateViewModel.targetChannel.value.toString())
         communicateViewModel.onFeedListFramgentState()
     }
 

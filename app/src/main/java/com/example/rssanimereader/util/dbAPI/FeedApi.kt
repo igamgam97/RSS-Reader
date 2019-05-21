@@ -7,18 +7,6 @@ import com.example.rssanimereader.util.TaskInOtherThread
 
 class FeedApi(private val context: Context) {
 
-    val taskInOtherThread: TaskInOtherThread = TaskInOtherThread()
-
-    fun getAllFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
-
-        taskInOtherThread {
-            DatabaseAPI(context).open().use {
-                onDataReady(it.getItemFeeds() as ArrayList<FeedItem>)
-            }
-        }
-
-    }
-
 
     fun getFeedsByChannel(linkChannel: String): ArrayList<FeedItem> {
         var feeds = ArrayList<FeedItem>()
@@ -35,6 +23,14 @@ class FeedApi(private val context: Context) {
         }
         return feeds
     }
+
+    fun setFavorite(feed:FeedItem){
+        DatabaseAPI(context).open().use {
+            it.updateFeed(feed)
+        }
+    }
+
+
 }
 
 

@@ -9,17 +9,10 @@ class FeedListLocalDataSource(private val feedApi: FeedApi) :
     FeedListDataSource {
 
 
-    override fun getAllFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
-        feedApi.getAllFeeds { data ->
-            run {
-                onDataReady(data)
-            }
-        }
-    }
 
     override fun getFeedsByChannel(linkChannel: String) = Single.fromCallable<ArrayList<FeedItem>> {
         feedApi.getFeedsByChannel(linkChannel)
     }.subscribeOn(Schedulers.io())
 
-    fun getAllFeeds() = Single.fromCallable{feedApi.getAllFeeds()}.subscribeOn(Schedulers.io())
+    override fun getAllFeeds() = Single.fromCallable{feedApi.getAllFeeds()}.subscribeOn(Schedulers.io())
 }

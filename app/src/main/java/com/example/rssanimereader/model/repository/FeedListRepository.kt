@@ -9,7 +9,7 @@ class FeedListRepository(
     private val feedListDataSourceFactory: FeedListDataSourceFactory
 ) : Repository {
 
-
+/*
     fun getAllFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
 
         if (netManager.isConnectedToInternet) {
@@ -18,7 +18,7 @@ class FeedListRepository(
             feedListDataSourceFactory.provideFeedListLocalDataSource().getAllFeeds(onDataReady)
         }
 
-    }
+    }*/
 
     fun getFeedsByChannel(linkChannel: String) = if (netManager.isConnectedToInternet) {
         feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannel(linkChannel)

@@ -94,6 +94,7 @@ class RSSRemoteDataParser(
         }
         if (channelTitle !=null && channelImageURl !=null){
             val channel = ChannelItem(source, channelTitle, channelImageURl)
+
             return Pair(episodes, channel)
         }else{
             throw IOException()
@@ -145,8 +146,7 @@ class RSSRemoteDataParser(
         }
 
         if (title != null && subtitle !=null && link != null && publishedDate != null) {
-            val pathImage = SaveImageForCashPage(subtitle, title).toString()
-            Log.d("bag",pathImage)
+           /* val pathImage = SaveImageForCashPage(subtitle, title).toString()*/
             return FeedItem(
                 title,
                 subtitle,
@@ -154,7 +154,7 @@ class RSSRemoteDataParser(
                 publishedDate,
                 false,
                 source,
-                pathImage
+                ""
             )
         }
         else{

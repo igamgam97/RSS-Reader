@@ -13,21 +13,13 @@ class FeedListRemoteDataSource(
 
 
 
-    override fun getAllFeeds(onDataReady: (ArrayList<FeedItem>) -> Unit) {
-        feedApi.getAllFeeds { data ->
-            run {
-                onDataReady(data)
-
-            }
-        }
-    }
 
     override fun getFeedsByChannel(linkChannel: String): Single<ArrayList<FeedItem>> =
         downloadUrlSourceManager.validateData(linkChannel)
             .flatMap{Single.fromCallable{feedApi.getFeedsByChannel(linkChannel)}}
             .subscribeOn(Schedulers.io())
 
-    fun getAllFeeds() = Single.fromCallable{feedApi.getAllFeeds()}.subscribeOn(Schedulers.io())
+    override fun getAllFeeds() = Single.fromCallable{feedApi.getAllFeeds()}.subscribeOn(Schedulers.io())
 
 }
 

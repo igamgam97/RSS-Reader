@@ -10,10 +10,15 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.FragmentFeedBinding
+import com.example.rssanimereader.di.FeedListViewModelFactory
+import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
 import com.example.rssanimereader.viewmodel.FeedListViewModel
+import com.example.rssanimereader.viewmodel.FeedViewModel
+import kotlinx.android.synthetic.main.feed_view_layout.*
 import kotlinx.android.synthetic.main.fragment_feed.view.*
 
 
@@ -23,12 +28,15 @@ import kotlinx.android.synthetic.main.fragment_feed.view.*
  */
 class FeedFragment : Fragment() {
 
-    lateinit var viewModel: FeedListViewModel
+    lateinit var feedViewModelFactory: ViewModelProvider.Factory
     lateinit var communicateViewModel: CommunicateViewModel
+    lateinit var feedViewModel : FeedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        feedViewModelFactory = Injection.provideViewModelFactory(this)
+        feedViewModel = ViewModelProviders.of(this, feedViewModelFactory)
+            .get(FeedViewModel::class.java)
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -37,7 +45,10 @@ class FeedFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? = FragmentFeedBinding.inflate(inflater, container, false).apply {
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
+        feedViewModel = this@FeedFragment.feedViewModel
+        feedViewModel?.feedItem =  communicateViewModel.selectedFeed
         val selectedFeed = communicateViewModel.selectedFeed.itemDesc
+
         wvMindorks.settings.loadWithOverviewMode = true
         wvMindorks.settings.javaScriptEnabled = true
         wvMindorks.webViewClient = object : WebViewClient() {

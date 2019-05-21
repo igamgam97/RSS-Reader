@@ -43,10 +43,8 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
             it?.let(feedRecyclerViewAdapter::replaceData)
         })
         communicateViewModel.targetChannel.observe(this, Observer {
-            Log.d("bag", it.toString())
             viewModel.getFeedsByChannel(communicateViewModel.targetChannel.value!!)
         })
-        Log.d("bag", "onCreate")
     }
 
     override fun onCreateView(

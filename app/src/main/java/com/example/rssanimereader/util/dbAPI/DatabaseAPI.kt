@@ -141,6 +141,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
             cv.put(DatabaseHelper.FEED_COLUMN_LINK, it.itemLink)
             cv.put(DatabaseHelper.FEED_COLUMN_PUB_DATE, it.itemPubDate)
             cv.put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, it.linkChannel)
+     /*       Log.d("bag",it.pathImage)*/
             cv.put(DatabaseHelper.FEED_COLUMN_PATH_IMAGE, it.pathImage)
             database!!.insert(DatabaseHelper.FEED_TABLE, null, cv)
         }
@@ -154,6 +155,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         cv.put(DatabaseHelper.CHANNEL__COLUMN_NAME, channel.nameChannel)
         cv.put(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE, channel.urlImage)
         cv.put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, channel.pathImage!!)
+        Log.d("bag",channel.pathImage)
         return database!!.insert(DatabaseHelper.CHANNEL_TABLE, null, cv)
     }
 
@@ -164,20 +166,20 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         val whereArgs = arrayOf(itemFeedId.toString())
         return database!!.delete(DatabaseHelper.FEED_TABLE, whereClause, whereArgs).toLong()
     }
-/*
 
-    fun update(item: FeedItem): Long {
 
-        val whereClause = DatabaseHelper.FEED_COLUMN_ID + "=" + item.id.toString()
+    fun updateFeed(item: FeedItem): Long {
+
+        val whereClause = DatabaseHelper.FEED_COLUMN_TITLE + "=" + item.itemTitle
         val cv = ContentValues()
-        cv.put(DatabaseHelper.FEED_COLUMN_TITLE, item.itemTitle)
-        cv.put(DatabaseHelper.FEED_COLUMN_DESCRIPTION, item.itemDesc)
-        cv.put(DatabaseHelper.FEED_COLUMN_LINK, item.itemLink)
-        cv.put(DatabaseHelper.FEED_COLUMN_PUB_DATE, item.itemPubDate)
-        cv.put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, item.linkChannel)
+        if (item.itemFavorite){
+            cv.put(DatabaseHelper.FEED_COLUMN_FAVORITE, 1)
+        }
+        else{
+            cv.put(DatabaseHelper.FEED_COLUMN_FAVORITE, 0)
+        }
         return database!!.update(DatabaseHelper.FEED_TABLE, cv, whereClause, null).toLong()
     }
-*/
 
 
     fun deleteFeedsByChannel(channel: String): Long {

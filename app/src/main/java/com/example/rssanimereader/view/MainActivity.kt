@@ -48,14 +48,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        Log.d("bag", "yes")
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         val nightModeEnabled = prefs.getBoolean("NIGHT_MODE_VALUE", false)
         if (nightModeEnabled) {
-            Log.d("bag", "yes")
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         } else {
-            Log.d("bag", "no")
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
     }
@@ -102,7 +99,6 @@ class MainActivity : AppCompatActivity() {
     }
     private fun handle(intent: Intent) {
         intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
-            Log.d("bag","there")
         }
     }
 
