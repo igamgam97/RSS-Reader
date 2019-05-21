@@ -22,6 +22,16 @@ class NavigationViewDataBindingAdapter {
 
 }
 
+@BindingMethods(
+    BindingMethod(
+        type = Toolbar::class,
+        attribute = "app:onToolbarItemSelected",
+        method = "setOnMenuItemClickListener"
+    )
+)
+class ToolbarViewDataBindingAdapter {
+
+}
 
 
 object SimpleBindingAdapter {

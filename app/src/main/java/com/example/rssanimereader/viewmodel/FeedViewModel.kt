@@ -3,7 +3,6 @@ package com.example.rssanimereader.viewmodel
 
 import android.util.Log
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
@@ -13,9 +12,9 @@ import com.example.rssanimereader.model.repository.FeedRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
-class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel(){
+class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
 
-    lateinit var feedItem : FeedItem
+    lateinit var feedItem: FeedItem
 
     private var feedRepository = FeedRepository()
 
@@ -29,24 +28,24 @@ class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel(){
         }
     }
 
-    /*override fun onMenuItemClick(item: MenuItem?): Boolean {
+    fun onMenuItemClick(item: MenuItem?): Boolean {
         when (item!!.itemId) {
-            R.id.action_favorite -> Log.d("bag", "favorite")
+            R.id.action_favorite -> setFavorite()
         }
 
         return true
-    }*/
+    }
 
     fun setFavorite() {
-        Log.d("bag",feedItem.itemFavorite.toString())
+        Log.d("bag", feedItem.itemFavorite.toString())
         feedItem.itemFavorite = !feedItem.itemFavorite
         val disposable = feedDataSource.setFavorite(feedItem)
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({},::handleError)
+            .subscribe({}, ::handleError)
         compositeDisposable.add(disposable)
     }
 
-    private fun handleError(error:Throwable){
+    private fun handleError(error: Throwable) {
 
     }
 
