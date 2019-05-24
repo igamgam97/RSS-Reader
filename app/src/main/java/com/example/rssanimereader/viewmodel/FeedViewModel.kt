@@ -36,7 +36,7 @@ class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
         return true
     }
 
-    fun setFavorite() {
+    private fun setFavorite() {
         Log.d("bag", feedItem.itemFavorite.toString())
         feedItem.itemFavorite = !feedItem.itemFavorite
         val disposable = feedDataSource.setFavorite(feedItem)

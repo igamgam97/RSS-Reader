@@ -28,8 +28,14 @@
                                                android:elevation="4dp" app:layout_constraintStart_toStartOf="parent"
                                                app:layout_constraintEnd_toEndOf="parent"
                                                app:layout_constraintTop_toTopOf="parent"
-                                               app:menu="@menu/toolbar_feed_list"
-                                               android:visibility="visible"/>
+                                               android:visibility="visible">
+                <Spinner
+                        android:id="@+id/spinner_nav"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:entries="@array/sort"
+                        android:layout_gravity="end"/>
+            </androidx.appcompat.widget.Toolbar>
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/feed_rv"
                     android:layout_width="0dp"
