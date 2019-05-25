@@ -1,6 +1,5 @@
 package com.example.rssanimereader.di
 
-import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import com.example.rssanimereader.ProvideContextApplication
@@ -11,19 +10,17 @@ import com.example.rssanimereader.model.dataSource.SettingsDataSource
 import com.example.rssanimereader.model.dataSource.feedListDataSource.FeedListDataSourceFactory
 import com.example.rssanimereader.model.repository.FeedListRepository
 import com.example.rssanimereader.model.repository.SearchRepository
+import com.example.rssanimereader.service.DownloadUrlSourceManager
+import com.example.rssanimereader.service.RemoteDataSaver
 import com.example.rssanimereader.util.HTMLFeedFormatter
 import com.example.rssanimereader.util.NetManager
 import com.example.rssanimereader.util.dbAPI.ChannelAPI
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import com.example.rssanimereader.util.dbAPI.FeedApi
-import com.example.rssanimereader.service.DownloadUrlSourceManager
-import com.example.rssanimereader.service.RemoteDataSaver
 import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
 import com.example.rssanimereader.view.*
-import com.example.rssanimereader.viewmodel.SettingsViewModel
 
 object Injection {
-
 
 
     // todo опрокинуть подключение к бд
@@ -35,29 +32,31 @@ object Injection {
         return RemoteDataSaver(rssRemoteDataParser, databaseAPI)
     }
 
-    fun provideDataBaseLoader(context: Context): FeedApi {
-        return FeedApi(context)
+    fun provideFeedApi(datBaseConnection: DatabaseAPI): FeedApi {
+        return FeedApi(datBaseConnection)
     }
 
     private fun provideFeedListViewModelFactory(): FeedListViewModelFactory {
 
         val context = ProvideContextApplication.applicationContext()
 
-        val dataBaseLoader = provideDataBaseLoader(context)
+        val dataBasConnection = ProvideContextApplication.getDataBaseConnection()
+
+        val dataBaseLoader = provideFeedApi(dataBasConnection)
 
         val netManager = NetManager(context)
 
         val downloadUrlSourceManager = DownloadUrlSourceManager(context)
 
         val feedListDataSourceFactory =
-                FeedListDataSourceFactory(
-                        downloadUrlSourceManager,
-                        dataBaseLoader
-                )
+            FeedListDataSourceFactory(
+                downloadUrlSourceManager,
+                dataBaseLoader
+            )
 
         val feedListRepository = FeedListRepository(
-                netManager,
-                feedListDataSourceFactory
+            netManager,
+            feedListDataSourceFactory
         )
 
         return FeedListViewModelFactory(feedListRepository)
@@ -65,9 +64,10 @@ object Injection {
 
     private fun provideSearchViewModelFactory(): SearchViewModelFactory {
 
-        val context = ProvideContextApplication.applicationContext()
 
-        val channelSubscriptionsAPI = ChannelAPI(context)
+        val dataBasConnection = ProvideContextApplication.getDataBaseConnection()
+
+        val channelSubscriptionsAPI = ChannelAPI(dataBasConnection)
 
         val searchRepository = SearchRepository(channelSubscriptionsAPI)
 
@@ -76,16 +76,17 @@ object Injection {
 
     private fun provideChannelListViewModelFactory(): ChannelListViewModelFactory {
 
-        val context = ProvideContextApplication.applicationContext()
+        val dataBasConnection = ProvideContextApplication.getDataBaseConnection()
 
-        val channelApi = ChannelAPI(context)
+
+        val channelApi = ChannelAPI(dataBasConnection)
 
         val channelListDataSource = ChannelListDataSource(channelApi)
 
         return ChannelListViewModelFactory(channelListDataSource)
     }
 
-    private fun provideSettingsViewModelFactory(): SettingsViewModelFactory{
+    private fun provideSettingsViewModelFactory(): SettingsViewModelFactory {
 
         val context = ProvideContextApplication.applicationContext()
 
@@ -97,11 +98,12 @@ object Injection {
 
     }
 
-    private fun provideFeedViewModelFactory(): FeedViewModelFactory{
+    private fun provideFeedViewModelFactory(): FeedViewModelFactory {
 
-        val context =  ProvideContextApplication.applicationContext()
+        val dataBaseConnection = ProvideContextApplication.getDataBaseConnection()
 
-        val dataBaseLoader = provideDataBaseLoader(context)
+
+        val dataBaseLoader = provideFeedApi(dataBaseConnection)
 
         val feedDataSource = FeedDataSource(dataBaseLoader)
 
@@ -109,12 +111,12 @@ object Injection {
     }
 
     fun provideViewModelFactory(fragment: Fragment) =
-            when (fragment) {
-                is FeedListFragment -> provideFeedListViewModelFactory()
-                is SearchFragment -> provideSearchViewModelFactory()
-                is ChannelListFragment -> provideChannelListViewModelFactory()
-                is SettingsFragment -> provideSettingsViewModelFactory()
-                is FeedFragment -> provideFeedViewModelFactory()
-                else -> throw IllegalArgumentException("Unknown ViewModelFactory Class")
-            }
+        when (fragment) {
+            is FeedListFragment -> provideFeedListViewModelFactory()
+            is SearchFragment -> provideSearchViewModelFactory()
+            is ChannelListFragment -> provideChannelListViewModelFactory()
+            is SettingsFragment -> provideSettingsViewModelFactory()
+            is FeedFragment -> provideFeedViewModelFactory()
+            else -> throw IllegalArgumentException("Unknown ViewModelFactory Class")
+        }
 }

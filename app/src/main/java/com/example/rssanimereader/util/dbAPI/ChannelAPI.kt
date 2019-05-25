@@ -1,33 +1,18 @@
 package com.example.rssanimereader.util.dbAPI
 
-import android.content.Context
 import com.example.rssanimereader.entity.ChannelItem
-import com.example.rssanimereader.util.TaskInOtherThread
 
 class ChannelAPI(
-        val context: Context
+    val dataBaseConnection: DatabaseAPI
 ) {
 
 
-    val taskInOtherThread: TaskInOtherThread = TaskInOtherThread()
+    fun getChannels() = dataBaseConnection.getAllChannels()
 
-
-    fun getChannels(onDataReady: (ArrayList<ChannelItem>) -> Unit) {
-        taskInOtherThread {
-            DatabaseAPI(context).open().use {
-                onDataReady(it.getAllChannels())
-            }
-        }
-    }
-
-    fun deleteChannel(channelName: String, onDataReady: (ArrayList<ChannelItem>) -> Unit) {
-        taskInOtherThread {
-            DatabaseAPI(context).open().use {
-                it.deleteFeedsByChannel(channelName)
-                it.deleteChannel(channelName)
-                onDataReady(it.getAllChannels())
-            }
-        }
+    fun deleteChannel(channelName: String): ArrayList<ChannelItem> {
+        dataBaseConnection.deleteFeedsByChannel(channelName)
+        dataBaseConnection.deleteChannel(channelName)
+        return dataBaseConnection.getAllChannels()
     }
 
     companion object {

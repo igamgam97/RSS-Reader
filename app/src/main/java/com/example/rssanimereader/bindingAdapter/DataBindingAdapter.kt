@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.view.MenuItem
 import android.widget.ImageView
+import android.widget.Spinner
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
@@ -29,9 +30,16 @@ class NavigationViewDataBindingAdapter {
         method = "setOnMenuItemClickListener"
     )
 )
-class ToolbarViewDataBindingAdapter {
+class ToolbarViewDataBindingAdapter{}
 
-}
+@BindingMethods(
+    BindingMethod(
+    type = Spinner::class,
+    attribute = "app:onSpinnerItemSelected",
+    method = "selectedItemPosition"
+    )
+)
+class SpinnerViewDataBindingAdapter{}
 
 
 object SimpleBindingAdapter {

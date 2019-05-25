@@ -1,33 +1,17 @@
 package com.example.rssanimereader.util.dbAPI
 
-import android.content.Context
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.util.TaskInOtherThread
 
 
-class FeedApi(private val context: Context) {
+class FeedApi(private val dataBaseConnection: DatabaseAPI) {
 
 
-    fun getFeedsByChannel(linkChannel: String): ArrayList<FeedItem> {
-        var feeds = ArrayList<FeedItem>()
-        DatabaseAPI(context).open().use {
-            feeds = it.getFeedsByChannel(linkChannel)
-        }
-        return feeds
-    }
+    fun getFeedsByChannel(linkChannel: String) = dataBaseConnection.getFeedsByChannel((linkChannel))
 
-    fun getAllFeeds(): ArrayList<FeedItem> {
-        var feeds = ArrayList<FeedItem>()
-        DatabaseAPI(context).open().use {
-            feeds = it.getItemFeeds()
-        }
-        return feeds
-    }
+    fun getAllFeeds() = dataBaseConnection.getItemFeeds()
 
-    fun setFavorite(feed:FeedItem){
-        DatabaseAPI(context).open().use {
-            it.updateFeed(feed)
-        }
+    fun setFavorite(feed: FeedItem) {
+        dataBaseConnection.updateFeed(feed)
     }
 
 

@@ -1,16 +1,14 @@
 package com.example.rssanimereader.model.dataSource
 
-import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.util.dbAPI.ChannelAPI
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 
 class ChannelListDataSource(private val channelApi: ChannelAPI) {
-    fun getChannels(onDataReady: (ArrayList<ChannelItem>) -> Unit) {
+    fun getChannels() =
+        Single.fromCallable { channelApi.getChannels() }.subscribeOn(Schedulers.io())
 
-        channelApi.getChannels(onDataReady)
+    fun deleteChannels(nameChannel: String) =
+        Single.fromCallable { channelApi.deleteChannel(nameChannel) }
 
-    }
-
-    fun deleteChannels(nameChannel: String, onDataReady: ((ArrayList<ChannelItem>)) -> Unit) {
-        channelApi.deleteChannel(nameChannel, onDataReady)
-    }
 }

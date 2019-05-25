@@ -55,6 +55,10 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
         compositeDisposable.clear()
     }
 
+     public fun setSelectedItemPosition(selectedItemPosition:Int) {
+
+    }
+
 
 
 }

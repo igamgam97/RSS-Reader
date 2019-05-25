@@ -15,9 +15,6 @@ import java.io.Closeable
 
 class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
 
-    init {
-
-    }
 
 
     private val dbHelper: DatabaseHelper =
@@ -192,7 +189,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     fun getFeedsByChannel(channel: String): ArrayList<FeedItem> {
         val whereClause = "linkChannel = ?"
         val whereArgs = arrayOf(channel)
-        return getItemFeeds(whereClause, whereArgs) as ArrayList<FeedItem>
+        return getItemFeeds(whereClause, whereArgs)
     }
 
     fun isExistChannel(channel: String): Boolean {
