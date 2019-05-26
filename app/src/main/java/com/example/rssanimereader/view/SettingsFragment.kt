@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.FragmentSettingsBinding
 import com.example.rssanimereader.di.Injection
-import com.example.rssanimereader.viewmodel.SearchViewModel
 import com.example.rssanimereader.viewmodel.SettingsViewModel
 
 
@@ -28,9 +27,7 @@ class SettingsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        settingsViewModelFactory = Injection.provideViewModelFactory(this)
-        settingsViewModel = ViewModelProviders.of(this, settingsViewModelFactory)
-            .get(SettingsViewModel::class.java)
+        settingsViewModel = Injection.provideSettingsViewModel(this)
         settingsViewModel.settingsNightMode.observe(this, Observer {
             changeTheme()
         })

@@ -1,6 +1,5 @@
 package com.example.rssanimereader.viewmodel
 
-import android.util.Log
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

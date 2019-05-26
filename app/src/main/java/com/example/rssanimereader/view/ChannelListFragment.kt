@@ -1,7 +1,6 @@
 package com.example.rssanimereader.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -18,17 +17,14 @@ import com.example.rssanimereader.viewmodel.CommunicateViewModel
 
 class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickListener {
 
-    private val channelRecyclerViewAdapter =
-        ChannelRecyclerViewAdapter(arrayListOf(), this)
+    private val channelRecyclerViewAdapter = ChannelRecyclerViewAdapter(arrayListOf(), this)
     private lateinit var viewModel: ChannelListViewModel
     private lateinit var channelListViewModelFactory: ViewModelProvider.Factory
     private lateinit var communicateViewModel: CommunicateViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
-        channelListViewModelFactory = Injection.provideViewModelFactory(this)
-        viewModel = ViewModelProviders.of(this, channelListViewModelFactory)
-                .get(ChannelListViewModel::class.java)
+        viewModel = Injection.provideChannelListViewModel(this)
 
         viewModel.channels.observe(this, Observer<ArrayList<ChannelItem>> {
             it?.let(channelRecyclerViewAdapter::replaceData)
@@ -44,12 +40,12 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-            FragmentChannelListBinding.inflate(inflater, container, false).apply {
-                executePendingBindings()
-                feedRv.layoutManager = LinearLayoutManager(activity)
-                feedRv.adapter = channelRecyclerViewAdapter
-                channelListViewModel = viewModel
-            }.root
+        FragmentChannelListBinding.inflate(inflater, container, false).apply {
+            executePendingBindings()
+            feedRv.layoutManager = LinearLayoutManager(activity)
+            feedRv.adapter = channelRecyclerViewAdapter
+            channelListViewModel = viewModel
+        }.root
 
     override fun onItemClick(position: Int) {
         communicateViewModel.targetChannel.value = viewModel.channels.value!![position].linkChannel

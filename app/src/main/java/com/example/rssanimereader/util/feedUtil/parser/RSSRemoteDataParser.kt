@@ -1,12 +1,10 @@
 package com.example.rssanimereader.util.feedUtil.parser
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.util.Xml
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.service.RemoteDataParser
-import com.example.rssanimereader.util.SaveImageForCashPage
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException

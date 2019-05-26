@@ -3,7 +3,6 @@ package com.example.rssanimereader.view
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
@@ -23,13 +22,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-      /*  when(intent?.action) {
-             Intent.ACTION_VIEW -> {
-                handle(intent)
-            }
-        }
-*/
         Log.d("bag", "onCreate")
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_layout)
         viewModel = ViewModelProviders.of(this).get(CommunicateViewModel::class.java)

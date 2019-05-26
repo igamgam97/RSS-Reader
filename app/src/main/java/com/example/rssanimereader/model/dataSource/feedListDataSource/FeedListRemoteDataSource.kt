@@ -1,8 +1,8 @@
 package com.example.rssanimereader.model.dataSource.feedListDataSource
 
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.util.dbAPI.FeedApi
 import com.example.rssanimereader.service.DownloadUrlSourceManager
+import com.example.rssanimereader.util.dbAPI.FeedApi
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 

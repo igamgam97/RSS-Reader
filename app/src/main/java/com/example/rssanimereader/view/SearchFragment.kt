@@ -23,9 +23,7 @@ class SearchFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        searchViewModelFactory = Injection.provideViewModelFactory(this)
-        searchViewModel = ViewModelProviders.of(this, searchViewModelFactory)
-                .get(SearchViewModel::class.java)
+        searchViewModel = Injection.provideSearchViewModel(this)
 
 
         searchViewModel.isClickSearchButton.observe(this, Observer<Boolean> {

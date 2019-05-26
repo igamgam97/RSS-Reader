@@ -22,7 +22,7 @@
             <TextView
                     android:id="@+id/feed_title"
                     android:minHeight="60sp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:layout_marginStart="16dp"
@@ -38,7 +38,7 @@
                     android:id="@+id/favorite_feed_image"
                     android:src="@drawable/favorite_feed_icon"
                     android:contentDescription="@string/channelImage"
-                    android:visibility="@{feed.itemFavorite ? View.GONE : View.VISIBLE}"/>
+                    android:visibility="@{feed.itemFavorite ? View.VISIBLE : View.GONE}"/>
             <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
@@ -46,7 +46,7 @@
                     android:id="@+id/no_favorite_feed_image"
                     android:src="@drawable/no_favorite_feed_icon"
                     android:contentDescription="@string/channelImage"
-                    android:visibility="@{!feed.itemFavorite ? View.GONE : View.VISIBLE}"/>
+                    android:visibility="@{!feed.itemFavorite ? View.VISIBLE : View.GONE}"/>
         </androidx.appcompat.widget.LinearLayoutCompat><!---->
     </androidx.cardview.widget.CardView>
 

@@ -3,7 +3,6 @@ package com.example.rssanimereader.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,9 +35,7 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         super.onCreate(savedInstanceState)
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
 
-        feedListViewModelFactory = Injection.provideViewModelFactory(this)
-        viewModel = ViewModelProviders.of(this, feedListViewModelFactory)
-                .get(FeedListViewModel::class.java)
+        viewModel = Injection.provideFeedListViewModel(this)
         viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
             it?.let(feedRecyclerViewAdapter::replaceData)
         })

@@ -4,6 +4,12 @@
             android:id="@+id/action_favorite"
             android:orderInCategory="300"
             android:title="@string/favorite_feed"
-            android:icon="@drawable/baseline_favorite_white"
+            android:icon="@drawable/no_favorite_feed_icon"
+            app:showAsAction="ifRoom"/>
+    <item
+            android:id="@+id/action_share"
+            android:orderInCategory="300"
+            android:title="@string/favorite_feed"
+            android:icon="@drawable/share_feed_icon"
             app:showAsAction="ifRoom"/>
 </menu>

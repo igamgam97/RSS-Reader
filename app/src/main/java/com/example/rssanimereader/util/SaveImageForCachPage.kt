@@ -1,8 +1,6 @@
 package com.example.rssanimereader.util
 
 import android.net.Uri
-import android.util.Log
-import com.example.rssanimereader.entity.FeedItem
 import java.util.regex.Pattern
 
 

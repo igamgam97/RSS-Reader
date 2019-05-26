@@ -1,6 +1,6 @@
 package com.example.rssanimereader.di
 
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.example.rssanimereader.ProvideContextApplication
 import com.example.rssanimereader.entity.FeedItem
@@ -19,104 +19,91 @@ import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import com.example.rssanimereader.util.dbAPI.FeedApi
 import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
 import com.example.rssanimereader.view.*
+import com.example.rssanimereader.viewmodel.*
 
 object Injection {
 
+    private val contextApplication = ProvideContextApplication.applicationContext()
+    private val dataBaseConnection = ProvideContextApplication.getDataBaseConnection()
+    private lateinit var feedListViewModel: FeedListViewModel
+    private lateinit var feedViewModel: FeedViewModel
+    private lateinit var searchViewModel: SearchViewModel
+    private lateinit var channelListViewModel: ChannelListViewModel
+    private lateinit var settingViewModel: SettingsViewModel
 
     // todo опрокинуть подключение к бд
     fun provideRemoteDataSaver(urlPath: String): RemoteDataSaver<FeedItem> {
-        val context = ProvideContextApplication.applicationContext()
-        val databaseAPI = DatabaseAPI(context)
         val htmlFeedFormatter = HTMLFeedFormatter()
         val rssRemoteDataParser = RSSRemoteDataParser(urlPath, htmlFeedFormatter)
-        return RemoteDataSaver(rssRemoteDataParser, databaseAPI)
+        return RemoteDataSaver(rssRemoteDataParser, dataBaseConnection)
     }
 
     fun provideFeedApi(datBaseConnection: DatabaseAPI): FeedApi {
         return FeedApi(datBaseConnection)
     }
 
-    private fun provideFeedListViewModelFactory(): FeedListViewModelFactory {
 
-        val context = ProvideContextApplication.applicationContext()
-
-        val dataBasConnection = ProvideContextApplication.getDataBaseConnection()
-
-        val dataBaseLoader = provideFeedApi(dataBasConnection)
-
-        val netManager = NetManager(context)
-
-        val downloadUrlSourceManager = DownloadUrlSourceManager(context)
-
+    fun provideFeedListViewModel(fragment: FeedListFragment) = if (!Injection::feedListViewModel.isInitialized) {
+        val feedApi = provideFeedApi(dataBaseConnection)
+        val netManager = NetManager(contextApplication)
+        val downloadUrlSourceManager = DownloadUrlSourceManager(contextApplication)
         val feedListDataSourceFactory =
             FeedListDataSourceFactory(
                 downloadUrlSourceManager,
-                dataBaseLoader
+                feedApi
             )
-
         val feedListRepository = FeedListRepository(
             netManager,
             feedListDataSourceFactory
         )
-
-        return FeedListViewModelFactory(feedListRepository)
+        val feedListViewModelFactory = FeedListViewModelFactory(feedListRepository)
+        ViewModelProviders.of(fragment, feedListViewModelFactory)
+            .get(FeedListViewModel::class.java)
+    } else {
+        feedListViewModel
     }
 
-    private fun provideSearchViewModelFactory(): SearchViewModelFactory {
-
-
-        val dataBasConnection = ProvideContextApplication.getDataBaseConnection()
-
-        val channelSubscriptionsAPI = ChannelAPI(dataBasConnection)
-
+    fun provideSearchViewModel(fragment: SearchFragment) = if (!Injection::searchViewModel.isInitialized) {
+        val channelSubscriptionsAPI = ChannelAPI(dataBaseConnection)
         val searchRepository = SearchRepository(channelSubscriptionsAPI)
-
-        return SearchViewModelFactory(searchRepository)
+        val searchViewModelFactory = SearchViewModelFactory(searchRepository)
+        ViewModelProviders.of(fragment, searchViewModelFactory)
+            .get(SearchViewModel::class.java)
+    } else {
+        searchViewModel
     }
 
-    private fun provideChannelListViewModelFactory(): ChannelListViewModelFactory {
-
-        val dataBasConnection = ProvideContextApplication.getDataBaseConnection()
-
-
-        val channelApi = ChannelAPI(dataBasConnection)
-
-        val channelListDataSource = ChannelListDataSource(channelApi)
-
-        return ChannelListViewModelFactory(channelListDataSource)
-    }
-
-    private fun provideSettingsViewModelFactory(): SettingsViewModelFactory {
-
-        val context = ProvideContextApplication.applicationContext()
-
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-        val settingsDataSource = SettingsDataSource(prefs)
-
-        return SettingsViewModelFactory(settingsDataSource)
-
-    }
-
-    private fun provideFeedViewModelFactory(): FeedViewModelFactory {
-
-        val dataBaseConnection = ProvideContextApplication.getDataBaseConnection()
-
-
-        val dataBaseLoader = provideFeedApi(dataBaseConnection)
-
-        val feedDataSource = FeedDataSource(dataBaseLoader)
-
-        return FeedViewModelFactory(feedDataSource)
-    }
-
-    fun provideViewModelFactory(fragment: Fragment) =
-        when (fragment) {
-            is FeedListFragment -> provideFeedListViewModelFactory()
-            is SearchFragment -> provideSearchViewModelFactory()
-            is ChannelListFragment -> provideChannelListViewModelFactory()
-            is SettingsFragment -> provideSettingsViewModelFactory()
-            is FeedFragment -> provideFeedViewModelFactory()
-            else -> throw IllegalArgumentException("Unknown ViewModelFactory Class")
+    fun provideChannelListViewModel(fragment: ChannelListFragment) =
+        if (!Injection::channelListViewModel.isInitialized) {
+            val channelApi = ChannelAPI(dataBaseConnection)
+            val channelListDataSource = ChannelListDataSource(channelApi)
+            val channelListViewModelFactory = ChannelListViewModelFactory(channelListDataSource)
+            ViewModelProviders.of(fragment, channelListViewModelFactory)
+                .get(ChannelListViewModel::class.java)
+        } else {
+            channelListViewModel
         }
+
+    fun provideSettingsViewModel(fragment: SettingsFragment) = if (!Injection::settingViewModel.isInitialized) {
+        val context = ProvideContextApplication.applicationContext()
+        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val settingsDataSource = SettingsDataSource(prefs)
+        val settingsViewModelFactory = SettingsViewModelFactory(settingsDataSource)
+        ViewModelProviders.of(fragment, settingsViewModelFactory)
+            .get(SettingsViewModel::class.java)
+
+    } else {
+        settingViewModel
+    }
+
+    fun provideFeedViewModel(fragment: FeedFragment) = if (!Injection::feedViewModel.isInitialized) {
+        val dataBaseLoader = provideFeedApi(dataBaseConnection)
+        val feedDataSource = FeedDataSource(dataBaseLoader)
+        val feedViewModelFactory = FeedViewModelFactory(feedDataSource)
+        ViewModelProviders.of(fragment, feedViewModelFactory)
+            .get(FeedViewModel::class.java)
+    } else {
+        feedViewModel
+    }
+
 }

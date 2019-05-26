@@ -13,7 +13,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="4dp"
                 app:menu="@menu/feed_toolbar"
-                app:onToolbarItemSelected="@{feedViewModel.onMenuItemClick}"/>
+                app:onToolbarItemSelected="@{feedViewModel::onMenuItemClick}"/>
 
 
         <WebView

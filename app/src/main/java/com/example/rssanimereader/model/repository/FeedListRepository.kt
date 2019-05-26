@@ -1,6 +1,5 @@
 package com.example.rssanimereader.model.repository
 
-import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.model.dataSource.feedListDataSource.FeedListDataSourceFactory
 import com.example.rssanimereader.util.NetManager
 
