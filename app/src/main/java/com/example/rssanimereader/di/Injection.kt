@@ -33,8 +33,7 @@ object Injection {
 
     // todo опрокинуть подключение к бд
     fun provideRemoteDataSaver(urlPath: String): RemoteDataSaver<FeedItem> {
-        val htmlFeedFormatter = HTMLFeedFormatter()
-        val rssRemoteDataParser = RSSRemoteDataParser(urlPath, htmlFeedFormatter)
+        val rssRemoteDataParser = RSSRemoteDataParser()
         return RemoteDataSaver(rssRemoteDataParser, dataBaseConnection)
     }
 

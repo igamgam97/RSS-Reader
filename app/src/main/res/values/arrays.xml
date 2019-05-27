@@ -16,6 +16,6 @@
         <item>@string/sortFirstNew</item>
         <item>@string/sortFirstOld</item>
     </string-array>>
-    <string name="sortFirstNew">сначала новые</string>
-    <string name="sortFirstOld">сначала старые</string>
+    <string name="sortFirstNew">start with new</string>
+    <string name="sortFirstOld">start with old</string>
 </resources>

@@ -7,49 +7,36 @@ import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.view.ListOfTypeFragment
-import java.util.*
 
 
 class CommunicateViewModel : ViewModel() {
-    val mListOfTypeFragment: MutableLiveData<Stack<ListOfTypeFragment>> = MutableLiveData()
+    val mListOfTypeFragment: MutableLiveData<ListOfTypeFragment> = MutableLiveData()
 
-    val listOfTypeFragment: LiveData<Stack<ListOfTypeFragment>>
+    val listOfTypeFragment: LiveData<ListOfTypeFragment>
         get() = mListOfTypeFragment
 
     init {
-        val stack = Stack<ListOfTypeFragment>()
-        stack.push(ListOfTypeFragment.FeedListFragment)
-        mListOfTypeFragment.value = stack
+        mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragment
     }
 
-    fun onFeedListFramgentState() {
-        val stack = mListOfTypeFragment.value
-        stack!!.push(ListOfTypeFragment.FeedListFragment)
-        mListOfTypeFragment.value = stack
+    fun onFeedListFragmentState() {
+        mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragment
     }
 
-    fun onSerchFramentState() {
-        val stack = mListOfTypeFragment.value
-        stack!!.push(ListOfTypeFragment.SearchFragment)
-        mListOfTypeFragment.value = stack
+    fun onSearchFragmentState() {
+        mListOfTypeFragment.value = ListOfTypeFragment.SearchFragment
     }
 
-    fun onFeedFramentState() {
-        val stack = mListOfTypeFragment.value
-        stack!!.push(ListOfTypeFragment.FeedFragment)
-        mListOfTypeFragment.value = stack
+    fun onFeedFragmentState() {
+        mListOfTypeFragment.value = ListOfTypeFragment.FeedFragment
     }
 
-    fun onSettingsFramentState() {
-        val stack = mListOfTypeFragment.value
-        stack!!.push(ListOfTypeFragment.SettingsFragment)
-        mListOfTypeFragment.value = stack
+    fun onSettingsFragmentState() {
+        mListOfTypeFragment.value = ListOfTypeFragment.SettingsFragment
     }
 
-    fun onChannelListFramentState() {
-        val stack = mListOfTypeFragment.value
-        stack!!.push(ListOfTypeFragment.ChannelListFragment)
-        mListOfTypeFragment.value = stack
+    fun onChannelListFragmentState() {
+        mListOfTypeFragment.value = ListOfTypeFragment.ChannelListFragment
     }
 
     val targetChannel = MutableLiveData<String>()
@@ -58,9 +45,9 @@ class CommunicateViewModel : ViewModel() {
 
     fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item!!.itemId) {
-            R.id.app_bar_channels -> onChannelListFramentState()
-            R.id.app_bar_search -> onSerchFramentState()
-            R.id.app_bar_settings-> onSettingsFramentState()
+            R.id.app_bar_channels -> onChannelListFragmentState()
+            R.id.app_bar_search -> onSearchFragmentState()
+            R.id.app_bar_settings-> onSettingsFragmentState()
         }
 
         return true

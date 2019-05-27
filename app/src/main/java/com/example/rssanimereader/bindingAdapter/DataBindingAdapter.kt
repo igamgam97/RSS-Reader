@@ -57,6 +57,7 @@ object SimpleBindingAdapter {
     @JvmStatic
     fun selectItemId(bottomNavigationView: BottomNavigationView,id: Int) {
         bottomNavigationView.menu.findItem(id).isChecked = true
+
     }
 
 

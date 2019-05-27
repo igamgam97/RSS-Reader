@@ -41,9 +41,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                     val link = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK))
                     val pubDate = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PUB_DATE))
                     val favorite = getInt(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_FAVORITE)) == 1
-                    val source = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL))
                     val pathImage = getStringOrNull(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PATH_IMAGE))
-                    Log.d("bag", favorite.toString())
                     items.add(
                         FeedItem(
                             title,
@@ -51,7 +49,6 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                             link,
                             pubDate,
                             favorite,
-                            source,
                             pathImage
                         )
                     )
@@ -119,18 +116,35 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return items
     }
 
+    fun getAllUrlChannels():ArrayList<String>{
+        val items = ArrayList<String>()
+        val cursor = database!!.query(
+            DatabaseHelper.CHANNEL_TABLE,
+            null, null, null, null, null, null
+        )
+        if (cursor.moveToFirst()) {
+            do {
+                val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_LINK))
+                items.add(link)
+            } while (cursor.moveToNext())
+
+        }
+        cursor.close()
+        return items
+    }
+
     fun insert(item: FeedItem): Long {
         val cv = ContentValues()
         cv.put(DatabaseHelper.FEED_COLUMN_TITLE, item.itemTitle)
         cv.put(DatabaseHelper.FEED_COLUMN_DESCRIPTION, item.itemDesc)
         cv.put(DatabaseHelper.FEED_COLUMN_LINK, item.itemLink)
         cv.put(DatabaseHelper.FEED_COLUMN_PUB_DATE, item.itemPubDate)
-        cv.put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, item.linkChannel)
+        /*cv.put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, item.linkChannel)*/
         return database!!.insert(DatabaseHelper.FEED_TABLE, null, cv)
     }
 
 
-    fun insertAll(items: List<FeedItem>) {
+    fun insertAllFeeds(items: List<FeedItem>,channel:String) {
         database?.beginTransaction()
         items.forEach {
             val cv = ContentValues().apply {
@@ -138,7 +152,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                 put(DatabaseHelper.FEED_COLUMN_DESCRIPTION, it.itemDesc)
                 put(DatabaseHelper.FEED_COLUMN_LINK, it.itemLink)
                 put(DatabaseHelper.FEED_COLUMN_PUB_DATE, it.itemPubDate)
-                put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, it.linkChannel)
+                put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, channel)
                 /*       Log.d("bag",it.pathImage)*/
                 put(DatabaseHelper.FEED_COLUMN_PATH_IMAGE, it.pathImage)
             }

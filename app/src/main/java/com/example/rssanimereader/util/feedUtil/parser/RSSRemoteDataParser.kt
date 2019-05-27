@@ -1,7 +1,9 @@
 package com.example.rssanimereader.util.feedUtil.parser
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Xml
+import androidx.annotation.RequiresApi
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.service.RemoteDataParser
@@ -13,8 +15,6 @@ import java.text.ParseException
 
 
 class RSSRemoteDataParser(
-    private val source: String,
-    private val htmlFormatter: HTMLFormatter<FeedItem>
 ) : RemoteDataParser {
     private companion object {
         val ns: String? = null
@@ -29,11 +29,11 @@ class RSSRemoteDataParser(
         const val TAG_PUBLISHED = "pubDate"
         const val TAG__CHANNEL_TITLE = "title"
         const val TAG_ENCLOSURE = "enclosure"
-
     }
+    var source: String? = null
 
-
-    override fun parse(input: InputStream): Pair<ArrayList<FeedItem>, ChannelItem> {
+    override fun parse(input: InputStream, source:String): Pair<ArrayList<FeedItem>, ChannelItem> {
+        this.source = source
         input.use {
             val parser = Xml.newPullParser().apply {
                 setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
@@ -91,7 +91,7 @@ class RSSRemoteDataParser(
             }
         }
         if (channelTitle !=null && channelImageURl !=null){
-            val channel = ChannelItem(source, channelTitle, channelImageURl)
+            val channel = ChannelItem(source!!, channelTitle, channelImageURl)
 
             return Pair(episodes, channel)
         }else{
@@ -118,10 +118,12 @@ class RSSRemoteDataParser(
                 continue
             }
             when (parser.name) {
-                TAG_TITLE -> title = readBasicTag(
-                    parser,
-                    TAG_TITLE
-                )
+                TAG_TITLE -> {
+                    title = readBasicTag(
+                        parser,
+                        TAG_TITLE
+                    )
+                }
                 TAG_DESCRIPTION -> {
                     subtitle = readBasicTag(
                         parser,
@@ -132,10 +134,18 @@ class RSSRemoteDataParser(
                     parser,
                     TAG_LINK
                 )
-                TAG_PUBLISHED -> publishedDate = readBasicTag(
-                    parser,
-                    TAG_PUBLISHED
-                )
+                TAG_PUBLISHED -> {
+                    publishedDate = readBasicTag(
+                        parser,
+                        TAG_PUBLISHED
+                    )
+                    // todo придумать как конверить нестандратные dates
+                    /*Log.d("bag", publishedDate)
+                    val temp = "Thu Dec 17 15:37:43 GMT+05:30 2015"
+                    val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+                    val convetedData = dateFormat.parse(publishedDate)
+                    Log.d("bag",convetedData.toString())*/
+                }
 
                 TAG_ENCLOSURE -> tempLink = readEnclosure(parser)
 
@@ -151,7 +161,6 @@ class RSSRemoteDataParser(
                 link,
                 publishedDate,
                 false,
-                source,
                 ""
             )
         }

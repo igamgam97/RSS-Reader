@@ -12,8 +12,7 @@ class FeedApi(private val dataBaseConnection: DatabaseAPI) {
     fun getAllFeeds() = dataBaseConnection.getItemFeeds()
 
     fun setFavorite(feed: FeedItem) {
-        Log.d("bag","there")
-        Log.d("bag",dataBaseConnection.updateFeed(feed).toString())
+        dataBaseConnection.updateFeed(feed).toString()
     }
 
 

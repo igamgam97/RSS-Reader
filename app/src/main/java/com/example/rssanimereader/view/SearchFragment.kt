@@ -40,7 +40,7 @@ class SearchFragment : Fragment() {
 
     fun onSearchClick() {
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
-        communicateViewModel.onFeedListFramgentState()
+        communicateViewModel.onFeedListFragmentState()
         communicateViewModel.targetChannel.value = searchViewModel.targetChannel.get()!!
     }
 

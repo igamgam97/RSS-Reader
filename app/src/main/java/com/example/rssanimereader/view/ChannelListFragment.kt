@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rssanimereader.adapter.ChannelRecyclerViewAdapter
@@ -19,10 +18,10 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
 
     private val channelRecyclerViewAdapter = ChannelRecyclerViewAdapter(arrayListOf(), this)
     private lateinit var viewModel: ChannelListViewModel
-    private lateinit var channelListViewModelFactory: ViewModelProvider.Factory
     private lateinit var communicateViewModel: CommunicateViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         viewModel = Injection.provideChannelListViewModel(this)
 
@@ -30,13 +29,12 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
             it?.let(channelRecyclerViewAdapter::replaceData)
         })
 
-        communicateViewModel.listOfTypeFragment.observe(activity!!, Observer {
+       /* communicateViewModel.listOfTypeFragment.observe(activity!!, Observer {
             if (it.peek() == ListOfTypeFragment.ChannelListFragment) {
                 viewModel.getAllChannels()
             }
-        })
+        })*/
 
-        super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -49,7 +47,7 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
 
     override fun onItemClick(position: Int) {
         communicateViewModel.targetChannel.value = viewModel.channels.value!![position].linkChannel
-        communicateViewModel.onFeedListFramgentState()
+        communicateViewModel.onFeedListFragmentState()
     }
 
     override fun onDeleteItemClick(position: Int): Boolean {

@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.FragmentSettingsBinding
 import com.example.rssanimereader.di.Injection
@@ -22,8 +20,6 @@ import com.example.rssanimereader.viewmodel.SettingsViewModel
 class SettingsFragment : Fragment() {
 
     private lateinit var settingsViewModel: SettingsViewModel
-
-    private lateinit var settingsViewModelFactory: ViewModelProvider.Factory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +38,7 @@ class SettingsFragment : Fragment() {
     }.root
 
 
-    fun changeTheme(){
+    private fun changeTheme() {
         val intent = Intent(context, MainActivity::class.java)
         intent.putExtra(SETTING_FRAGMENT, true)
         startActivity(intent)
@@ -51,6 +47,6 @@ class SettingsFragment : Fragment() {
     }
 
     companion object {
-        private const val SETTING_FRAGMENT = "settings_fragment"
+        const val SETTING_FRAGMENT = "settings_fragment"
     }
 }

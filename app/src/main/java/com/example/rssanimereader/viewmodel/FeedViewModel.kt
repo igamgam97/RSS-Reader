@@ -46,7 +46,6 @@ class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
     //todo change Single on Completable
     private fun setFavorite() {
         feedItem.itemFavorite = !feedItem.itemFavorite
-        Log.d("bag", feedItem.itemFavorite.toString())
         val disposable = feedDataSource.setFavorite(feedItem)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({}, ::handleError)

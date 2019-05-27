@@ -10,8 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.WorkManager
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.ActivityMainLayoutBinding
+import com.example.rssanimereader.peridic_feed_manager.PeriodicDownloadFeedsWorkerUtils
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
 
 
@@ -22,32 +25,32 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("bag", "onCreate")
+        applySettings()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_layout)
         viewModel = ViewModelProviders.of(this).get(CommunicateViewModel::class.java)
         viewModel.listOfTypeFragment.observe(this, Observer {
-            it?.let { stack ->
-                setFragment(stack.peek())
+            it?.let { fragmentName ->
+                setFragment(fragmentName)
             }
         })
         binding.mainViewModel = viewModel
-
-        /*  delegate.localNightMode = AppCompatDelegate.MODE_NIGHT_YES*/
+        Log.d("bag","tag")
+        PeriodicDownloadFeedsWorkerUtils.startPeriodicDownloadFeedsWorker()
 
     }
 
-
-
-    override fun onResume() {
-        super.onResume()
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        val nightModeEnabled = prefs.getBoolean("NIGHT_MODE_VALUE", false)
-        if (nightModeEnabled) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    private fun applySettings () {
+        if (intent.getBooleanExtra(SettingsFragment.SETTING_FRAGMENT,false)) {
+            val prefs = PreferenceManager.getDefaultSharedPreferences(this)
+            val nightModeEnabled = prefs.getBoolean("NIGHT_MODE_VALUE", false)
+            if (nightModeEnabled) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
         }
     }
+
 
 
     private fun setFragment(tagFragment: ListOfTypeFragment) {
@@ -79,13 +82,10 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
     }
-
     override fun onBackPressed() {
-        viewModel.mListOfTypeFragment.value!!.pop()!!
-        if (viewModel.mListOfTypeFragment.value!!.isNotEmpty()) {
-            val state = viewModel.mListOfTypeFragment.value!!.peek()
-            setFragment(state)
-        } else {
+        super.onBackPressed()
+        Log.d("bag",viewModel.mListOfTypeFragment.value.toString())
+        if (viewModel.mListOfTypeFragment.value == ListOfTypeFragment.FeedListFragment){
             finish()
         }
     }

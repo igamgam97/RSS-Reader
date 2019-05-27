@@ -24,6 +24,7 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
         val disposable = channelListDataSource.getChannels()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe{ data ->
+                //data.add(0,ChannelItem("","all","",""))
                 channels.value = data
             }
         compositeDisposable.add(disposable)

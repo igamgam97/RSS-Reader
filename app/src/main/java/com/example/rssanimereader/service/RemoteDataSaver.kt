@@ -4,6 +4,7 @@ import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.ImageSaver
 import com.example.rssanimereader.util.StreamFromURLLoader
+import com.example.rssanimereader.util.dbAPI.ChannelAPI
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import io.reactivex.Completable
 import java.io.InputStream
@@ -14,6 +15,12 @@ class RemoteDataSaver<T>(
     private val dataBase: DatabaseAPI
 ) {
 
+    fun downloadAndSaveAllFeedsApi() = Completable.fromCallable {downloadAndSaveAllFeeds()}
+
+    fun downloadAndSaveAllFeeds () {
+        val channelList = ChannelAPI(dataBase).getUrlChannels()
+        channelList.forEach(::saveData)
+    }
 
     fun saveDataFromApi(urlPath: String) = Completable.fromCallable { saveData(urlPath) }
 
@@ -25,7 +32,7 @@ class RemoteDataSaver<T>(
             dataBase.insertChannel(channel)
         }
 
-        dataBase.insertAll((feeds))
+        dataBase.insertAllFeeds(feeds,urlPath)
 
 
     }
@@ -36,7 +43,7 @@ class RemoteDataSaver<T>(
         val streamFromURLLoader = StreamFromURLLoader()
 
         streamFromURLLoader(urlPath).inputStream.use {
-            return remoteDataParser.parse(it)
+            return remoteDataParser.parse(it,urlPath)
         }
     }
 
@@ -44,5 +51,5 @@ class RemoteDataSaver<T>(
 }
 
 interface RemoteDataParser {
-    fun parse(input: InputStream): Pair<ArrayList<FeedItem>, ChannelItem>
+    fun parse(input: InputStream,source:String): Pair<ArrayList<FeedItem>, ChannelItem>
 }

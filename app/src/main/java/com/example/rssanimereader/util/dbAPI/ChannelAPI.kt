@@ -15,6 +15,8 @@ class ChannelAPI(
         return dataBaseConnection.getAllChannels()
     }
 
+    fun getUrlChannels() = dataBaseConnection.getAllUrlChannels()
+
     companion object {
         const val FAVORITE_CHANNELS = "Favorite_Channels"
         const val KEY_CHANNEL = "KEY_CHANNEL"
