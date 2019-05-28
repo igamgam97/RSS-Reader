@@ -9,7 +9,10 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
-
+    <style name="Toolbar">
+        <item name="theme">@style/Theme.AppCompat.DayNight.NoActionBar</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
 
 
 </resources>

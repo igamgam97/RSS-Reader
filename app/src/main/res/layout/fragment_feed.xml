@@ -13,16 +13,22 @@
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="4dp"
                 app:menu="@menu/feed_toolbar"
-                app:onToolbarItemSelected="@{feedViewModel::onMenuItemClick}"/>
+                android:theme="@style/Toolbar"
+                app:onToolbarItemSelected="@{feedViewModel::onMenuItemClick}">
+            <ImageButton
+                    android:id="@+id/favorite_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:onClick="@{() -> feedViewModel.setFavoriteFeed()}"
+                    android:src="@{feedViewModel.isFavorite() ? @drawable/favorite_feed_icon : @drawable/no_favorite_feed_icon}"
+                    android:layout_gravity="end" android:contentDescription="favorite button"/>
+        </androidx.appcompat.widget.Toolbar>
 
 
         <WebView
                 android:id="@+id/wvMindorks"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:layout_height="match_parent"/>
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

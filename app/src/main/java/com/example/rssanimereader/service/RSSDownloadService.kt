@@ -30,14 +30,17 @@ class RSSDownloadService : IntentService("RSSDownloadService") {
     }
 
     private fun isDataPublishedError(error:Throwable) {
+        when(error){
+
+        }
         val intent = Intent(FeedUtilConstants.BROADCAST_STATE_DATA_ACTION)
         intent.putExtra(FeedUtilConstants.STATUS_DATA, error)
         sendBroadcast(intent)
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         compositeDisposable.clear()
+        super.onDestroy()
     }
 
 

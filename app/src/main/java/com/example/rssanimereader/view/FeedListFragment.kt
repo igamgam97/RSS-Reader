@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -39,6 +41,12 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         communicateViewModel.targetChannel.observe(this, Observer {
             viewModel.getFeedsByChannel(communicateViewModel.targetChannel.value!!)
         })
+        viewModel.channelLink = communicateViewModel.targetChannel.value
+        viewModel.status.observe(this, Observer {
+            it?.let{
+                showError(it)
+            }
+        })
     }
 
     override fun onCreateView(
@@ -50,13 +58,17 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
             executePendingBindings()
             feedRv.layoutManager = LinearLayoutManager(activity)
             feedRv.adapter = feedRecyclerViewAdapter
-
-
         }.root
 
     override fun onItemClick(position: Int) {
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         communicateViewModel.onFeedFragmentState()
         communicateViewModel.selectedFeed = viewModel.feeds.value!![position]
+    }
+
+    fun showError(status:Boolean) {
+        if (!status) {
+            Toast.makeText(context, "Error connection", Toast.LENGTH_SHORT).show()
+        }
     }
 }
