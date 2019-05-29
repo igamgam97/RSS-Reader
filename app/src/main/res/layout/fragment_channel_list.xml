@@ -12,9 +12,16 @@
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
+            android:layout_height="match_parent">
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/channels_add_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="36dp"
+                android:src="@drawable/ic_add_circle"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:onClick="@{() -> channelListViewModel.addChannel()}"/>
         <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/feed_rv"
                 android:layout_width="0dp"

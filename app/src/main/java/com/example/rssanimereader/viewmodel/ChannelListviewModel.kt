@@ -1,6 +1,7 @@
 package com.example.rssanimereader.viewmodel
 
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.entity.ChannelItem
@@ -37,6 +38,10 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
                 channels.value = data
             }
         compositeDisposable.add(disposable)
+    }
+
+    fun addChannel() {
+        Log.d("bag","click")
     }
 
     override fun onCleared() {

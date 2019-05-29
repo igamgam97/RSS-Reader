@@ -16,6 +16,7 @@
     <string name="night_mode">Night mode</string>
     <string name="favorite_feed">favorite_feed</string>
     <string name="no_favorite_feed">no favorite feed</string>
+    <string name="action_feeds">feeds</string>
 
 
 </resources>

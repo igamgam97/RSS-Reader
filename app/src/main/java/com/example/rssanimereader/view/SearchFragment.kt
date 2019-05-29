@@ -18,8 +18,6 @@ class SearchFragment : Fragment() {
 
     private lateinit var searchViewModel: SearchViewModel
 
-    private lateinit var searchViewModelFactory: ViewModelProvider.Factory
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -41,7 +39,7 @@ class SearchFragment : Fragment() {
     fun onSearchClick() {
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         communicateViewModel.onFeedListFragmentState()
-        communicateViewModel.targetChannel.value = searchViewModel.targetChannel.get()!!
+        communicateViewModel.searchChannel.value = searchViewModel.targetChannel.get()!!
     }
 
 }

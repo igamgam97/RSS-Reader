@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.FragmentFeedBinding
 import com.example.rssanimereader.di.Injection
+import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
 import com.example.rssanimereader.viewmodel.FeedViewModel
 
@@ -33,7 +34,6 @@ class FeedFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("bag","there")
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         feedViewModel = Injection.provideFeedViewModel(this)
         feedViewModel.shareData.observe(this, Observer {
@@ -75,5 +75,10 @@ class FeedFragment : Fragment() {
         wvMindorks.loadData("<style>img{display: inline;height: auto;max-width: 100%;}</style>$selectedFeed", "text/html", "UTF-8")
     }.root
 
+    companion object {
+        fun setParams(selectedFeed:FeedItem){
+
+        }
+    }
 
 }

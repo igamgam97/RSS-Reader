@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
         xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <item
+            android:id="@+id/app_bar_feeds"
+            android:icon="@drawable/app_bar_rss_feeds"
+            android:title="@string/action_feeds"/>
     <item
             android:id="@+id/app_bar_channels"
             android:icon="@drawable/baseline_channels_menu_white"
             android:title="@string/action_favorite"/>
-    <item
-            android:id="@+id/app_bar_fav"
-            android:icon="@drawable/baseline_favorite_white"
-            android:title="@string/action_favorite"
-            android:checked="true"/>
 
     <item
             android:id="@+id/app_bar_search"

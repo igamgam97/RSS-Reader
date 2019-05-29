@@ -23,15 +23,28 @@ class FeedListRepository(
 
     }*/
 
-    fun getFeedsByChannelFromWebApi(linkChannel: String, hasInternet:Boolean) = if (hasInternet){
+
+    private fun getFeedsByChannelFromWebApi(linkChannel: String, hasInternet:Boolean) = if (hasInternet){
         feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannel(linkChannel)
     } else {
         throw IOException()
     }
 
-    fun getFeedsByChannelFromWeb(linkChannel: String) = netManager
-        .hasInternetConnection()
-        .flatMap { hasInternet -> getFeedsByChannelFromWebApi(linkChannel,hasInternet) }
+    private fun getAllFeedsFromWebApi( hasInternet:Boolean) = if (hasInternet){
+        feedListDataSourceFactory.provideFeedListRemoteDataSource().getAllFeeds()
+    } else {
+        throw IOException()
+    }
+
+    fun getFeedsFromWeb(linkChannel: String) = if (linkChannel.isNotEmpty()) {
+        netManager
+            .hasInternetConnection()
+            .flatMap { hasInternet -> getFeedsByChannelFromWebApi(linkChannel, hasInternet) }
+    } else {
+        netManager
+            .hasInternetConnection()
+            .flatMap { hasInternet -> getAllFeedsFromWebApi(hasInternet) }
+    }
 
     fun getFeedsByChannel(linkChannel: String) = if (netManager.isConnectedToInternet) {
         feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannel(linkChannel)
@@ -39,15 +52,13 @@ class FeedListRepository(
         feedListDataSourceFactory.provideFeedListLocalDataSource().getFeedsByChannel(linkChannel)
     }
 
-    /*fun getFeedsByChannel(linkChannel: String) = netManager.hasInternetConnection()
-        .flatMap { hasInernet -> chooseRepository(linkChannel, hasInernet) }
 
-    fun chooseRepository(linkChannel: String, hasInternet:Boolean) =if (hasInternet) {
-            feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannel(linkChannel)
-        } else {
-            feedListDataSourceFactory.provideFeedListLocalDataSource().getFeedsByChannel(linkChannel)
-        }*/
-
+    fun getFeedsFromCashe(linkChannel: String) =
+        if (linkChannel.isNotEmpty()) {
+        feedListDataSourceFactory.provideFeedListLocalDataSource().getFeedsByChannel(linkChannel)
+    } else {
+        feedListDataSourceFactory.provideFeedListLocalDataSource().getAllFeeds()
+    }
 
     fun getAllFeeds() = if (netManager.isConnectedToInternet) {
         feedListDataSourceFactory.provideFeedListRemoteDataSource().getAllFeeds()

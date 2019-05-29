@@ -1,13 +1,16 @@
 package com.example.rssanimereader.bindingAdapter
 
 import android.net.Uri
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
+import androidx.lifecycle.MutableLiveData
 import com.example.rssanimereader.R
+import com.example.rssanimereader.view.ListOfTypeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -55,8 +58,17 @@ object SimpleBindingAdapter {
 
     @BindingAdapter("binding:onSelectecItemId")
     @JvmStatic
-    fun selectItemId(bottomNavigationView: BottomNavigationView,id: Int) {
-        bottomNavigationView.menu.findItem(id).isChecked = true
+    fun selectItemId(bottomNavigationView: BottomNavigationView,tagFragment: MutableLiveData<ListOfTypeFragment>) {
+        Log.d("bag","there")
+        tagFragment.value?.let {
+            val itemID = when (it) {
+                ListOfTypeFragment.ChannelListFragment -> R.id.app_bar_channels
+                ListOfTypeFragment.FeedListFragment -> R.id.app_bar_feeds
+                ListOfTypeFragment.SearchFragment -> R.id.app_bar_search
+                else ->  R.id.app_bar_settings
+            }
+            bottomNavigationView.menu.findItem(itemID).isChecked = true
+        }
 
     }
 

@@ -168,7 +168,6 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
             put(DatabaseHelper.CHANNEL__COLUMN_NAME, channel.nameChannel)
             put(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE, channel.urlImage)
             put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, channel.pathImage!!)
-            Log.d("bag", channel.pathImage)
         }
         return database!!.insert(DatabaseHelper.CHANNEL_TABLE, null, cv)
     }

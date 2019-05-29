@@ -69,16 +69,18 @@ class MainActivity : AppCompatActivity() {
                 ListOfTypeFragment.ChannelListFragment -> ChannelListFragment()
                 ListOfTypeFragment.SettingsFragment -> SettingsFragment()
             }
-            openFragment(fragment, tagFragment.toString())
+            fragment.retainInstance = true
+            openFragment(fragment, tagFragment)
         } else {
-            openFragment(currentFragment, tagFragment.toString())
+            openFragment(currentFragment, tagFragment)
         }
     }
 
-    private fun openFragment(fragment: Fragment, nameFragment: String) {
-        fragment.retainInstance = true
+    private fun openFragment(fragment: Fragment, tagFragment: ListOfTypeFragment) {
+        if (tagFragment == ListOfTypeFragment.FeedListFragment) {
+            binding.navigation.menu.findItem( R.id.app_bar_feeds).isChecked = true}
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frag_container, fragment, nameFragment)
+            .replace(R.id.frag_container, fragment, tagFragment.toString())
             .addToBackStack(null)
             .commit()
     }
@@ -86,11 +88,22 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
         Log.d("bag",viewModel.mListOfTypeFragment.value.toString())
         if (viewModel.mListOfTypeFragment.value == ListOfTypeFragment.FeedListFragment){
+            Log.d("bag",viewModel.mListOfTypeFragment.value.toString())
             finish()
         }
+        changeSelectedTabIcon()
     }
-    private fun handle(intent: Intent) {
-        intent.getStringExtra(Intent.EXTRA_TEXT)?.let {
+
+    private fun changeSelectedTabIcon() {
+        val displayedFragments = supportFragmentManager.fragments
+        if (displayedFragments.isNotEmpty()) {
+            val itemID = when (supportFragmentManager.fragments.first()) {
+                is ChannelListFragment -> R.id.app_bar_channels
+                is FeedListFragment -> R.id.app_bar_feeds
+                is SearchFragment -> R.id.app_bar_search
+                else ->  R.id.app_bar_settings
+            }
+            binding.navigation.menu.findItem(itemID).isChecked = true
         }
     }
 

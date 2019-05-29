@@ -29,11 +29,11 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
             it?.let(channelRecyclerViewAdapter::replaceData)
         })
 
-       /* communicateViewModel.listOfTypeFragment.observe(activity!!, Observer {
-            if (it.peek() == ListOfTypeFragment.ChannelListFragment) {
+        communicateViewModel.listOfTypeFragment.observe(activity!!, Observer {
+            if (it == ListOfTypeFragment.ChannelListFragment) {
                 viewModel.getAllChannels()
             }
-        })*/
+        })
 
     }
 

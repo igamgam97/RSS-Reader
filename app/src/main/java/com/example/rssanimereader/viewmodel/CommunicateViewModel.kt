@@ -40,6 +40,7 @@ class CommunicateViewModel : ViewModel() {
     }
 
     val targetChannel = MutableLiveData<String>()
+    val searchChannel = MutableLiveData<String>()
 
     lateinit var selectedFeed: FeedItem
 
@@ -48,6 +49,7 @@ class CommunicateViewModel : ViewModel() {
             R.id.app_bar_channels -> onChannelListFragmentState()
             R.id.app_bar_search -> onSearchFragmentState()
             R.id.app_bar_settings-> onSettingsFragmentState()
+            R.id.app_bar_feeds -> onFeedListFragmentState()
         }
 
         return true
