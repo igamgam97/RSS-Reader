@@ -15,4 +15,6 @@ class FeedListLocalDataSource(private val feedApi: FeedApi) :
     }.subscribeOn(Schedulers.io())
 
     override fun getAllFeeds() = Single.fromCallable{feedApi.getAllFeeds()}.subscribeOn(Schedulers.io())
+
+    fun getFavoriteFeeds() = Single.fromCallable{feedApi.getFavoriteFeeds()}.subscribeOn(Schedulers.io())
 }

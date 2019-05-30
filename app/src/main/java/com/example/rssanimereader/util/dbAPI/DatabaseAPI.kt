@@ -25,7 +25,8 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
             DatabaseHelper.FEED_COLUMN_ID,
             DatabaseHelper.FEED_COLUMN_TITLE, DatabaseHelper.FEED_COLUMN_DESCRIPTION,
             DatabaseHelper.FEED_COLUMN_LINK, DatabaseHelper.FEED_COLUMN_PUB_DATE,
-            DatabaseHelper.FEED_COLUMN_FAVORITE, DatabaseHelper.FEED_COLUMN_LINK_CHANNEL
+            DatabaseHelper.FEED_COLUMN_FAVORITE, DatabaseHelper.FEED_COLUMN_LINK_CHANNEL,
+            DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE
         )
         return database!!.query(DatabaseHelper.FEED_TABLE, columns, whereClause, whereArgs, null, null, null)
     }
@@ -41,6 +42,8 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                     val link = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK))
                     val pubDate = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PUB_DATE))
                     val favorite = getInt(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_FAVORITE)) == 1
+                    val downloadDate = getStringOrNull(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE))
+                    Log.d("bag",downloadDate.toString())
                     val pathImage = getStringOrNull(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PATH_IMAGE))
                     items.add(
                         FeedItem(
@@ -49,6 +52,8 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                             link,
                             pubDate,
                             favorite,
+                          /*  downloadDate,*/
+                            "",
                             pathImage
                         )
                     )
@@ -153,7 +158,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                 put(DatabaseHelper.FEED_COLUMN_LINK, it.itemLink)
                 put(DatabaseHelper.FEED_COLUMN_PUB_DATE, it.itemPubDate)
                 put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, channel)
-                /*       Log.d("bag",it.pathImage)*/
+                put(DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE, it.downloadDate)
                 put(DatabaseHelper.FEED_COLUMN_PATH_IMAGE, it.pathImage)
             }
             database!!.insert(DatabaseHelper.FEED_TABLE, null, cv)
@@ -207,6 +212,12 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         val whereClause = "${DatabaseHelper.FEED_COLUMN_LINK_CHANNEL} = ?"
         /*val whereClause = "linkChannel = ?"*/
         val whereArgs = arrayOf(channel)
+        return getItemFeeds(whereClause, whereArgs)
+    }
+
+    fun getFavoriteFeeds(): ArrayList<FeedItem> {
+        val whereClause = "${DatabaseHelper.FEED_COLUMN_FAVORITE} = ?"
+        val whereArgs = arrayOf(1.toString())
         return getItemFeeds(whereClause, whereArgs)
     }
 

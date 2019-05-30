@@ -1,5 +1,6 @@
 package com.example.rssanimereader.service
 
+import android.util.Log
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.ImageSaver

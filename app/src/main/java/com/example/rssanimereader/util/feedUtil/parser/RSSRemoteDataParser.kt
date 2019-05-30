@@ -2,6 +2,7 @@ package com.example.rssanimereader.util.feedUtil.parser
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import android.util.Xml
 import androidx.annotation.RequiresApi
 import com.example.rssanimereader.entity.ChannelItem
@@ -12,6 +13,9 @@ import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.InputStream
 import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class RSSRemoteDataParser(
@@ -152,6 +156,9 @@ class RSSRemoteDataParser(
                 else -> skip(parser)
             }
         }
+        val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            .format(Calendar.getInstance().time)
+            .toString()
 
         if (title != null && subtitle !=null && link != null && publishedDate != null) {
            /* val pathImage = SaveImageForCashPage(subtitle, title).toString()*/
@@ -161,6 +168,8 @@ class RSSRemoteDataParser(
                 link,
                 publishedDate,
                 false,
+                currentDate,
+             /*   currentDateandTime,*/
                 ""
             )
         }

@@ -87,10 +87,10 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         Log.d("bag",viewModel.mListOfTypeFragment.value.toString())
-        if (viewModel.mListOfTypeFragment.value == ListOfTypeFragment.FeedListFragment){
+        /*if (viewModel.mListOfTypeFragment.value == ListOfTypeFragment.FeedListFragment){
             Log.d("bag",viewModel.mListOfTypeFragment.value.toString())
             finish()
-        }
+        }*/
         changeSelectedTabIcon()
     }
 

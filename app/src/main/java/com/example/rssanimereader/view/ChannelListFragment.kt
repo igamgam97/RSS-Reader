@@ -29,8 +29,12 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
             it?.let(channelRecyclerViewAdapter::replaceData)
         })
 
-        viewModel.isFavoriteFeedsButtonClicked.observe(this, Observer {
+        viewModel.isAllFeedsButtonClicked.observe(this, Observer {
             onAllFeedsButtonClick()
+        })
+
+        viewModel.isFavoriteFeedsButtonClicked.observe(this, Observer {
+            onFavoriteFeedsButtonClick()
         })
 
 
@@ -62,6 +66,11 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
 
     private fun onAllFeedsButtonClick(){
         communicateViewModel.targetChannel.value = ""
+        communicateViewModel.onFeedListFragmentState()
+    }
+
+    private fun onFavoriteFeedsButtonClick(){
+        communicateViewModel.targetChannel.value = "favorite"
         communicateViewModel.onFeedListFragmentState()
     }
 

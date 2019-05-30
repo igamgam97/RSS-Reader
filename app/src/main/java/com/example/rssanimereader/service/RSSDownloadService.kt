@@ -2,6 +2,7 @@ package com.example.rssanimereader.service
 
 import android.app.IntentService
 import android.content.Intent
+import android.util.Log
 import com.example.rssanimereader.di.Injection
 import io.reactivex.disposables.CompositeDisposable
 
@@ -17,7 +18,6 @@ class RSSDownloadService : IntentService("RSSDownloadService") {
 
         val disposable = remoteDataSaver.saveDataFromApi(urlPath)
             .subscribe({ isDataPublishedSuccessful() }, { error -> isDataPublishedError(error) })
-
         compositeDisposable.add(disposable)
 
     }

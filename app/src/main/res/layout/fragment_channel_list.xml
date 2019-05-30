@@ -27,7 +27,7 @@
                     android:id="@+id/all_channels"
                     android:text="@string/all_feeds"
                     android:layout_weight="1"
-                    android:onClick="@{()-> channelListViewModel.onClickFavoriteFeedsButton()}"
+                    android:onClick="@{()-> channelListViewModel.onClickAllFeedsButton()}"
                 />
             <Button
                     android:layout_width="match_parent"
@@ -35,6 +35,7 @@
                     android:id="@+id/favorite_channels"
                     android:text="@string/favorite_feeds"
                     android:layout_weight="1"
+                    android:onClick="@{()-> channelListViewModel.onClickFavoriteFeedsButton()}"
             />
         </LinearLayout>
 
