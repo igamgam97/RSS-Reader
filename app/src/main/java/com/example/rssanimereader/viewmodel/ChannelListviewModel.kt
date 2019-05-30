@@ -13,6 +13,9 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
 
 
     var channels = MutableLiveData<ArrayList<ChannelItem>>()
+    var isAllFeedsButtonClicked = MutableLiveData<Boolean>()
+    var isFavoriteFeedsButtonClicked = MutableLiveData<Boolean>()
+
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -49,8 +52,12 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
         compositeDisposable.clear()
     }
 
-    //todo add dialogfragment and clear function
-    /* fun clearFeedsByChannel(nameChannel: String){
+    fun onClickAllFeedsButton(){
+        isAllFeedsButtonClicked.value = true
+    }
 
-     }*/
+    fun onClickFavoriteFeedsButton(){
+        isFavoriteFeedsButtonClicked.value = true
+    }
+
 }

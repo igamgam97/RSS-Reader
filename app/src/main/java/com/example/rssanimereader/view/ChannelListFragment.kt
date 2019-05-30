@@ -29,6 +29,11 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
             it?.let(channelRecyclerViewAdapter::replaceData)
         })
 
+        viewModel.isFavoriteFeedsButtonClicked.observe(this, Observer {
+            onAllFeedsButtonClick()
+        })
+
+
         communicateViewModel.listOfTypeFragment.observe(activity!!, Observer {
             if (it == ListOfTypeFragment.ChannelListFragment) {
                 viewModel.getAllChannels()
@@ -54,4 +59,11 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
         viewModel.deleteChannel(viewModel.channels.value!![position].linkChannel)
         return true
     }
+
+    private fun onAllFeedsButtonClick(){
+        communicateViewModel.targetChannel.value = ""
+        communicateViewModel.onFeedListFragmentState()
+    }
+
+
 }

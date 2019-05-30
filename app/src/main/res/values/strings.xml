@@ -17,6 +17,8 @@
     <string name="favorite_feed">favorite_feed</string>
     <string name="no_favorite_feed">no favorite feed</string>
     <string name="action_feeds">feeds</string>
+    <string name="all_feeds">all feeds</string>
+    <string name="favorite_feeds">favorite feeds</string>
 
 
 </resources>
