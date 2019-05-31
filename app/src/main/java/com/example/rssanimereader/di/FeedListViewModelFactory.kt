@@ -61,3 +61,14 @@ class FeedViewModelFactory(private val dataSource: FeedDataSource) : ViewModelPr
         throw IllegalArgumentException("Unknown ViewModel Class")
     }
 }
+
+class AddChannelViewModelFactory(private val repository: SearchRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(AddChannelViewModelFactory::class.java)) {
+            return SearchViewModel(repository) as T
+        }
+
+        throw IllegalArgumentException("Unknown ViewModel Class")
+    }
+
+}

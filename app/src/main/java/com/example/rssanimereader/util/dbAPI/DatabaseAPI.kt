@@ -20,7 +20,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         DatabaseHelper(context.applicationContext)
     private var database: SQLiteDatabase? = null
 
-    private fun getEntriesByClause(whereClause: String? = null, whereArgs: Array<String>? = null): Cursor {
+    /*private fun getEntriesByClause(whereClause: String? = null, whereArgs: Array<String>? = null): Cursor {
         val columns = arrayOf(
             DatabaseHelper.FEED_COLUMN_ID,
             DatabaseHelper.FEED_COLUMN_TITLE, DatabaseHelper.FEED_COLUMN_DESCRIPTION,
@@ -29,11 +29,15 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
             DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE
         )
         return database!!.query(DatabaseHelper.FEED_TABLE, columns, whereClause, whereArgs, null, null, null)
-    }
+    }*/
 
     override fun getItemFeeds(whereClause: String?, whereArgs: Array<String>?): ArrayList<FeedItem> {
         val items = ArrayList<FeedItem>()
-        val cursor = getEntriesByClause(whereClause, whereArgs)
+        /*val cursor = getEntriesByClause(whereClause, whereArgs)*/
+        val cursor = database!!.query(
+            DatabaseHelper.FEED_TABLE,
+            null, null, null, null, null, null
+        )
         if (cursor.moveToFirst()) {
             do {
                 with(cursor) {

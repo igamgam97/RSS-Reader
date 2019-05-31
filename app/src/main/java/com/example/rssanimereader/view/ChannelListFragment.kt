@@ -1,6 +1,7 @@
 package com.example.rssanimereader.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
     private val channelRecyclerViewAdapter = ChannelRecyclerViewAdapter(arrayListOf(), this)
     private lateinit var viewModel: ChannelListViewModel
     private lateinit var communicateViewModel: CommunicateViewModel
+    private lateinit var addChannelDialogFragment: AddChannelDialogFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,12 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
             }
         })
 
+        viewModel.isAddChannelButtonClicked.observe(this, Observer {
+            onAddChannelButtonClick()
+        })
+
+        addChannelDialogFragment= AddChannelDialogFragment()
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
@@ -55,8 +63,7 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
         }.root
 
     override fun onItemClick(position: Int) {
-        communicateViewModel.targetChannel.value = viewModel.channels.value!![position].linkChannel
-        communicateViewModel.onFeedListFragmentState()
+        communicateViewModel.onFeedListFragmentState(viewModel.channels.value!![position].linkChannel)
     }
 
     override fun onDeleteItemClick(position: Int): Boolean {
@@ -65,13 +72,17 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
     }
 
     private fun onAllFeedsButtonClick(){
-        communicateViewModel.targetChannel.value = ""
-        communicateViewModel.onFeedListFragmentState()
+        communicateViewModel.onFeedListFragmentState("")
     }
 
     private fun onFavoriteFeedsButtonClick(){
-        communicateViewModel.targetChannel.value = "favorite"
-        communicateViewModel.onFeedListFragmentState()
+        communicateViewModel.onFeedListFragmentState("favorite")
+    }
+
+
+    private fun onAddChannelButtonClick(){
+        Log.d("bag","bad")
+        addChannelDialogFragment.show(fragmentManager!!, "dil")
     }
 
 

@@ -15,7 +15,7 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
     var channels = MutableLiveData<ArrayList<ChannelItem>>()
     var isAllFeedsButtonClicked = MutableLiveData<Boolean>()
     var isFavoriteFeedsButtonClicked = MutableLiveData<Boolean>()
-
+    var isAddChannelButtonClicked = MutableLiveData<Boolean>()
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -45,6 +45,7 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
 
     fun addChannel() {
         Log.d("bag","click")
+        isAddChannelButtonClicked.value = true
     }
 
     override fun onCleared() {

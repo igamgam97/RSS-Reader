@@ -32,9 +32,7 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("bag","onCreate")
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
-
 
         viewModel = Injection.provideFeedListViewModel(this)
         viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
@@ -73,8 +71,9 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
 
     override fun onItemClick(position: Int) {
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
-        communicateViewModel.onFeedFragmentState()
-        communicateViewModel.selectedFeed = viewModel.feeds.value!![position]
+        viewModel.feeds.value?.get(position)?.let {
+            communicateViewModel.onFeedFragmentState(it)
+        }
     }
 
     private fun showError(status:Throwable) {
@@ -86,4 +85,7 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         }
 
     }
+    //todo fratmap to datasave
+    //todo добавить InvalidUrlException
+    //todo retry when (doOnError)
 }

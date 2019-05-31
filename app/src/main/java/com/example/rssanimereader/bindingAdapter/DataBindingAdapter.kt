@@ -43,7 +43,7 @@ class ToolbarViewDataBindingAdapter{}
     BindingMethod(
     type = Spinner::class,
     attribute = "app:onSpinnerItemSelected",
-    method = "selectedItemPosition"
+    method = "setSpinnerItemSelectedListener"
     )
 )
 class SpinnerViewDataBindingAdapter{}
@@ -56,6 +56,8 @@ object SimpleBindingAdapter {
         imageView.setImageURI(Uri.parse(path))
     }
 
+
+
     @BindingAdapter("binding:onSelectecItemId")
     @JvmStatic
     fun selectItemId(bottomNavigationView: BottomNavigationView,tagFragment: MutableLiveData<ListOfTypeFragment>) {
@@ -64,7 +66,6 @@ object SimpleBindingAdapter {
             val itemID = when (it) {
                 ListOfTypeFragment.ChannelListFragment -> R.id.app_bar_channels
                 ListOfTypeFragment.FeedListFragment -> R.id.app_bar_feeds
-                ListOfTypeFragment.SearchFragment -> R.id.app_bar_search
                 else ->  R.id.app_bar_settings
             }
             bottomNavigationView.menu.findItem(itemID).isChecked = true

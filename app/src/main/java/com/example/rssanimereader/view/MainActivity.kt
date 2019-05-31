@@ -100,7 +100,6 @@ class MainActivity : AppCompatActivity() {
             val itemID = when (supportFragmentManager.fragments.first()) {
                 is ChannelListFragment -> R.id.app_bar_channels
                 is FeedListFragment -> R.id.app_bar_feeds
-                is SearchFragment -> R.id.app_bar_search
                 else ->  R.id.app_bar_settings
             }
             binding.navigation.menu.findItem(itemID).isChecked = true

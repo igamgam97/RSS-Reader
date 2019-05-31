@@ -12,7 +12,6 @@ import com.example.rssanimereader.model.repository.FeedListRepository
 import com.example.rssanimereader.model.repository.SearchRepository
 import com.example.rssanimereader.service.DownloadUrlSourceManager
 import com.example.rssanimereader.service.RemoteDataSaver
-import com.example.rssanimereader.util.HTMLFeedFormatter
 import com.example.rssanimereader.util.NetManager
 import com.example.rssanimereader.util.dbAPI.ChannelAPI
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
@@ -30,7 +29,6 @@ object Injection {
     private lateinit var searchViewModel: SearchViewModel
     private lateinit var channelListViewModel: ChannelListViewModel
     private lateinit var settingViewModel: SettingsViewModel
-
     // todo опрокинуть подключение к бд
     fun provideRemoteDataSaver(urlPath: String): RemoteDataSaver<FeedItem> {
         val rssRemoteDataParser = RSSRemoteDataParser()
@@ -63,6 +61,16 @@ object Injection {
     }
 
     fun provideSearchViewModel(fragment: SearchFragment) = if (!Injection::searchViewModel.isInitialized) {
+        val channelSubscriptionsAPI = ChannelAPI(dataBaseConnection)
+        val searchRepository = SearchRepository(channelSubscriptionsAPI)
+        val searchViewModelFactory = SearchViewModelFactory(searchRepository)
+        ViewModelProviders.of(fragment, searchViewModelFactory)
+            .get(SearchViewModel::class.java)
+    } else {
+        searchViewModel
+    }
+
+    fun provideAddChannelViewModel(fragment: AddChannelDialogFragment) = if (!Injection::searchViewModel.isInitialized) {
         val channelSubscriptionsAPI = ChannelAPI(dataBaseConnection)
         val searchRepository = SearchRepository(channelSubscriptionsAPI)
         val searchViewModelFactory = SearchViewModelFactory(searchRepository)

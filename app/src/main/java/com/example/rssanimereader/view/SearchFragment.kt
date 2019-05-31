@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.FragmentSeerchBinding
 import com.example.rssanimereader.di.Injection
@@ -38,8 +37,7 @@ class SearchFragment : Fragment() {
 
     fun onSearchClick() {
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
-        communicateViewModel.onFeedListFragmentState()
-        communicateViewModel.searchChannel.value = searchViewModel.targetChannel.get()!!
+        searchViewModel.targetChannel.get()?.let { communicateViewModel.onFeedListFragmentStateFromSearchFragment(it) }
     }
 
 }
