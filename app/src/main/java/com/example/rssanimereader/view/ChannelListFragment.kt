@@ -3,24 +3,32 @@ package com.example.rssanimereader.view
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rssanimereader.adapter.ChannelRecyclerViewAdapter
+import com.example.rssanimereader.adapter.SwipeHandler
 import com.example.rssanimereader.databinding.FragmentChannelListBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.viewmodel.ChannelListViewModel
 import com.example.rssanimereader.viewmodel.CommunicateViewModel
+import com.google.android.material.snackbar.Snackbar
+import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
 
-class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickListener {
+
+
+class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickListener, SwipeHandler {
 
     private val channelRecyclerViewAdapter = ChannelRecyclerViewAdapter(arrayListOf(), this)
     private lateinit var viewModel: ChannelListViewModel
     private lateinit var communicateViewModel: CommunicateViewModel
     private lateinit var addChannelDialogFragment: AddChannelDialogFragment
+    private lateinit var binding:FragmentChannelListBinding
+    lateinit var tempItem: Pair<Int, ChannelItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,14 +62,16 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
-        FragmentChannelListBinding.inflate(inflater, container, false).apply {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) :View {
+        binding = FragmentChannelListBinding.inflate(inflater, container, false).apply {
             executePendingBindings()
             feedRv.layoutManager = LinearLayoutManager(activity)
             feedRv.adapter = channelRecyclerViewAdapter
             channelListViewModel = viewModel
-        }.root
-
+            handler = this@ChannelListFragment
+        }
+        return binding.root
+    }
     override fun onItemClick(position: Int) {
         communicateViewModel.onFeedListFragmentState(viewModel.channels.value!![position].linkChannel)
     }
@@ -83,6 +93,32 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
     private fun onAddChannelButtonClick(){
         Log.d("bag","bad")
         addChannelDialogFragment.show(fragmentManager!!, "dil")
+    }
+
+    override fun onItemSwipedLeft(position: Int) {
+        saveAndRemoveItem(position)
+        showSnackbar("Swiped Left $position")
+    }
+
+    override fun onItemSwipedRight(position: Int) {
+        saveAndRemoveItem(position)
+        showSnackbar("Swiped Right $position")
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG)
+            .setAction("UNDO"){
+                    retractSavedItem()
+            }.show()
+    }
+
+    private fun retractSavedItem() {
+        channelRecyclerViewAdapter.add(tempItem.first, tempItem.second)
+    }
+
+    private fun saveAndRemoveItem(position: Int) {
+        tempItem = Pair(position, viewModel.channels.value!![position])
+        channelRecyclerViewAdapter.remove(position)
     }
 
 

@@ -26,6 +26,16 @@ class ChannelRecyclerViewAdapter(
         notifyDataSetChanged()
     }
 
+    fun remove(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
+    fun add(position: Int, item: ChannelItem) {
+        items.add(position, item)
+        notifyItemInserted(position)
+    }
+
     interface OnItemClickListener {
         fun onItemClick(position: Int)
         fun onDeleteItemClick(position: Int): Boolean

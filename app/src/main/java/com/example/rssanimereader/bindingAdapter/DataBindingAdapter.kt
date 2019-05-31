@@ -12,6 +12,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.rssanimereader.R
 import com.example.rssanimereader.view.ListOfTypeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.recyclerview.widget.ItemTouchHelper
+import android.graphics.drawable.Drawable
+import androidx.recyclerview.widget.RecyclerView
+import com.example.rssanimereader.adapter.SwipeItemTouchHelperCallback
 
 
 @BindingMethods(
@@ -73,6 +77,53 @@ object SimpleBindingAdapter {
 
     }
 
+    @BindingAdapter(
+        value = [ "swipeEnabled", "drawableSwipeLeft", "drawableSwipeRight", "bgColorSwipeLeft", "bgColorSwipeRight", "onItemSwipeLeft", "onItemSwipeRight" ],
+        requireAll = false
+    )
+    @JvmStatic
+    fun setItemSwipeToRecyclerView(
+        recyclerView: RecyclerView,
+        swipeEnabled: Boolean,
+        drawableSwipeLeft: Drawable,
+        drawableSwipeRight: Drawable,
+        bgColorSwipeLeft: Int,
+        bgColorSwipeRight: Int,
+        onItemSwipeLeft: SwipeItemTouchHelperCallback.OnItemSwipeListener,
+        onItemSwipeRight: SwipeItemTouchHelperCallback.OnItemSwipeListener
+    ) {
 
+        val swipeCallback = SwipeItemTouchHelperCallback.Builder(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+            .bgColorSwipeLeft(bgColorSwipeLeft)
+            .bgColorSwipeRight(bgColorSwipeRight)
+            .drawableSwipeLeft(drawableSwipeLeft)
+            .drawableSwipeRight(drawableSwipeRight)
+            .setSwipeEnabled(swipeEnabled)
+            .onItemSwipeLeftListener(onItemSwipeLeft)
+            .onItemSwipeRightListener(onItemSwipeRight)
+            .build()
+
+        val itemTouchHelper = ItemTouchHelper(swipeCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+
+
+}
+
+object BindingAdapter {
+
+    /**
+     * Bind ItemTouchHelper.SimpleCallback with RecyclerView
+     *
+     * @param recyclerView        RecyclerView to bind to SwipeItemTouchHelperCallback
+     * @param swipeEnabled        enable/disable swipe
+     * @param drawableSwipeLeft     drawable shown when swiped left
+     * @param drawableSwipeRight    drawable shown when swiped right
+     * @param bgColorSwipeLeft    background color when swiped left
+     * @param bgColorSwipeRight    background color when swiped right
+     * @param onItemSwipeLeft    OnItemSwipeListener for swiped left
+     * @param onItemSwipeRight    OnItemSwipeListener for swiped right
+     */
 
 }

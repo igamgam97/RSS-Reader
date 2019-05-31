@@ -8,6 +8,9 @@
         <variable
                 name="channelListViewModel"
                 type="com.example.rssanimereader.viewmodel.ChannelListViewModel"/>
+        <variable
+                name="handler"
+                type="com.example.rssanimereader.adapter.SwipeHandler"/>
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -57,7 +60,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/special_button_container"
-                tools:listitem="@layout/rv_item_feed"/>
+                bgColorSwipeLeft="@{@color/colorPrimary}"
+                bgColorSwipeRight="@{@color/colorPrimary}"
+                drawableSwipeLeft="@{@drawable/ic_dashboard_black_24dp}"
+                drawableSwipeRight="@{@drawable/ic_dashboard_black_24dp}"
+                onItemSwipeLeft="@{(position) -> handler.onItemSwipedLeft(position)}"
+                onItemSwipeRight="@{(position) -> handler.onItemSwipedRight(position)}"
+                swipeEnabled="@{true}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
