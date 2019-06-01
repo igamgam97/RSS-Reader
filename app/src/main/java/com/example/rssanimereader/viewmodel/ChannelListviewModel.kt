@@ -63,22 +63,11 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
         isFavoriteFeedsButtonClicked.value = true
     }
 
-    fun onItemSwipedLeft(position: Int) {
-        saveAndRemoveItem(position)
-        isSwiped.value = true
+    fun retractSaveChannel(channelItem: ChannelItem) {
+        val disposable = channelListDataSource.retractSaveChannel(channelItem)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {}
+        compositeDisposable.add(disposable)
     }
 
-    fun onItemSwipedRight(position: Int) {
-        saveAndRemoveItem(position)
-        isSwiped.value = true
-    }
-
-
-    private fun retractSavedItem() {
-        channels.value!!.add(tempItem.first, tempItem.second)
-    }
-
-    private fun saveAndRemoveItem(position: Int) {
-        tempItem = Pair(position, channels.value!![position])
-    }
 }

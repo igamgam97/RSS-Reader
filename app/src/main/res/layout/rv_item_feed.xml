@@ -47,7 +47,7 @@
                     android:src="@drawable/no_favorite_feed_icon"
                     android:contentDescription="@string/channelImage"
                     android:visibility="@{!feed.itemFavorite ? View.VISIBLE : View.GONE}"/>
-        </androidx.appcompat.widget.LinearLayoutCompat><!---->
+        </androidx.appcompat.widget.LinearLayoutCompat>
     </androidx.cardview.widget.CardView>
 
 </layout>

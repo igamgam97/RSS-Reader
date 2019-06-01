@@ -22,7 +22,7 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
     private val compositeDisposable = CompositeDisposable()
     var channelLink: String = ""
     val statusError = MutableLiveData<Throwable>()
-    var statusOfSort = 0
+    val statusOfSort = MutableLiveData<Boolean>().apply { value = false }
 
 
             init {
@@ -80,8 +80,11 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
 
     fun  onMenuItemClick(item: MenuItem):Boolean {
         when (item.itemId){
-            /*R.id.sort_by_older -> feeds.value?.sort()
-            R.id.sort_by_earlier -> feeds.value?.reverse()*/
+            R.id.sort_by_older -> feeds.value?.sort()
+            R.id.sort_by_earlier -> feeds.value?.sortDescending()
+        }
+        statusOfSort.value?.let {
+            statusOfSort.value = !it
         }
         return true
     }

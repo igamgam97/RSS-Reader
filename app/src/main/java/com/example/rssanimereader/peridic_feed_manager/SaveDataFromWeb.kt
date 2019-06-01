@@ -8,6 +8,7 @@ import com.example.rssanimereader.util.StreamFromURLLoader
 import com.example.rssanimereader.util.dbAPI.ChannelAPI
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import io.reactivex.Completable
+import io.reactivex.Single
 import java.io.InputStream
 import java.net.MalformedURLException
 
@@ -20,9 +21,10 @@ class SaveDataFromWeb(
 
     fun downloadAndSaveAllFeeds () {
         val channelList = ChannelAPI(dataBase).getUrlChannels()
-        channelList.forEach(::saveData)
+        if (channelList.isNotEmpty()){
+            channelList.forEach(::saveData)
+        }
     }
-
 
     private fun saveData(urlPath: String) {
         val (feeds, channel) = getFeedsAndChannel(urlPath)
@@ -37,7 +39,7 @@ class SaveDataFromWeb(
 
     }
 
-    @Throws(MalformedURLException::class)
+
     private fun getFeedsAndChannel(urlPath: String): Pair<ArrayList<FeedItem>, ChannelItem> {
 
         val streamFromURLLoader = StreamFromURLLoader()

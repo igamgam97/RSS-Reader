@@ -27,6 +27,3 @@ class StreamFromURLLoader  {
 
 }
 
-fun HttpURLConnection.use(onDataReady: HttpURLConnection.()->Unit){
-    this.disconnect()
-}

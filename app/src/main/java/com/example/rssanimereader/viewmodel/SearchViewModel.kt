@@ -10,15 +10,17 @@ import com.example.rssanimereader.model.repository.SearchRepository
 class SearchViewModel(private val searchRepository: SearchRepository) : ViewModel() {
 
     val isClickSearchButton = MutableLiveData<Boolean>()
+    val statusError = MutableLiveData<Boolean>().apply { value = true }
     val targetChannel = ObservableField<String>()
 
     fun searchChannel() {
-        Log.d("bag",targetChannel.get().toString())
+        Log.d("bag", targetChannel.get().toString())
         targetChannel.get()?.let {
-            if (it.isNotEmpty() && URLUtil.isValidUrl(it)) {
-                searchRepository.getData(it) {
-                    isClickSearchButton.value = !(isClickSearchButton.value ?: false)
-                }
+            if (URLUtil.isValidUrl(it)) {
+
+                isClickSearchButton.value = !(isClickSearchButton.value ?: false)
+            } else {
+                statusError.value = false
             }
         }
     }

@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         binding.mainViewModel = viewModel
 
         Log.d("bag","tag")
-        /*PeriodicDownloadFeedsWorkerUtils.startPeriodicDownloadFeedsWorker()*/
+        PeriodicDownloadFeedsWorkerUtils.startPeriodicDownloadFeedsWorker()
 
     }
 

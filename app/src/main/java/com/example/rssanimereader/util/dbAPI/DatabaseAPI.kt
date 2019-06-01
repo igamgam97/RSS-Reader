@@ -36,7 +36,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         /*val cursor = getEntriesByClause(whereClause, whereArgs)*/
         val cursor = database!!.query(
             DatabaseHelper.FEED_TABLE,
-            null, whereClause, whereArgs, null, null, null
+            null, whereClause, whereArgs, null, null, "${DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE} DESC"
         )
         if (cursor.moveToFirst()) {
             do {

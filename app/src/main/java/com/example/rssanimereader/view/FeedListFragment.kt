@@ -52,6 +52,10 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
             viewModel.onRefresh()
         })
 
+        viewModel.statusOfSort.observe(this, Observer {
+            feedRecyclerViewAdapter.notifyDataSetChanged()
+        })
+
         viewModel.statusError.observe(this, Observer {
             it?.let{
                 showError(it)

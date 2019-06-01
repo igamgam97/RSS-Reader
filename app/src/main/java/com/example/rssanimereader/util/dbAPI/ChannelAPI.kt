@@ -17,6 +17,9 @@ class ChannelAPI(
 
     fun getUrlChannels() = dataBaseConnection.getAllUrlChannels()
 
+    fun retractSaveChannel(channelItem: ChannelItem): Long =
+        dataBaseConnection.insertChannel(channelItem)
+
     companion object {
         const val FAVORITE_CHANNELS = "Favorite_Channels"
         const val KEY_CHANNEL = "KEY_CHANNEL"

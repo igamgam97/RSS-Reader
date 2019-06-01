@@ -2,6 +2,7 @@ package com.example.rssanimereader.view
 
 import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
@@ -18,6 +19,7 @@ import com.example.rssanimereader.viewmodel.SearchViewModel
 class AddChannelDialogFragment :DialogFragment(){
     lateinit var searchViewModel:SearchViewModel
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        Log.d("bag","there")
         val binding = DialogFragmentAddChannelBinding.inflate(
             LayoutInflater.from(context), null, false
         )
@@ -40,6 +42,12 @@ class AddChannelDialogFragment :DialogFragment(){
         val alertDialog = dialog as AlertDialog?
         val okButton = alertDialog!!.getButton(AlertDialog.BUTTON_POSITIVE)
         okButton.setOnClickListener{searchViewModel.searchChannel()}
+        searchViewModel.statusError.observe(this, Observer {
+            if (it==false) {
+                alertDialog.setMessage("Incorrect url")
+            }
+
+        })
     }
 
     fun onSearchClick() {
