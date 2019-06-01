@@ -35,9 +35,6 @@ class CommunicateViewModel : ViewModel() {
         mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragment
     }
 
-    fun onSearchFragmentState() {
-        mListOfTypeFragment.value = ListOfTypeFragment.SearchFragment
-    }
 
     fun onFeedFragmentState(feedItem: FeedItem) {
         selectedFeed = feedItem

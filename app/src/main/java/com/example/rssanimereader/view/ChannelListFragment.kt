@@ -47,6 +47,9 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
             onFavoriteFeedsButtonClick()
         })
 
+        viewModel.isSwiped.observe(this, Observer {
+            showSnackbar("")
+        })
 
         communicateViewModel.listOfTypeFragment.observe(activity!!, Observer {
             if (it == ListOfTypeFragment.ChannelListFragment) {

@@ -39,7 +39,6 @@ class ProvideContextApplication : Application() {
                 is FeedListFragment -> Injection.provideFeedListViewModel(fragment)
                 is ChannelListFragment -> Injection.provideChannelListViewModel(fragment)
                 is FeedFragment -> Injection.provideFeedViewModel(fragment)
-                is SearchFragment -> Injection.provideSearchViewModel(fragment)
                 else -> null
             }
     }

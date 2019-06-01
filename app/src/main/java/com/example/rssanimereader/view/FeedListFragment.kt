@@ -43,6 +43,7 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         })
         communicateViewModel.targetChannel.observe(this, Observer {
             viewModel.channelLink = it ?: ""
+
             viewModel.getFeedsFromCashe()
         })
 

@@ -36,7 +36,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         /*val cursor = getEntriesByClause(whereClause, whereArgs)*/
         val cursor = database!!.query(
             DatabaseHelper.FEED_TABLE,
-            null, null, null, null, null, null
+            null, whereClause, whereArgs, null, null, null
         )
         if (cursor.moveToFirst()) {
             do {
@@ -46,8 +46,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                     val link = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK))
                     val pubDate = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PUB_DATE))
                     val favorite = getInt(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_FAVORITE)) == 1
-                    val downloadDate = getStringOrNull(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE))
-                    Log.d("bag",downloadDate.toString())
+                    val downloadDate = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE))
                     val pathImage = getStringOrNull(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PATH_IMAGE))
                     items.add(
                         FeedItem(
@@ -56,8 +55,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                             link,
                             pubDate,
                             favorite,
-                          /*  downloadDate,*/
-                            "",
+                            downloadDate,
                             pathImage
                         )
                     )

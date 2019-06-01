@@ -28,19 +28,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:theme="@style/Toolbar"
+                    app:onToolbarItemSelected ="@{viewModel::onMenuItemClick}"
+                    app:menu="@menu/feed_list_menu"
                     android:visibility="visible">
-                <Spinner
-                        android:id="@+id/spinner_nav"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:entries="@array/sort"
-                        android:layout_gravity="end"/>
             </androidx.appcompat.widget.Toolbar>
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/feed_rv"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:indeterminate="true"
+                    android:visibility="@{viewModel.isLoadingFromCashe()  ? View.GONE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"

@@ -1,6 +1,7 @@
 package com.example.rssanimereader.view
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -28,15 +29,26 @@ class MainActivity : AppCompatActivity() {
         applySettings()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_layout)
         viewModel = ViewModelProviders.of(this).get(CommunicateViewModel::class.java)
+        openApplicationFromDeepLink()
         viewModel.listOfTypeFragment.observe(this, Observer {
             it?.let { fragmentName ->
                 setFragment(fragmentName)
             }
         })
         binding.mainViewModel = viewModel
+
         Log.d("bag","tag")
         /*PeriodicDownloadFeedsWorkerUtils.startPeriodicDownloadFeedsWorker()*/
 
+    }
+
+    //todo добавить открытие по ссылке
+    fun openApplicationFromDeepLink(){
+    /*    val action: String? = intent?.action*/
+        val data = intent?.data
+        data?.let {
+            viewModel.onFeedListFragmentStateFromSearchFragment(it.toString())
+        }
     }
 
     private fun applySettings () {
@@ -62,7 +74,6 @@ class MainActivity : AppCompatActivity() {
                 ListOfTypeFragment.FeedListFragment -> {
                     FeedListFragment()
                 }
-                ListOfTypeFragment.SearchFragment -> SearchFragment()
                 ListOfTypeFragment.FeedFragment -> {
                     FeedFragment()
                 }

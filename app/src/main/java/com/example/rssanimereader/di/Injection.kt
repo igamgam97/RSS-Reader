@@ -60,15 +60,6 @@ object Injection {
         feedListViewModel
     }
 
-    fun provideSearchViewModel(fragment: SearchFragment) = if (!Injection::searchViewModel.isInitialized) {
-        val channelSubscriptionsAPI = ChannelAPI(dataBaseConnection)
-        val searchRepository = SearchRepository(channelSubscriptionsAPI)
-        val searchViewModelFactory = SearchViewModelFactory(searchRepository)
-        ViewModelProviders.of(fragment, searchViewModelFactory)
-            .get(SearchViewModel::class.java)
-    } else {
-        searchViewModel
-    }
 
     fun provideAddChannelViewModel(fragment: AddChannelDialogFragment) = if (!Injection::searchViewModel.isInitialized) {
         val channelSubscriptionsAPI = ChannelAPI(dataBaseConnection)
