@@ -7,13 +7,14 @@
 
         <variable
                 name="viewModel"
-                type="com.example.rssanimereader.viewmodel.FeedListViewModel"/>
+                type="com.example.rssanimereader.presentation.viewmodel.FeedListViewModel"/>
 
     </data>
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:refreshing="@{viewModel.isLoading}"
+            android:onEnabled = "@{viewModel.channelLink}"
             app:onRefreshListener="@{() -> viewModel.onRefresh()}">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

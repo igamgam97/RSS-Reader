@@ -17,8 +17,8 @@ import com.example.rssanimereader.util.dbAPI.ChannelAPI
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import com.example.rssanimereader.util.dbAPI.FeedApi
 import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
-import com.example.rssanimereader.view.*
-import com.example.rssanimereader.viewmodel.*
+import com.example.rssanimereader.presentation.view.*
+import com.example.rssanimereader.presentation.viewmodel.*
 
 object Injection {
 
@@ -30,7 +30,7 @@ object Injection {
     private lateinit var channelListViewModel: ChannelListViewModel
     private lateinit var settingViewModel: SettingsViewModel
     // todo опрокинуть подключение к бд
-    fun provideRemoteDataSaver(urlPath: String): RemoteDataSaver<FeedItem> {
+    fun provideRemoteDataSaver(): RemoteDataSaver {
         val rssRemoteDataParser = RSSRemoteDataParser()
         return RemoteDataSaver(rssRemoteDataParser, dataBaseConnection)
     }
@@ -47,7 +47,8 @@ object Injection {
         val feedListDataSourceFactory =
             FeedListDataSourceFactory(
                 downloadUrlSourceManager,
-                feedApi
+                feedApi,
+                provideRemoteDataSaver()
             )
         val feedListRepository = FeedListRepository(
             netManager,

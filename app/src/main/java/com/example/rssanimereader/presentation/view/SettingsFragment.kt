@@ -1,4 +1,4 @@
-package com.example.rssanimereader.view
+package com.example.rssanimereader.presentation.view
 
 
 import android.content.Intent
@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.FragmentSettingsBinding
 import com.example.rssanimereader.di.Injection
-import com.example.rssanimereader.viewmodel.SettingsViewModel
+import com.example.rssanimereader.presentation.viewmodel.SettingsViewModel
 
 
 /**

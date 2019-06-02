@@ -1,17 +1,15 @@
-package com.example.rssanimereader.viewmodel
+package com.example.rssanimereader.presentation.viewmodel
 
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.rssanimereader.R
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.model.repository.FeedListRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import android.widget.AdapterView
-import com.example.rssanimereader.R
 
 
 class FeedListViewModel(private val feedListRepository: FeedListRepository) : ViewModel() {
@@ -20,32 +18,21 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
     val isLoadingFromCashe = ObservableField(false)
     val feeds = MutableLiveData<ArrayList<FeedItem>>()
     private val compositeDisposable = CompositeDisposable()
-    var channelLink: String = ""
+    var channelLink = ObservableField("")
     val statusError = MutableLiveData<Throwable>()
     val statusOfSort = MutableLiveData<Boolean>().apply { value = false }
 
 
-            init {
-                getAllFeeds()
-            }
-
-
-
-    fun getAllFeeds() {
-        isLoading.set(true)
-        val disposable = feedListRepository.getAllFeeds()
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { data ->
-                isLoading.set(false)
-                feeds.value = data
-            }
-        compositeDisposable.add(disposable)
+    init {
+        getFeedsFromCashe()
     }
+
+
 
 
     fun onRefresh() {
         isLoading.set(true)
-        val disposable = feedListRepository.getFeedsFromWeb(channelLink)
+        val disposable = feedListRepository.getFeedsFromWeb(channelLink.get()!!)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ data ->
                 isLoading.set(false)
@@ -62,7 +49,7 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
 
     fun getFeedsFromCashe() {
         isLoadingFromCashe.set(true)
-        val disposable = feedListRepository.getFeedsFromCashe(channelLink)
+        val disposable = feedListRepository.getFeedsFromCashe(channelLink.get()!!)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ data ->
                 feeds.value = data
@@ -78,8 +65,9 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
     }
 
 
-    fun  onMenuItemClick(item: MenuItem):Boolean {
-        when (item.itemId){
+
+    fun onMenuItemClick(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.sort_by_older -> feeds.value?.sort()
             R.id.sort_by_earlier -> feeds.value?.sortDescending()
         }
@@ -88,6 +76,7 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
         }
         return true
     }
+
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()

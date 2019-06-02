@@ -6,7 +6,7 @@
     <data>
         <variable
                 name="mainViewModel"
-                type="com.example.rssanimereader.viewmodel.CommunicateViewModel"/>
+                type="com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

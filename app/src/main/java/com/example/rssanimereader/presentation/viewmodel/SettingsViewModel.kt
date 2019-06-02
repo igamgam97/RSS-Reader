@@ -1,4 +1,4 @@
-package com.example.rssanimereader.viewmodel
+package com.example.rssanimereader.presentation.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

@@ -1,4 +1,4 @@
-package com.example.rssanimereader.viewmodel
+package com.example.rssanimereader.presentation.viewmodel
 
 import android.view.MenuItem
 import androidx.lifecycle.LiveData
@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.view.ListOfTypeFragment
+import com.example.rssanimereader.presentation.view.ListOfTypeFragment
 
 //todo change -> router
 class CommunicateViewModel : ViewModel() {
@@ -18,7 +18,7 @@ class CommunicateViewModel : ViewModel() {
     val targetChannel = MutableLiveData<String>()
     val searchChannel = MutableLiveData<String>()
 
-    lateinit var selectedFeed: FeedItem
+    val selectedFeed = MutableLiveData<FeedItem>()
 
     init {
         mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragment
@@ -37,7 +37,7 @@ class CommunicateViewModel : ViewModel() {
 
 
     fun onFeedFragmentState(feedItem: FeedItem) {
-        selectedFeed = feedItem
+        selectedFeed.value = feedItem
         mListOfTypeFragment.value = ListOfTypeFragment.FeedFragment
     }
 

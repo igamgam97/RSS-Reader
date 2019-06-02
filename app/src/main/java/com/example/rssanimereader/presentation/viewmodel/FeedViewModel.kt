@@ -1,7 +1,8 @@
-package com.example.rssanimereader.viewmodel
+package com.example.rssanimereader.presentation.viewmodel
 
 
 import android.content.Intent
+import android.util.Log
 import android.view.MenuItem
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
@@ -41,6 +42,17 @@ class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ isFavorite.set(feedItem.itemFavorite) }, ::handleError)
         compositeDisposable.add(disposable)
+
+    }
+
+    fun setIsReadFeed() {
+        Log.d("bag", feedItem.isRead.toString())
+        if (!feedItem.isRead){
+            val disposable = feedDataSource.setIsRead(feedItem)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({feedItem.isRead = true}, ::handleError)
+            compositeDisposable.add(disposable)
+        }
 
     }
 

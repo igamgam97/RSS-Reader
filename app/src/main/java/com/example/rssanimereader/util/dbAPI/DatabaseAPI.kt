@@ -46,6 +46,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                     val link = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK))
                     val pubDate = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PUB_DATE))
                     val favorite = getInt(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_FAVORITE)) == 1
+                    val isRead = getInt(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_IS_READ)) == 1
                     val downloadDate = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE))
                     val pathImage = getStringOrNull(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PATH_IMAGE))
                     items.add(
@@ -56,7 +57,8 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                             pubDate,
                             favorite,
                             downloadDate,
-                            pathImage
+                            pathImage,
+                            isRead
                         )
                     )
                 }
@@ -188,7 +190,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     }
 
 
-    fun updateFeed(item: FeedItem): Long {
+    fun setFavoriteFeed(item: FeedItem): Long {
 
         val whereClause = "${DatabaseHelper.FEED_COLUMN_TITLE} = ?"
         val whereArgs = arrayOf(item.itemTitle)
@@ -198,6 +200,15 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         } else {
             cv.put(DatabaseHelper.FEED_COLUMN_FAVORITE, 0)
         }
+        return database!!.update(DatabaseHelper.FEED_TABLE, cv, whereClause, whereArgs).toLong()
+    }
+
+    fun setIsReadFeed(item: FeedItem): Long {
+
+        val whereClause = "${DatabaseHelper.FEED_COLUMN_TITLE} = ?"
+        val whereArgs = arrayOf(item.itemTitle)
+        val cv = ContentValues()
+        cv.put(DatabaseHelper.FEED_COLUMN_IS_READ, 1)
         return database!!.update(DatabaseHelper.FEED_TABLE, cv, whereClause, whereArgs).toLong()
     }
 

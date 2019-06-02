@@ -1,6 +1,7 @@
 package com.example.rssanimereader.model.repository
 
-import android.util.Log
+import com.example.rssanimereader.entity.ChannelItem
+import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.model.dataSource.feedListDataSource.FeedListDataSourceFactory
 import com.example.rssanimereader.util.NetManager
 import java.io.IOException
@@ -9,6 +10,7 @@ class FeedListRepository(
     private val netManager: NetManager,
     private val feedListDataSourceFactory: FeedListDataSourceFactory
 ) : Repository {
+
 
     private fun getFeedsByChannelFromWebApi(linkChannel: String, hasInternet: Boolean) = if (hasInternet) {
         feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannel(linkChannel)
@@ -27,7 +29,6 @@ class FeedListRepository(
             "" -> netManager
                 .hasInternetConnection()
                 .flatMap { hasInternet -> getAllFeedsFromWebApi(hasInternet) }
-            "favorite" -> feedListDataSourceFactory.provideFeedListLocalDataSource().getFavoriteFeeds()
             else -> {
                 netManager
                     .hasInternetConnection()
@@ -35,11 +36,7 @@ class FeedListRepository(
             }
         }
 
-    fun getFeedsByChannel(linkChannel: String) = if (netManager.isConnectedToInternet) {
-        feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannel(linkChannel)
-    } else {
-        feedListDataSourceFactory.provideFeedListLocalDataSource().getFeedsByChannel(linkChannel)
-    }
+
 
 
     fun getFeedsFromCashe(linkChannel: String) = when (linkChannel) {
@@ -48,11 +45,9 @@ class FeedListRepository(
         else -> feedListDataSourceFactory.provideFeedListLocalDataSource().getFeedsByChannel(linkChannel)
     }
 
+    fun saveFeedsFromWeb(data: Pair<ArrayList<FeedItem>, ChannelItem>)
+            = feedListDataSourceFactory.provideFeedListRemoteDataSource().saveFeedsByChannel(data)
 
-    fun getAllFeeds() = if (netManager.isConnectedToInternet) {
-        feedListDataSourceFactory.provideFeedListRemoteDataSource().getAllFeeds()
-    } else {
-        feedListDataSourceFactory.provideFeedListLocalDataSource().getAllFeeds()
-    }
+
 }
 

@@ -6,15 +6,12 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.*
-import com.example.rssanimereader.ProvideContextApplication
 import com.example.rssanimereader.R
-import com.example.rssanimereader.notifications.NotificationsUtil
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
-import com.example.rssanimereader.view.MainActivity
+import com.example.rssanimereader.presentation.view.MainActivity
 import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 
@@ -48,7 +45,6 @@ class PeriodicDownloadFeedsWorker(val context: Context, workerParams: WorkerPara
     }
 
     override fun doWork() = try {
-        Log.d("bag","fuck")
         val dataBaseConnection = DatabaseAPI(context).open()
         val rssRemoteDataParser = RSSRemoteDataParser()
         val saveDataFromWeb = SaveDataFromWeb(rssRemoteDataParser, dataBaseConnection)

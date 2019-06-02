@@ -14,7 +14,7 @@ class RSSDownloadService : IntentService("RSSDownloadService") {
     override fun onHandleIntent(intent: Intent) {
         val urlPath = intent.getStringExtra(FeedUtilConstants.URL)
 
-        val remoteDataSaver = Injection.provideRemoteDataSaver(urlPath)
+        val remoteDataSaver = Injection.provideRemoteDataSaver()
 
         val disposable = remoteDataSaver.saveDataFromApi(urlPath)
             .subscribe({ isDataPublishedSuccessful() }, { error -> isDataPublishedError(error) })

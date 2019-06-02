@@ -18,3 +18,9 @@ class FeedListLocalDataSource(private val feedApi: FeedApi) :
 
     fun getFavoriteFeeds() = Single.fromCallable{feedApi.getFavoriteFeeds()}.subscribeOn(Schedulers.io())
 }
+
+//todo переделать логику получения всех фидов
+//todo добавить затеменине в уже прочитанные
+//todo допилить add channel fragment
+//todo впилить прочитанные
+//todo добавить кнопу удалить прочитанные

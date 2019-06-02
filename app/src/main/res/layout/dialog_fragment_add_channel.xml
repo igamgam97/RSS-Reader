@@ -7,7 +7,7 @@
 
         <variable
                 name="searchViewModel"
-                type="com.example.rssanimereader.viewmodel.SearchViewModel"/>
+                type="com.example.rssanimereader.presentation.viewmodel.SearchViewModel"/>
 
     </data>
 

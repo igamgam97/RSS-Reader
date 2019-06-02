@@ -1,4 +1,4 @@
-package com.example.rssanimereader.view
+package com.example.rssanimereader.presentation.view
 
 
 import android.os.Bundle
@@ -15,8 +15,8 @@ import com.example.rssanimereader.adapter.FeedRecyclerViewAdapter
 import com.example.rssanimereader.databinding.FragmentFeedListBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.viewmodel.CommunicateViewModel
-import com.example.rssanimereader.viewmodel.FeedListViewModel
+import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
+import com.example.rssanimereader.presentation.viewmodel.FeedListViewModel
 import java.io.IOException
 import java.sql.SQLException
 import java.text.ParseException
@@ -42,13 +42,13 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
             }
         })
         communicateViewModel.targetChannel.observe(this, Observer {
-            viewModel.channelLink = it ?: ""
+            viewModel.channelLink.set( it ?: "")
 
             viewModel.getFeedsFromCashe()
         })
 
         communicateViewModel.searchChannel.observe(this, Observer {
-            viewModel.channelLink = it ?: ""
+            viewModel.channelLink.set(it ?: "")
             viewModel.onRefresh()
         })
 
@@ -56,12 +56,20 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
             feedRecyclerViewAdapter.notifyDataSetChanged()
         })
 
+        /*viewModel.progressOfDownload.observe(this, Observer {
+            it?.let {
+                showProgresOfDownloads(it)
+            }
+
+        })*/
+
         viewModel.statusError.observe(this, Observer {
             it?.let{
                 showError(it)
             }
         })
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,6 +97,9 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
                 Toast.makeText(context, "невозможно прочитать фид из данных навостей", Toast.LENGTH_SHORT).show()
         }
 
+    }
+    fun showProgresOfDownloads(value:String){
+        Toast.makeText(context, value, Toast.LENGTH_SHORT).show()
     }
     //todo fratmap to datasave
     //todo добавить InvalidUrlException

@@ -170,7 +170,8 @@ class RSSRemoteDataParser(
                 false,
                 currentDate,
              /*   currentDateandTime,*/
-                ""
+                "",
+                false
             )
         }
         else{

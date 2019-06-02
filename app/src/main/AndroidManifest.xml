@@ -20,7 +20,7 @@
                 android:exported="false"/>
 
 
-        <activity android:name=".view.MainActivity"  >
+        <activity android:name="com.example.rssanimereader.presentation.view.MainActivity"  >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

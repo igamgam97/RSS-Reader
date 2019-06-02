@@ -1,11 +1,10 @@
-package com.example.rssanimereader.view
+package com.example.rssanimereader.presentation.view
 
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,13 +13,12 @@ import android.webkit.WebViewClient
 import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.FragmentFeedBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.viewmodel.CommunicateViewModel
-import com.example.rssanimereader.viewmodel.FeedViewModel
+import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
+import com.example.rssanimereader.presentation.viewmodel.FeedViewModel
 
 
 /**
@@ -39,8 +37,11 @@ class FeedFragment : Fragment() {
         feedViewModel.shareData.observe(this, Observer {
             startActivity(Intent.createChooser(it, "Share link!"))
         })
-        feedViewModel.feedItem =  communicateViewModel.selectedFeed
-        feedViewModel.isFavorite = ObservableField(communicateViewModel.selectedFeed.itemFavorite)
+        communicateViewModel.selectedFeed.observe(this, Observer {
+            feedViewModel.feedItem = it
+            feedViewModel.isFavorite = ObservableField(it.itemFavorite)
+            feedViewModel.setIsReadFeed()
+        })
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -49,8 +50,8 @@ class FeedFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? = FragmentFeedBinding.inflate(inflater, container, false).apply {
         feedViewModel = this@FeedFragment.feedViewModel
-        val selectedFeed = communicateViewModel.selectedFeed.itemDesc
-        wvMindorks.settings.loadWithOverviewMode = true
+        val selectedFeed = communicateViewModel.selectedFeed.value!!.itemDesc
+        /*wvMindorks.settings.loadWithOverviewMode = true*/
         wvMindorks.settings.javaScriptEnabled = true
         wvMindorks.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {

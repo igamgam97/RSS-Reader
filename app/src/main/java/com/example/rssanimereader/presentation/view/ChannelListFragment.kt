@@ -1,4 +1,4 @@
-package com.example.rssanimereader.view
+package com.example.rssanimereader.presentation.view
 
 import android.os.Bundle
 import android.util.Log
@@ -14,11 +14,9 @@ import com.example.rssanimereader.adapter.SwipeHandler
 import com.example.rssanimereader.databinding.FragmentChannelListBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.entity.ChannelItem
-import com.example.rssanimereader.viewmodel.ChannelListViewModel
-import com.example.rssanimereader.viewmodel.CommunicateViewModel
+import com.example.rssanimereader.presentation.viewmodel.ChannelListViewModel
+import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
 import com.google.android.material.snackbar.Snackbar
-import androidx.core.view.accessibility.AccessibilityEventCompat.setAction
-
 
 
 class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickListener, SwipeHandler {

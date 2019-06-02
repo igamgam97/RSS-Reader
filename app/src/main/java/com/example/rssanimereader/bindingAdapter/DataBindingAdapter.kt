@@ -10,11 +10,12 @@ import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
 import androidx.lifecycle.MutableLiveData
 import com.example.rssanimereader.R
-import com.example.rssanimereader.view.ListOfTypeFragment
+import com.example.rssanimereader.presentation.view.ListOfTypeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.recyclerview.widget.ItemTouchHelper
 import android.graphics.drawable.Drawable
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.rssanimereader.adapter.SwipeItemTouchHelperCallback
 
 
@@ -74,6 +75,13 @@ object SimpleBindingAdapter {
             }
             bottomNavigationView.menu.findItem(itemID).isChecked = true
         }
+
+    }
+
+    @BindingAdapter("android:onEnabled")
+    @JvmStatic
+    fun setEnabled(swipeRefreshLayout:SwipeRefreshLayout, typeOfFeedsList:String) {
+        swipeRefreshLayout.isEnabled = typeOfFeedsList!="favorite"
 
     }
 

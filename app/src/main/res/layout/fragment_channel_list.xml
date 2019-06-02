@@ -7,7 +7,7 @@
 
         <variable
                 name="channelListViewModel"
-                type="com.example.rssanimereader.viewmodel.ChannelListViewModel"/>
+                type="com.example.rssanimereader.presentation.viewmodel.ChannelListViewModel"/>
         <variable
                 name="handler"
                 type="com.example.rssanimereader.adapter.SwipeHandler"/>

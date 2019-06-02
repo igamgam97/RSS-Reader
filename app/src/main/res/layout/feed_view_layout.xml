@@ -3,7 +3,7 @@
     <data>
         <variable
                 name="feedViewModel"
-                type="com.example.rssanimereader.viewmodel.FeedViewModel"/>
+                type="com.example.rssanimereader.presentation.viewmodel.FeedViewModel"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

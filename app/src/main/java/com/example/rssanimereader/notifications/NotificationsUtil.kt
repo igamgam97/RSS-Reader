@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 import com.example.rssanimereader.ProvideContextApplication
 import com.example.rssanimereader.R
 import com.example.rssanimereader.peridic_feed_manager.Constants
-import com.example.rssanimereader.view.MainActivity
+import com.example.rssanimereader.presentation.view.MainActivity
 
 object NotificationsUtil{
     fun showPeriodicNotificationOfDownloadFeeds(title: String, text: String, id: Int){

@@ -1,4 +1,4 @@
-package com.example.rssanimereader.viewmodel
+package com.example.rssanimereader.presentation.viewmodel
 
 import android.util.Log
 import android.webkit.URLUtil

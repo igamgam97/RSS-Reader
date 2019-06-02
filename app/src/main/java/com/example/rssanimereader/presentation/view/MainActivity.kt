@@ -1,7 +1,5 @@
-package com.example.rssanimereader.view
+package com.example.rssanimereader.presentation.view
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -11,12 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.WorkManager
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.ActivityMainLayoutBinding
 import com.example.rssanimereader.peridic_feed_manager.PeriodicDownloadFeedsWorkerUtils
-import com.example.rssanimereader.viewmodel.CommunicateViewModel
+import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
 
 
 class MainActivity : AppCompatActivity() {

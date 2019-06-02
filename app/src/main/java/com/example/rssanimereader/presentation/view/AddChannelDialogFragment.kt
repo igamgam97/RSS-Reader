@@ -1,4 +1,4 @@
-package com.example.rssanimereader.view
+package com.example.rssanimereader.presentation.view
 
 import android.app.Dialog
 import android.os.Bundle
@@ -10,8 +10,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.DialogFragmentAddChannelBinding
 import com.example.rssanimereader.di.Injection
-import com.example.rssanimereader.viewmodel.CommunicateViewModel
-import com.example.rssanimereader.viewmodel.SearchViewModel
+import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
+import com.example.rssanimereader.presentation.viewmodel.SearchViewModel
 
 
 

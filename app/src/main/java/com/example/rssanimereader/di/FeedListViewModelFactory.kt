@@ -7,7 +7,7 @@ import com.example.rssanimereader.model.dataSource.FeedDataSource
 import com.example.rssanimereader.model.dataSource.SettingsDataSource
 import com.example.rssanimereader.model.repository.FeedListRepository
 import com.example.rssanimereader.model.repository.SearchRepository
-import com.example.rssanimereader.viewmodel.*
+import com.example.rssanimereader.presentation.viewmodel.*
 
 class FeedListViewModelFactory(private val repository: FeedListRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
