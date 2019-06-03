@@ -17,9 +17,6 @@ class FeedListRemoteDataSource(
 ) : FeedListDataSource {
 
 
-
-
-
     override fun getFeedsByChannel(linkChannel: String): Single<ArrayList<FeedItem>> =
         downloadUrlSourceManager.validateData(linkChannel)
             .flatMap { Single.fromCallable { feedApi.getFeedsByChannel(linkChannel) } }
@@ -28,14 +25,30 @@ class FeedListRemoteDataSource(
     override fun getAllFeeds() = Single.fromCallable { feedApi.getAllFeeds() }.subscribeOn(Schedulers.io())
 
 
-    fun getFeedsByChannel2(linkChannel: String) =
-        Observable
+    fun getFeedsByChannelFromWeb(linkChannel: String) =
+        Single
             .fromCallable { remoteDataSaver.getFeedsAndChannel(linkChannel) }
             .subscribeOn(Schedulers.io())
 
-    fun saveFeedsByChannel(data: Pair<ArrayList<FeedItem>, ChannelItem>) = remoteDataSaver.saveDataApi(data)
+    fun saveFeedsByChannel(data: Pair<ArrayList<FeedItem>, ChannelItem>) =
+        Completable
+            .fromCallable { remoteDataSaver.saveDataApi(data) }
+            .subscribeOn(Schedulers.io())
 
-    fun getAllFeeds2()  = remoteDataSaver.getAllFeedsApi()
+
+    fun getFeedsByChannelFromDB(linkChannel: String) =
+        Single
+            .fromCallable { feedApi.getFeedsByChannel(linkChannel)}
+            .subscribeOn(Schedulers.io())
+
+
+    fun getAllChannels(): Observable<String> =
+        Observable.
+                fromIterable(remoteDataSaver.getAllChannelsFromDB())
+            .subscribeOn(Schedulers.io())
+
+
+    fun getAllFeedsFromWeb() = remoteDataSaver.getAllFeedsApi()
 
 }
 

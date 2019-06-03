@@ -4,6 +4,7 @@ import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.model.dataSource.feedListDataSource.FeedListDataSourceFactory
 import com.example.rssanimereader.util.NetManager
+import io.reactivex.Observable
 import java.io.IOException
 
 class FeedListRepository(
@@ -37,17 +38,26 @@ class FeedListRepository(
         }
 
 
-
-
     fun getFeedsFromCashe(linkChannel: String) = when (linkChannel) {
         "" -> feedListDataSourceFactory.provideFeedListLocalDataSource().getAllFeeds()
         "favorite" -> feedListDataSourceFactory.provideFeedListLocalDataSource().getFavoriteFeeds()
         else -> feedListDataSourceFactory.provideFeedListLocalDataSource().getFeedsByChannel(linkChannel)
     }
 
-    fun saveFeedsFromWeb(data: Pair<ArrayList<FeedItem>, ChannelItem>)
-            = feedListDataSourceFactory.provideFeedListRemoteDataSource().saveFeedsByChannel(data)
+    fun getObservableFromChannels(linkChannel: String): Observable<String> =
+        when (linkChannel) {
+            "" -> feedListDataSourceFactory.provideFeedListRemoteDataSource().getAllChannels()
+            else -> Observable.fromIterable(arrayListOf(linkChannel))
+        }
 
+    fun saveFeedsByChannel(data: Pair<ArrayList<FeedItem>, ChannelItem>) =
+        feedListDataSourceFactory.provideFeedListRemoteDataSource().saveFeedsByChannel(data)
+
+    fun getFeedsByChannelFromWeb(linkChannel: String) =
+        feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannelFromWeb(linkChannel)
+
+    fun getFeedsByChannelFromDB(linkChannel: String) =
+        feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannelFromDB(linkChannel)
 
 }
 

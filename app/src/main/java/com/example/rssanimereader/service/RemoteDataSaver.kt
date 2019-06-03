@@ -48,6 +48,7 @@ class RemoteDataSaver(
         }
     }
 
+    fun getAllChannelsFromDB() = ChannelAPI(dataBase).getUrlChannels()
 
     fun getAllFeedsApi() = Observable
         .fromIterable(ChannelAPI(dataBase).getUrlChannels())

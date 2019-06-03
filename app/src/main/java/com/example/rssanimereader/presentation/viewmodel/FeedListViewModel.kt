@@ -1,5 +1,6 @@
 package com.example.rssanimereader.presentation.viewmodel
 
+
 import android.util.Log
 import android.view.MenuItem
 import androidx.databinding.ObservableField
@@ -28,42 +29,68 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
     }
 
 
-
+    /*fun onRefresh() {
+        isLoading.set(true)
+        channelLink.get()?.let { channelLink ->
+            val disposable = feedListRepository.getFeedsFromWeb(channelLink)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ data ->
+                    isLoading.set(false)
+                    feeds.value = data
+                },
+                    { error ->
+                        run {
+                            isLoading.set(false)
+                            statusError.value = error
+                        }
+                    })
+            compositeDisposable.add(disposable)
+        }
+    }*/
 
     fun onRefresh() {
         isLoading.set(true)
-        val disposable = feedListRepository.getFeedsFromWeb(channelLink.get()!!)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ data ->
-                isLoading.set(false)
-                feeds.value = data
-            },
-                { error ->
-                    run {
-                        isLoading.set(false)
-                        statusError.value = error
-                    }
-                })
-        compositeDisposable.add(disposable)
+        channelLink.get()?.let {it ->
+            val disposable = feedListRepository.getObservableFromChannels(it)
+                .flatMapSingle {links -> feedListRepository.getFeedsByChannelFromWeb(links) }
+                .flatMapSingle { data -> feedListRepository.saveFeedsByChannel(data)
+                    .andThen(feedListRepository.getFeedsByChannelFromDB(data.second.linkChannel)) }
+                /*.flatMapCompletable {data -> feedListRepository.saveFeedsByChannel(data) }
+                .andThen(feedListRepository.getFeedsByChannelFromDB(it))*/
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ data ->
+                    Log.d("bag","data"+data.size)
+                    isLoading.set(false)
+                   /* feeds.value = data*/
+                },
+                    { error ->
+                        run {
+                            isLoading.set(false)
+                            statusError.value = error
+                        }
+                    })
+            compositeDisposable.add(disposable)
+        }
     }
 
     fun getFeedsFromCashe() {
         isLoadingFromCashe.set(true)
-        val disposable = feedListRepository.getFeedsFromCashe(channelLink.get()!!)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ data ->
-                feeds.value = data
-                isLoadingFromCashe.set(false)
-            },
-                { error ->
-                    run {
-                        statusError.value = error
-                        isLoadingFromCashe.set(false)
-                    }
-                })
-        compositeDisposable.add(disposable)
+        channelLink.get()?.let {channelLink->
+            val disposable = feedListRepository.getFeedsFromCashe(channelLink)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ data ->
+                    feeds.value = data
+                    isLoadingFromCashe.set(false)
+                },
+                    { error ->
+                        run {
+                            statusError.value = error
+                            isLoadingFromCashe.set(false)
+                        }
+                    })
+            compositeDisposable.add(disposable)
+        }
     }
-
 
 
     fun onMenuItemClick(item: MenuItem): Boolean {

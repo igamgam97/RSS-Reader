@@ -33,7 +33,6 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
 
     override fun getItemFeeds(whereClause: String?, whereArgs: Array<String>?): ArrayList<FeedItem> {
         val items = ArrayList<FeedItem>()
-        /*val cursor = getEntriesByClause(whereClause, whereArgs)*/
         val cursor = database!!.query(
             DatabaseHelper.FEED_TABLE,
             null, whereClause, whereArgs, null, null, "${DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE} DESC"
@@ -142,14 +141,14 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return items
     }
 
-    fun insert(item: FeedItem): Long {
+    fun insertFeeds(item: FeedItem): Long {
         val cv = ContentValues()
         cv.put(DatabaseHelper.FEED_COLUMN_TITLE, item.itemTitle)
         cv.put(DatabaseHelper.FEED_COLUMN_DESCRIPTION, item.itemDesc)
         cv.put(DatabaseHelper.FEED_COLUMN_LINK, item.itemLink)
         cv.put(DatabaseHelper.FEED_COLUMN_PUB_DATE, item.itemPubDate)
         /*cv.put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, item.linkChannel)*/
-        return database!!.insert(DatabaseHelper.FEED_TABLE, null, cv)
+        return database!!.insertWithOnConflict(DatabaseHelper.FEED_TABLE, null, cv,SQLiteDatabase.CONFLICT_IGNORE)
     }
 
 
@@ -165,7 +164,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
                 put(DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE, it.downloadDate)
                 put(DatabaseHelper.FEED_COLUMN_PATH_IMAGE, it.pathImage)
             }
-            database!!.insert(DatabaseHelper.FEED_TABLE, null, cv)
+            database!!.insertWithOnConflict(DatabaseHelper.FEED_TABLE, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
         }
         database?.setTransactionSuccessful()
         database?.endTransaction()
@@ -178,7 +177,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
             put(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE, channel.urlImage)
             put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, channel.pathImage!!)
         }
-        return database!!.insert(DatabaseHelper.CHANNEL_TABLE, null, cv)
+        return database!!.insertWithOnConflict(DatabaseHelper.CHANNEL_TABLE, null, cv,SQLiteDatabase.CONFLICT_IGNORE)
     }
 
 
