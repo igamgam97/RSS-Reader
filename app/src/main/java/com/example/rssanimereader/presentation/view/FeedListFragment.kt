@@ -35,21 +35,12 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
 
         viewModel = Injection.provideFeedListViewModel(this)
+
         viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
             it?.let{
                 feedRecyclerViewAdapter.replaceData(it)
                 Log.d("bag",it.size.toString())
             }
-        })
-        communicateViewModel.targetChannel.observe(this, Observer {
-            viewModel.channelLink.set( it ?: "")
-
-            viewModel.getFeedsFromCashe()
-        })
-
-        communicateViewModel.searchChannel.observe(this, Observer {
-            viewModel.channelLink.set(it ?: "")
-            viewModel.onRefresh()
         })
 
         viewModel.statusOfSort.observe(this, Observer {
@@ -82,6 +73,11 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
             feedRv.adapter = feedRecyclerViewAdapter
         }.root
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        retainInstance = true//toggle this
+    }
+
     override fun onItemClick(position: Int) {
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         viewModel.feeds.value?.get(position)?.let {
@@ -101,7 +97,16 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
     fun showProgresOfDownloads(value:String){
         Toast.makeText(context, value, Toast.LENGTH_SHORT).show()
     }
-    //todo fratmap to datasave
-    //todo добавить InvalidUrlException
+
+    fun setParamsFromAddChannelDealogFragment(nameLink:String){
+        viewModel.channelLink.set(nameLink)
+        viewModel.onRefresh()
+    }
+
+    fun setParamsFromChannelListFragment(nameLink:String){
+        viewModel.channelLink.set( nameLink)
+        viewModel.getFeedsFromCashe()
+    }
+
     //todo retry when (doOnError)
 }

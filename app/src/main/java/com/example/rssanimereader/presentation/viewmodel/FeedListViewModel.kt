@@ -61,7 +61,7 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
                 .subscribe({ data ->
                     Log.d("bag","data"+data.size)
                     isLoading.set(false)
-                   /* feeds.value = data*/
+                    feeds.value = data
                 },
                     { error ->
                         run {

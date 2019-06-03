@@ -33,22 +33,22 @@ class MainActivity : AppCompatActivity() {
         })
         binding.mainViewModel = viewModel
 
-        Log.d("bag","tag")
+        Log.d("bag", "tag")
         PeriodicDownloadFeedsWorkerUtils.startPeriodicDownloadFeedsWorker()
 
     }
 
     //todo добавить открытие по ссылке
-    fun openApplicationFromDeepLink(){
-    /*    val action: String? = intent?.action*/
+    fun openApplicationFromDeepLink() {
+        /*    val action: String? = intent?.action*/
         val data = intent?.data
         data?.let {
             viewModel.onFeedListFragmentStateFromSearchFragment(it.toString())
         }
     }
 
-    private fun applySettings () {
-        if (intent.getBooleanExtra(SettingsFragment.SETTING_FRAGMENT,false)) {
+    private fun applySettings() {
+        if (intent.getBooleanExtra(SettingsFragment.SETTING_FRAGMENT, false)) {
             val prefs = PreferenceManager.getDefaultSharedPreferences(this)
             val nightModeEnabled = prefs.getBoolean("NIGHT_MODE_VALUE", false)
             if (nightModeEnabled) {
@@ -60,40 +60,69 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun setFragment(tagFragment: ListOfTypeFragment) {
 
         val currentFragment = supportFragmentManager
             .findFragmentByTag(tagFragment.toString())
         if (currentFragment == null) {
             val fragment = when (tagFragment) {
-                ListOfTypeFragment.FeedListFragment -> {
+                ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment
+                    , ListOfTypeFragment.FeedListFragmentFromChannelListFragment -> {
                     FeedListFragment()
                 }
                 ListOfTypeFragment.FeedFragment -> {
+                    Log.d("bag", "createListOfFragment")
                     FeedFragment()
                 }
                 ListOfTypeFragment.ChannelListFragment -> ChannelListFragment()
                 ListOfTypeFragment.SettingsFragment -> SettingsFragment()
             }
-            fragment.retainInstance = true
             openFragment(fragment, tagFragment)
         } else {
-            openFragment(currentFragment, tagFragment)
+            replaceFragment(currentFragment, tagFragment)
+        }
+    }
+
+
+    private fun replaceFragment(fragment: Fragment, tagFragment: ListOfTypeFragment) {
+        if (tagFragment == ListOfTypeFragment.FeedListFragmentFromChannelListFragment ||
+            tagFragment == ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment
+        ) {
+            binding.navigation.menu.findItem(R.id.app_bar_feeds).isChecked = true
+        }
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.frag_container, fragment, tagFragment.toString())
+            .addToBackStack(null)
+            .commit()
+        when (tagFragment) {
+            ListOfTypeFragment.FeedListFragmentFromChannelListFragment -> {
+                (fragment as FeedListFragment).setParamsFromChannelListFragment(viewModel.targetChannel)
+            }
+            ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment -> {
+                (fragment as FeedListFragment).setParamsFromAddChannelDealogFragment(viewModel.searchChannel)
+            }
+            ListOfTypeFragment.FeedFragment -> {
+                (fragment as FeedFragment).setParams(viewModel.selectedFeed)
+            }
+            ListOfTypeFragment.ChannelListFragment -> (fragment as ChannelListFragment).setParams()
         }
     }
 
     private fun openFragment(fragment: Fragment, tagFragment: ListOfTypeFragment) {
-        if (tagFragment == ListOfTypeFragment.FeedListFragment) {
-            binding.navigation.menu.findItem( R.id.app_bar_feeds).isChecked = true}
+        if (tagFragment == ListOfTypeFragment.FeedListFragmentFromChannelListFragment ||
+            tagFragment == ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment
+        ) {
+            binding.navigation.menu.findItem(R.id.app_bar_feeds).isChecked = true
+        }
         supportFragmentManager.beginTransaction()
             .replace(R.id.frag_container, fragment, tagFragment.toString())
             .addToBackStack(null)
             .commit()
     }
+
     override fun onBackPressed() {
         super.onBackPressed()
-        Log.d("bag",viewModel.mListOfTypeFragment.value.toString())
+        Log.d("bag", viewModel.mListOfTypeFragment.value.toString())
         /*if (viewModel.mListOfTypeFragment.value == ListOfTypeFragment.FeedListFragment){
             Log.d("bag",viewModel.mListOfTypeFragment.value.toString())
             finish()
@@ -106,8 +135,8 @@ class MainActivity : AppCompatActivity() {
         if (displayedFragments.isNotEmpty()) {
             val itemID = when (supportFragmentManager.fragments.first()) {
                 is ChannelListFragment -> R.id.app_bar_channels
-                is FeedListFragment -> R.id.app_bar_feeds
-                else ->  R.id.app_bar_settings
+                is FeedListFragment, is FeedFragment -> R.id.app_bar_feeds
+                else -> R.id.app_bar_settings
             }
             binding.navigation.menu.findItem(itemID).isChecked = true
         }

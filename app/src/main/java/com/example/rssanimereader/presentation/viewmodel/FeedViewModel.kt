@@ -15,7 +15,7 @@ import io.reactivex.disposables.CompositeDisposable
 
 class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
 
-    lateinit var feedItem: FeedItem
+    lateinit var feedItem: ObservableField<FeedItem>
     lateinit var isFavorite: ObservableField<Boolean>
     val shareData = MutableLiveData<Intent>()
     private val compositeDisposable = CompositeDisposable()
@@ -25,6 +25,8 @@ class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
              this.feedHTMLItem.value = feedHTMLItem
          }
      }*/
+
+
 
     fun onMenuItemClick(menuItem: MenuItem?): Boolean {
         when (menuItem?.itemId) {
@@ -37,31 +39,36 @@ class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
     //todo change Single on Completable
 
     fun setFavoriteFeed() {
-        feedItem.itemFavorite = !feedItem.itemFavorite
-        val disposable = feedDataSource.setFavorite(feedItem)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ isFavorite.set(feedItem.itemFavorite) }, ::handleError)
-        compositeDisposable.add(disposable)
-
-    }
-
-    fun setIsReadFeed() {
-        Log.d("bag", feedItem.isRead.toString())
-        if (!feedItem.isRead){
-            val disposable = feedDataSource.setIsRead(feedItem)
+        feedItem.get()?.let {
+            it.itemFavorite = !it.itemFavorite
+            val disposable = feedDataSource.setFavorite(it)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({feedItem.isRead = true}, ::handleError)
+                .subscribe({ isFavorite.set(it.itemFavorite) }, ::handleError)
             compositeDisposable.add(disposable)
         }
 
     }
 
+    fun setIsReadFeed() {
+        feedItem.get()?.let {
+            if (!it.isRead){
+                val disposable = feedDataSource.setIsRead(it)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({it.isRead = true}, ::handleError)
+                compositeDisposable.add(disposable)
+            }
+        }
+
+    }
+
     private fun shareFeed() {
-        val shareIntent = Intent(Intent.ACTION_SEND)
-        shareIntent.type = "text/plain"
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, feedItem.itemTitle)
-        shareIntent.putExtra(Intent.EXTRA_TEXT, feedItem.itemLink)
-        shareData.value = shareIntent
+        feedItem.get()?.let {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, it.itemTitle)
+            shareIntent.putExtra(Intent.EXTRA_TEXT, it.itemLink)
+            shareData.value = shareIntent
+        }
     }
 
     private fun handleError(error: Throwable) {

@@ -14,6 +14,7 @@ import com.example.rssanimereader.adapter.SwipeHandler
 import com.example.rssanimereader.databinding.FragmentChannelListBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.entity.ChannelItem
+import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.presentation.viewmodel.ChannelListViewModel
 import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -25,11 +26,12 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
     private lateinit var viewModel: ChannelListViewModel
     private lateinit var communicateViewModel: CommunicateViewModel
     private lateinit var addChannelDialogFragment: AddChannelDialogFragment
-    private lateinit var binding:FragmentChannelListBinding
+    private lateinit var binding: FragmentChannelListBinding
     lateinit var tempItem: Pair<Int, ChannelItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("bag","onCreateChannel")
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         viewModel = Injection.provideChannelListViewModel(this)
 
@@ -46,21 +48,21 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
         })
 
 
-        communicateViewModel.listOfTypeFragment.observe(activity!!, Observer {
+        /*communicateViewModel.listOfTypeFragment.observe(activity!!, Observer {
             if (it == ListOfTypeFragment.ChannelListFragment) {
                 viewModel.getAllChannels()
             }
-        })
+        })*/
 
         viewModel.isAddChannelButtonClicked.observe(this, Observer {
             onAddChannelButtonClick()
         })
 
-        addChannelDialogFragment= AddChannelDialogFragment()
+        addChannelDialogFragment = AddChannelDialogFragment()
 
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) :View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentChannelListBinding.inflate(inflater, container, false).apply {
             executePendingBindings()
             feedRv.layoutManager = LinearLayoutManager(activity)
@@ -70,6 +72,12 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
         }
         return binding.root
     }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        retainInstance = true//toggle this
+    }
+
     override fun onItemClick(position: Int) {
         communicateViewModel.onFeedListFragmentState(viewModel.channels.value!![position].linkChannel)
     }
@@ -79,17 +87,17 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
         return true
     }
 
-    private fun onAllFeedsButtonClick(){
+    private fun onAllFeedsButtonClick() {
         communicateViewModel.onFeedListFragmentState("")
     }
 
-    private fun onFavoriteFeedsButtonClick(){
+    private fun onFavoriteFeedsButtonClick() {
         communicateViewModel.onFeedListFragmentState("favorite")
     }
 
 
-    private fun onAddChannelButtonClick(){
-        Log.d("bag","bad")
+    private fun onAddChannelButtonClick() {
+        Log.d("bag", "bad")
         addChannelDialogFragment.show(fragmentManager!!, "dil")
     }
 
@@ -105,8 +113,8 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
 
     private fun showSnackbar(message: String) {
         Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG)
-            .setAction("UNDO"){
-                    retractSavedItem()
+            .setAction("UNDO") {
+                retractSavedItem()
             }.show()
     }
 
@@ -117,12 +125,14 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
 
     private fun saveAndRemoveItem(position: Int) {
         tempItem = Pair(position, viewModel.channels.value!![position])
-        viewModel.deleteChannel( viewModel.channels.value!![position].linkChannel)
+        viewModel.deleteChannel(viewModel.channels.value!![position].linkChannel)
         channelRecyclerViewAdapter.remove(position)
-        communicateViewModel.targetChannel.value = ""
+        communicateViewModel.targetChannel = ""
     }
 
-
+    fun setParams() {
+        viewModel.getAllChannels()
+    }
 
 
 }

@@ -1,7 +1,11 @@
 package com.example.rssanimereader.bindingAdapter
 
+import android.annotation.SuppressLint
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.util.Log
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ImageView
 import android.widget.Spinner
 import androidx.appcompat.widget.Toolbar
@@ -9,22 +13,21 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
 import androidx.lifecycle.MutableLiveData
-import com.example.rssanimereader.R
-import com.example.rssanimereader.presentation.view.ListOfTypeFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.recyclerview.widget.ItemTouchHelper
-import android.graphics.drawable.Drawable
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.rssanimereader.R
 import com.example.rssanimereader.adapter.SwipeItemTouchHelperCallback
+import com.example.rssanimereader.presentation.view.ListOfTypeFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 @BindingMethods(
-        BindingMethod(
-                type = BottomNavigationView::class,
-                attribute = "app:onNavigationItemSelected",
-                method = "setOnNavigationItemSelectedListener"
-        ),
+    BindingMethod(
+        type = BottomNavigationView::class,
+        attribute = "app:onNavigationItemSelected",
+        method = "setOnNavigationItemSelectedListener"
+    ),
     BindingMethod(
         type = BottomNavigationView::class,
         attribute = "app:onSelectedItemId",
@@ -42,51 +45,49 @@ class NavigationViewDataBindingAdapter {
         method = "setOnMenuItemClickListener"
     )
 )
-class ToolbarViewDataBindingAdapter{}
+class ToolbarViewDataBindingAdapter {}
 
 @BindingMethods(
     BindingMethod(
-    type = Spinner::class,
-    attribute = "app:onSpinnerItemSelected",
-    method = "setSpinnerItemSelectedListener"
+        type = Spinner::class,
+        attribute = "app:onSpinnerItemSelected",
+        method = "setSpinnerItemSelectedListener"
     )
 )
-class SpinnerViewDataBindingAdapter{}
+class SpinnerViewDataBindingAdapter {}
 
 
 object SimpleBindingAdapter {
     @BindingAdapter("android:loadImage")
     @JvmStatic
-    fun setImageViewResource(imageView: ImageView, path:String) {
+    fun setImageViewResource(imageView: ImageView, path: String) {
         imageView.setImageURI(Uri.parse(path))
     }
 
 
-
-    @BindingAdapter("binding:onSelectecItemId")
+    /*@BindingAdapter("binding:onSelectecItemId")
     @JvmStatic
-    fun selectItemId(bottomNavigationView: BottomNavigationView,tagFragment: MutableLiveData<ListOfTypeFragment>) {
-        Log.d("bag","there")
+    fun selectItemId(bottomNavigationView: BottomNavigationView, tagFragment: MutableLiveData<ListOfTypeFragment>) {
         tagFragment.value?.let {
             val itemID = when (it) {
                 ListOfTypeFragment.ChannelListFragment -> R.id.app_bar_channels
                 ListOfTypeFragment.FeedListFragment -> R.id.app_bar_feeds
-                else ->  R.id.app_bar_settings
+                else -> R.id.app_bar_settings
             }
             bottomNavigationView.menu.findItem(itemID).isChecked = true
         }
 
-    }
+    }*/
 
     @BindingAdapter("android:onEnabled")
     @JvmStatic
-    fun setEnabled(swipeRefreshLayout:SwipeRefreshLayout, typeOfFeedsList:String) {
-        swipeRefreshLayout.isEnabled = typeOfFeedsList!="favorite"
+    fun setEnabled(swipeRefreshLayout: SwipeRefreshLayout, typeOfFeedsList: String) {
+        swipeRefreshLayout.isEnabled = typeOfFeedsList != "favorite"
 
     }
 
     @BindingAdapter(
-        value = [ "swipeEnabled", "drawableSwipeLeft", "drawableSwipeRight", "bgColorSwipeLeft", "bgColorSwipeRight", "onItemSwipeLeft", "onItemSwipeRight" ],
+        value = ["swipeEnabled", "drawableSwipeLeft", "drawableSwipeRight", "bgColorSwipeLeft", "bgColorSwipeRight", "onItemSwipeLeft", "onItemSwipeRight"],
         requireAll = false
     )
     @JvmStatic
@@ -115,23 +116,38 @@ object SimpleBindingAdapter {
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
+    @BindingAdapter("binding:loadData")
+    @JvmStatic
+    fun loadDataFromHtml(webView: WebView, html: String) {
+        /*webView.settings.loadWithOverviewMode = true*/
+        webView.settings.javaScriptEnabled = true
+        webView.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView, url: String) {
+                val code = """javascript:(function() {
 
+        var node = document.createElement('style');
 
-}
+        node.type = 'text/css';
+        node.innerHTML = 'body {
+            color: c0c0c0;
+            background-color: #424242;
+        }';
 
-object BindingAdapter {
+        document.head.appendChild(node);
 
-    /**
-     * Bind ItemTouchHelper.SimpleCallback with RecyclerView
-     *
-     * @param recyclerView        RecyclerView to bind to SwipeItemTouchHelperCallback
-     * @param swipeEnabled        enable/disable swipe
-     * @param drawableSwipeLeft     drawable shown when swiped left
-     * @param drawableSwipeRight    drawable shown when swiped right
-     * @param bgColorSwipeLeft    background color when swiped left
-     * @param bgColorSwipeRight    background color when swiped right
-     * @param onItemSwipeLeft    OnItemSwipeListener for swiped left
-     * @param onItemSwipeRight    OnItemSwipeListener for swiped right
-     */
+    })()""".trimIndent()
+
+                webView.loadUrl(code)
+            }
+        }
+        webView.setBackgroundColor(Color.parseColor("#424242"))
+        webView.loadData(
+            "<style>img{display: inline;height: auto;max-width: 100%;}</style>$html",
+            "text/html",
+            "UTF-8"
+        )
+    }
+
 
 }

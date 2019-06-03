@@ -15,29 +15,29 @@ class CommunicateViewModel : ViewModel() {
     val listOfTypeFragment: LiveData<ListOfTypeFragment>
         get() = mListOfTypeFragment
 
-    val targetChannel = MutableLiveData<String>()
-    val searchChannel = MutableLiveData<String>()
+    var targetChannel = ""
+    var searchChannel = ""
 
-    val selectedFeed = MutableLiveData<FeedItem>()
+    var selectedFeed:FeedItem? = null
 
     init {
-        mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragment
+        mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragmentFromChannelListFragment
     }
 
     //todo add put logic
     fun onFeedListFragmentState(linkChannel: String) {
-        targetChannel.value = linkChannel
-        mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragment
+        targetChannel = linkChannel
+        mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragmentFromChannelListFragment
     }
 
     fun onFeedListFragmentStateFromSearchFragment(linkChannel:String){
-        searchChannel.value = linkChannel
-        mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragment
+        searchChannel = linkChannel
+        mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment
     }
 
 
     fun onFeedFragmentState(feedItem: FeedItem) {
-        selectedFeed.value = feedItem
+        selectedFeed = feedItem
         mListOfTypeFragment.value = ListOfTypeFragment.FeedFragment
     }
 
@@ -54,7 +54,7 @@ class CommunicateViewModel : ViewModel() {
         when (item!!.itemId) {
             R.id.app_bar_channels -> onChannelListFragmentState()
             R.id.app_bar_settings-> onSettingsFragmentState()
-            R.id.app_bar_feeds ->  mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragment
+            R.id.app_bar_feeds ->  mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragmentFromChannelListFragment
         }
 
         return true

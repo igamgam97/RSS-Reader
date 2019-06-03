@@ -2,7 +2,8 @@ package com.example.rssanimereader.presentation.view
 
 enum class ListOfTypeFragment {
     FeedFragment,
-    FeedListFragment,
+    FeedListFragmentFromChannelListFragment,
+    FeedListFragmentFromAddChannelDialogFragment,
     ChannelListFragment,
     SettingsFragment
 }

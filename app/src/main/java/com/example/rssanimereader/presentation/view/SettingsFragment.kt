@@ -13,6 +13,8 @@ import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.presentation.viewmodel.SettingsViewModel
 
 
+
+
 /**
  * A simple [Fragment] subclass.
  *
@@ -36,6 +38,11 @@ class SettingsFragment : Fragment() {
     ) = FragmentSettingsBinding.inflate(inflater, container, false).apply {
         settingsViewModel = this@SettingsFragment.settingsViewModel
     }.root
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        retainInstance = true//toggle this
+    }
 
 
     private fun changeTheme() {
