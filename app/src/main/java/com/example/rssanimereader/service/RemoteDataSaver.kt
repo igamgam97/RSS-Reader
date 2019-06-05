@@ -1,5 +1,6 @@
 package com.example.rssanimereader.service
 
+import android.util.Log
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.util.ImageSaver
@@ -34,17 +35,21 @@ class RemoteDataSaver(
             dataBase.insertChannel(channel)
         }
 
-        dataBase.insertAllFeeds(feeds, urlPath)
+        dataBase.insertAllFeedsByChannel(feeds, urlPath)
 
 
     }
 
     fun getFeedsAndChannel(urlPath: String): Pair<ArrayList<FeedItem>, ChannelItem> {
-
         val streamFromURLLoader = StreamFromURLLoader()
 
         streamFromURLLoader(urlPath).inputStream.use {
-            return remoteDataParser.parse(it, urlPath)
+            Log.d("bag","before parse${urlPath}")
+           /* val data = RSSRemoteDataParser().parse(it,urlPath)*/
+            val data = remoteDataParser.parse(it, urlPath)
+
+            Log.d("bag","after parse${data.second.linkChannel}")
+            return data
         }
     }
 
@@ -63,7 +68,7 @@ class RemoteDataSaver(
             dataBase.insertChannel(channel)
         }
 
-        dataBase.insertAllFeeds(feeds, channel.linkChannel)
+        dataBase.insertAllFeedsByChannel(feeds, channel.linkChannel)
 
 
     }

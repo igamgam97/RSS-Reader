@@ -152,7 +152,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     }
 
 
-    fun insertAllFeeds(items: List<FeedItem>,channel:String) {
+    fun insertAllFeedsByChannel(items: List<FeedItem>, channel:String) {
         database?.beginTransaction()
         items.forEach {
             val cv = ContentValues().apply {

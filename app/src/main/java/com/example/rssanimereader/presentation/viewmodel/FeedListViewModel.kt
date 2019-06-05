@@ -1,7 +1,6 @@
 package com.example.rssanimereader.presentation.viewmodel
 
 
-import android.util.Log
 import android.view.MenuItem
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
@@ -15,78 +14,57 @@ import io.reactivex.disposables.CompositeDisposable
 
 class FeedListViewModel(private val feedListRepository: FeedListRepository) : ViewModel() {
     //todo убрать lateinit var
-    val isLoading = ObservableField(false)
-    val isLoadingFromCashe = ObservableField(false)
-    val feeds = MutableLiveData<ArrayList<FeedItem>>()
     private val compositeDisposable = CompositeDisposable()
+    val isLoading = ObservableField(false)
+    val isLoadingFromCache = ObservableField(false)
+    val feeds = MutableLiveData<ArrayList<FeedItem>>()
     var channelLink = ObservableField("")
     val statusError = MutableLiveData<Throwable>()
     val statusOfSort = MutableLiveData<Boolean>().apply { value = false }
 
 
     init {
-        getFeedsFromCashe()
+        getFeedsFromCache()
     }
 
-
-    /*fun onRefresh() {
-        isLoading.set(true)
-        channelLink.get()?.let { channelLink ->
-            val disposable = feedListRepository.getFeedsFromWeb(channelLink)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ data ->
-                    isLoading.set(false)
-                    feeds.value = data
-                },
-                    { error ->
-                        run {
-                            isLoading.set(false)
-                            statusError.value = error
-                        }
-                    })
-            compositeDisposable.add(disposable)
-        }
-    }*/
 
     fun onRefresh() {
         isLoading.set(true)
-        channelLink.get()?.let {it ->
-            val disposable = feedListRepository.getObservableFromChannels(it)
-                .flatMapSingle {links -> feedListRepository.getFeedsByChannelFromWeb(links) }
-                .flatMapSingle { data -> feedListRepository.saveFeedsByChannel(data)
-                    .andThen(feedListRepository.getFeedsByChannelFromDB(data.second.linkChannel)) }
-                /*.flatMapCompletable {data -> feedListRepository.saveFeedsByChannel(data) }
-                .andThen(feedListRepository.getFeedsByChannelFromDB(it))*/
+        channelLink.get()?.let { it ->
+            val newFeeds = ArrayList<FeedItem>()
+            val disposable = feedListRepository.getChannelsFromDB(it)
+                .concatMapSingle { link -> feedListRepository.getFeedsFromWeb(link).map { link to it } }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ data ->
-                    Log.d("bag","data"+data.size)
-                    isLoading.set(false)
-                    feeds.value = data
-                },
+                .subscribe(
+                    { (link, feeds) ->
+                        newFeeds.addAll(feeds)
+                        this.feeds.value = newFeeds
+
+                    },
                     { error ->
-                        run {
-                            isLoading.set(false)
-                            statusError.value = error
-                        }
+                        isLoading.set(false)
+                        statusError.value = error
+                    }, {
+                        isLoading.set(false)
                     })
             compositeDisposable.add(disposable)
         }
     }
 
-    fun getFeedsFromCashe() {
-        isLoadingFromCashe.set(true)
-        channelLink.get()?.let {channelLink->
+    fun getFeedsFromCache() {
+        isLoadingFromCache.set(true)
+        channelLink.get()?.let { channelLink ->
             val disposable = feedListRepository.getFeedsFromCashe(channelLink)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ data ->
-                    feeds.value = data
-                    isLoadingFromCashe.set(false)
-                },
+                .subscribe(
+                    { feeds ->
+                        this.feeds.value = feeds
+                        isLoadingFromCache.set(false)
+                    },
                     { error ->
-                        run {
-                            statusError.value = error
-                            isLoadingFromCashe.set(false)
-                        }
+                        statusError.value = error
+                        isLoadingFromCache.set(false)
+
                     })
             compositeDisposable.add(disposable)
         }
@@ -105,8 +83,8 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
     }
 
     override fun onCleared() {
-        super.onCleared()
         compositeDisposable.clear()
+        super.onCleared()
     }
 
 

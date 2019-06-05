@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //todo добавить открытие по ссылке
-    fun openApplicationFromDeepLink() {
+    private fun openApplicationFromDeepLink() {
         /*    val action: String? = intent?.action*/
         val data = intent?.data
         data?.let {

@@ -38,7 +38,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:indeterminate="true"
-                    android:visibility="@{viewModel.isLoadingFromCashe()  ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{viewModel.isLoadingFromCache()  ? View.GONE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"

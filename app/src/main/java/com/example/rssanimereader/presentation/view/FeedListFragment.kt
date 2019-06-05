@@ -37,10 +37,7 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         viewModel = Injection.provideFeedListViewModel(this)
 
         viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
-            it?.let{
-                feedRecyclerViewAdapter.replaceData(it)
-                Log.d("bag",it.size.toString())
-            }
+            it?.let(feedRecyclerViewAdapter::replaceData)
         })
 
         viewModel.statusOfSort.observe(this, Observer {
@@ -55,9 +52,7 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         })*/
 
         viewModel.statusError.observe(this, Observer {
-            it?.let{
-                showError(it)
-            }
+            it?.let(::showError)
         })
     }
 
@@ -75,37 +70,38 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        retainInstance = true//toggle this
+        retainInstance = true
     }
 
     override fun onItemClick(position: Int) {
-        val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
+        communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         viewModel.feeds.value?.get(position)?.let {
             communicateViewModel.onFeedFragmentState(it)
         }
     }
 
-    private fun showError(status:Throwable) {
-        when(status){
+    private fun showError(status: Throwable) {
+        when (status) {
             is IOException -> Toast.makeText(context, "Error connection", Toast.LENGTH_SHORT).show()
-            is SQLException -> Log.d("bag","отправка сообщений разработчику")
+            is SQLException -> Log.d("bag", "отправка сообщений разработчику")
             is ParseException ->
                 Toast.makeText(context, "невозможно прочитать фид из данных навостей", Toast.LENGTH_SHORT).show()
         }
 
     }
-    fun showProgresOfDownloads(value:String){
+
+    fun showProgresOfDownloads(value: String) {
         Toast.makeText(context, value, Toast.LENGTH_SHORT).show()
     }
 
-    fun setParamsFromAddChannelDealogFragment(nameLink:String){
+    fun setParamsFromAddChannelDealogFragment(nameLink: String) {
         viewModel.channelLink.set(nameLink)
         viewModel.onRefresh()
     }
 
-    fun setParamsFromChannelListFragment(nameLink:String){
-        viewModel.channelLink.set( nameLink)
-        viewModel.getFeedsFromCashe()
+    fun setParamsFromChannelListFragment(nameLink: String) {
+        viewModel.channelLink.set(nameLink)
+        viewModel.getFeedsFromCache()
     }
 
     //todo retry when (doOnError)

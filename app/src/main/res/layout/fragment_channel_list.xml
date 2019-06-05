@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+>
 
     <data>
         <import type="android.view.View"/>
@@ -8,9 +8,6 @@
         <variable
                 name="channelListViewModel"
                 type="com.example.rssanimereader.presentation.viewmodel.ChannelListViewModel"/>
-        <variable
-                name="handler"
-                type="com.example.rssanimereader.adapter.SwipeHandler"/>
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +28,7 @@
                     android:text="@string/all_feeds"
                     android:layout_weight="1"
                     android:onClick="@{()-> channelListViewModel.onClickAllFeedsButton()}"
-                />
+            />
             <Button
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -64,8 +61,8 @@
                 bgColorSwipeRight="@{@color/colorPrimary}"
                 drawableSwipeLeft="@{@drawable/ic_dashboard_black_24dp}"
                 drawableSwipeRight="@{@drawable/ic_dashboard_black_24dp}"
-                onItemSwipeLeft="@{(position) -> handler.onItemSwipedLeft(position)}"
-                onItemSwipeRight="@{(position) -> handler.onItemSwipedRight(position)}"
+                onItemSwipeLeft="@{(position) ->channelListViewModel.onItemSwipedLeft(position)}"
+                onItemSwipeRight="@{(position) -> channelListViewModel.onItemSwipedRight(position)}"
                 swipeEnabled="@{true}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

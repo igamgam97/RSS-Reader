@@ -3,13 +3,14 @@ package com.example.rssanimereader.di
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.example.rssanimereader.ProvideContextApplication
-import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.model.dataSource.ChannelListDataSource
 import com.example.rssanimereader.model.dataSource.FeedDataSource
 import com.example.rssanimereader.model.dataSource.SettingsDataSource
 import com.example.rssanimereader.model.dataSource.feedListDataSource.FeedListDataSourceFactory
 import com.example.rssanimereader.model.repository.FeedListRepository
 import com.example.rssanimereader.model.repository.SearchRepository
+import com.example.rssanimereader.presentation.view.*
+import com.example.rssanimereader.presentation.viewmodel.*
 import com.example.rssanimereader.service.DownloadUrlSourceManager
 import com.example.rssanimereader.service.RemoteDataSaver
 import com.example.rssanimereader.util.NetManager
@@ -17,8 +18,6 @@ import com.example.rssanimereader.util.dbAPI.ChannelAPI
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import com.example.rssanimereader.util.dbAPI.FeedApi
 import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
-import com.example.rssanimereader.presentation.view.*
-import com.example.rssanimereader.presentation.viewmodel.*
 
 object Injection {
 

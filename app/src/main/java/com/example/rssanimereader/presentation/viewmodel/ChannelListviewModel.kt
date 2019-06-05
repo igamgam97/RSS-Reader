@@ -4,19 +4,20 @@ package com.example.rssanimereader.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.rssanimereader.adapter.SwipeHandler
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.model.dataSource.ChannelListDataSource
+import com.example.rssanimereader.presentation.view.TypeOfButtonChannelListFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
-class ChannelListViewModel(private val channelListDataSource: ChannelListDataSource) : ViewModel() {
+class ChannelListViewModel(private val channelListDataSource: ChannelListDataSource) : ViewModel(), SwipeHandler {
 
 
     var channels = MutableLiveData<ArrayList<ChannelItem>>()
-    var isAllFeedsButtonClicked = MutableLiveData<Boolean>()
-    var isFavoriteFeedsButtonClicked = MutableLiveData<Boolean>()
-    var isAddChannelButtonClicked = MutableLiveData<Boolean>()
-    val isSwiped =  MutableLiveData<Boolean>()
+    val isTypeButtonClicked = MutableLiveData<TypeOfButtonChannelListFragment>()
+    val isSwiped = MutableLiveData<Boolean>()
+    var positionOnDelete = 0
     lateinit var tempItem: Pair<Int, ChannelItem>
     private val compositeDisposable = CompositeDisposable()
 
@@ -25,11 +26,9 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
     }
 
     fun getAllChannels() {
-
         val disposable = channelListDataSource.getChannels()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
-                //data.add(0,ChannelItem("","all","",""))
                 channels.value = data
             }
         compositeDisposable.add(disposable)
@@ -45,21 +44,15 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
     }
 
     fun addChannel() {
-        Log.d("bag", "click")
-        isAddChannelButtonClicked.value = true
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        compositeDisposable.clear()
+        isTypeButtonClicked.value= TypeOfButtonChannelListFragment.ShowAddChannelDialogFragment
     }
 
     fun onClickAllFeedsButton() {
-        isAllFeedsButtonClicked.value = true
+        isTypeButtonClicked.value= TypeOfButtonChannelListFragment.ShowAllFeeds
     }
 
     fun onClickFavoriteFeedsButton() {
-        isFavoriteFeedsButtonClicked.value = true
+        isTypeButtonClicked.value= TypeOfButtonChannelListFragment.ShowFavoriteFeeds
     }
 
     fun retractSaveChannel(channelItem: ChannelItem) {
@@ -67,6 +60,30 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {}
         compositeDisposable.add(disposable)
+    }
+
+    override fun onItemSwipedLeft(position: Int) {
+        positionOnDelete = position
+        saveAndRemoveItem(position)
+        isTypeButtonClicked.value = TypeOfButtonChannelListFragment.SwipeLeft
+
+    }
+
+    override fun onItemSwipedRight(position: Int) {
+        positionOnDelete = position
+        saveAndRemoveItem(position)
+        isTypeButtonClicked.value = TypeOfButtonChannelListFragment.SwipeRight
+    }
+
+    private fun saveAndRemoveItem(position: Int) {
+        tempItem = Pair(position, channels.value!![position])
+        deleteChannel(channels.value!![position].linkChannel)
+    }
+
+
+    override fun onCleared() {
+        compositeDisposable.clear()
+        super.onCleared()
     }
 
 }

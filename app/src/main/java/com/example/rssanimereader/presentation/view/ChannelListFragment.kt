@@ -14,13 +14,12 @@ import com.example.rssanimereader.adapter.SwipeHandler
 import com.example.rssanimereader.databinding.FragmentChannelListBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.entity.ChannelItem
-import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.presentation.viewmodel.ChannelListViewModel
 import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
 import com.google.android.material.snackbar.Snackbar
 
 
-class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickListener, SwipeHandler {
+class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickListener{
 
     private val channelRecyclerViewAdapter = ChannelRecyclerViewAdapter(arrayListOf(), this)
     private lateinit var viewModel: ChannelListViewModel
@@ -31,7 +30,7 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("bag","onCreateChannel")
+        Log.d("bag", "onCreateChannel")
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         viewModel = Injection.provideChannelListViewModel(this)
 
@@ -39,23 +38,8 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
             it?.let(channelRecyclerViewAdapter::replaceData)
         })
 
-        viewModel.isAllFeedsButtonClicked.observe(this, Observer {
-            onAllFeedsButtonClick()
-        })
-
-        viewModel.isFavoriteFeedsButtonClicked.observe(this, Observer {
-            onFavoriteFeedsButtonClick()
-        })
-
-
-        /*communicateViewModel.listOfTypeFragment.observe(activity!!, Observer {
-            if (it == ListOfTypeFragment.ChannelListFragment) {
-                viewModel.getAllChannels()
-            }
-        })*/
-
-        viewModel.isAddChannelButtonClicked.observe(this, Observer {
-            onAddChannelButtonClick()
+        viewModel.isTypeButtonClicked.observe(this, Observer {
+            isTypeOfButtonClicked(it)
         })
 
         addChannelDialogFragment = AddChannelDialogFragment()
@@ -68,7 +52,6 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
             feedRv.layoutManager = LinearLayoutManager(activity)
             feedRv.adapter = channelRecyclerViewAdapter
             channelListViewModel = viewModel
-            handler = this@ChannelListFragment
         }
         return binding.root
     }
@@ -82,10 +65,6 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
         communicateViewModel.onFeedListFragmentState(viewModel.channels.value!![position].linkChannel)
     }
 
-    override fun onDeleteItemClick(position: Int): Boolean {
-        viewModel.deleteChannel(viewModel.channels.value!![position].linkChannel)
-        return true
-    }
 
     private fun onAllFeedsButtonClick() {
         communicateViewModel.onFeedListFragmentState("")
@@ -97,42 +76,53 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
 
 
     private fun onAddChannelButtonClick() {
-        Log.d("bag", "bad")
-        addChannelDialogFragment.show(fragmentManager!!, "dil")
+        addChannelDialogFragment.show(fragmentManager!!, "dialog")
     }
 
-    override fun onItemSwipedLeft(position: Int) {
-        saveAndRemoveItem(position)
-        showSnackbar("Swiped Left $position")
-    }
-
-    override fun onItemSwipedRight(position: Int) {
-        saveAndRemoveItem(position)
-        showSnackbar("Swiped Right $position")
-    }
 
     private fun showSnackbar(message: String) {
-        Snackbar.make(binding.getRoot(), message, Snackbar.LENGTH_LONG)
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
             .setAction("UNDO") {
                 retractSavedItem()
             }.show()
     }
 
     private fun retractSavedItem() {
-        viewModel.retractSaveChannel(tempItem.second)
-        channelRecyclerViewAdapter.add(tempItem.first, tempItem.second)
+        viewModel.retractSaveChannel(viewModel.tempItem.second)
+        channelRecyclerViewAdapter.add(viewModel.tempItem.first, viewModel.tempItem.second)
     }
 
-    private fun saveAndRemoveItem(position: Int) {
-        tempItem = Pair(position, viewModel.channels.value!![position])
-        viewModel.deleteChannel(viewModel.channels.value!![position].linkChannel)
-        channelRecyclerViewAdapter.remove(position)
+    fun onSwipeLeft() {
+        channelRecyclerViewAdapter.remove(viewModel.positionOnDelete)
         communicateViewModel.targetChannel = ""
+        showSnackbar("Swiped Left $viewModel.positionOnDelete")
     }
 
+    fun onSwipeRight() {
+        channelRecyclerViewAdapter.remove(viewModel.positionOnDelete)
+        communicateViewModel.targetChannel = ""
+        showSnackbar("Swiped Left $viewModel.positionOnDelete")
+    }
+
+    private fun isTypeOfButtonClicked(typeOfButtonChannelListFragment: TypeOfButtonChannelListFragment) {
+        when (typeOfButtonChannelListFragment) {
+            TypeOfButtonChannelListFragment.ShowAddChannelDialogFragment -> onAddChannelButtonClick()
+            TypeOfButtonChannelListFragment.ShowFavoriteFeeds -> onFavoriteFeedsButtonClick()
+            TypeOfButtonChannelListFragment.ShowAllFeeds -> onAllFeedsButtonClick()
+            TypeOfButtonChannelListFragment.SwipeRight -> onSwipeRight()
+            TypeOfButtonChannelListFragment.SwipeLeft -> onSwipeLeft()
+        }
+    }
     fun setParams() {
         viewModel.getAllChannels()
     }
 
+}
 
+enum class TypeOfButtonChannelListFragment {
+    ShowAddChannelDialogFragment,
+    ShowAllFeeds,
+    ShowFavoriteFeeds,
+    SwipeRight,
+    SwipeLeft
 }

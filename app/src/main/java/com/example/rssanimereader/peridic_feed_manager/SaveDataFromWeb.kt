@@ -8,10 +8,6 @@ import com.example.rssanimereader.util.StreamFromURLLoader
 import com.example.rssanimereader.util.dbAPI.ChannelAPI
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Single
-import java.io.InputStream
-import java.net.MalformedURLException
 
 class SaveDataFromWeb(
     private val remoteDataParser: RemoteDataParser,
@@ -36,7 +32,7 @@ class SaveDataFromWeb(
             dataBase.insertChannel(channel)
         }
 
-        dataBase.insertAllFeeds(feeds,urlPath)
+        dataBase.insertAllFeedsByChannel(feeds,urlPath)
 
 
     }
@@ -49,7 +45,7 @@ class SaveDataFromWeb(
             dataBase.insertChannel(channel)
         }
 
-        dataBase.insertAllFeeds(feeds,urlPath)
+        dataBase.insertAllFeedsByChannel(feeds,urlPath)
 
 
     }

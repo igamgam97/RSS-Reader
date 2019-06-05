@@ -38,7 +38,6 @@ class ChannelRecyclerViewAdapter(
 
     interface OnItemClickListener {
         fun onItemClick(position: Int)
-        fun onDeleteItemClick(position: Int): Boolean
     }
 
 
@@ -48,7 +47,6 @@ class ChannelRecyclerViewAdapter(
         fun bind(channel: ChannelItem, listener: OnItemClickListener?) {
             binding.channel = channel
             if (listener != null) binding.root.setOnClickListener { listener.onItemClick(layoutPosition) }
-            if (listener != null) binding.root.setOnLongClickListener { listener.onDeleteItemClick(layoutPosition) }
             binding.executePendingBindings()
         }
     }
