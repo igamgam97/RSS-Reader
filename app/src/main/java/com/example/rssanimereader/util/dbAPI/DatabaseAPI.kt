@@ -3,22 +3,26 @@ package com.example.rssanimereader.util.dbAPI
 
 import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
-import android.util.Log
 import androidx.core.database.getStringOrNull
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.web.ImageSaver
 import java.io.Closeable
 
 
-class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
-
-
+class DatabaseAPI(context: Context)
+    : Closeable, ChannelAndFeedApi{
     private val dbHelper: DatabaseHelper =
         DatabaseHelper(context.applicationContext)
     private var database: SQLiteDatabase? = null
+
+
+    fun open(): DatabaseAPI {
+        database = dbHelper.writableDatabase
+        return this
+    }
 
     /*private fun getEntriesByClause(whereClause: String? = null, whereArgs: Array<String>? = null): Cursor {
         val columns = arrayOf(
@@ -31,7 +35,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return database!!.query(DatabaseHelper.FEED_TABLE, columns, whereClause, whereArgs, null, null, null)
     }*/
 
-    override fun getItemFeeds(whereClause: String?, whereArgs: Array<String>?): ArrayList<FeedItem> {
+    override fun getAllFeeds(whereClause: String?, whereArgs: Array<String>?): ArrayList<FeedItem> {
         val items = ArrayList<FeedItem>()
         val cursor = database!!.query(
             DatabaseHelper.FEED_TABLE,
@@ -67,13 +71,9 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return items
     }
 
-    val count: Long
+    override val count: Long
         get() = DatabaseUtils.queryNumEntries(database, DatabaseHelper.FEED_TABLE)
 
-    fun open(): DatabaseAPI {
-        database = dbHelper.writableDatabase
-        return this
-    }
 
     override fun close() {
         dbHelper.close()
@@ -96,14 +96,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return item
     }*/
 
-    fun deleteChannel(channelLink: String): Long {
-
-        val whereClause = "link = ?"
-        val whereArgs = arrayOf(channelLink)
-        return database!!.delete(DatabaseHelper.CHANNEL_TABLE, whereClause, whereArgs).toLong()
-    }
-
-    fun getAllChannels(): ArrayList<ChannelItem> {
+    override fun getAllChannels(): ArrayList<ChannelItem> {
         val items = ArrayList<ChannelItem>()
         val cursor = database!!.query(
             DatabaseHelper.CHANNEL_TABLE,
@@ -124,7 +117,14 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return items
     }
 
-    fun getAllUrlChannels():ArrayList<String>{
+    override fun deleteChannel(channelLink: String): Long {
+        deleteFeedsByChannel(channelLink)
+        val whereClause = "link = ?"
+        val whereArgs = arrayOf(channelLink)
+        return database!!.delete(DatabaseHelper.CHANNEL_TABLE, whereClause, whereArgs).toLong()
+    }
+
+    override fun getAllUrlChannels():ArrayList<String>{
         val items = ArrayList<String>()
         val cursor = database!!.query(
             DatabaseHelper.CHANNEL_TABLE,
@@ -141,7 +141,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return items
     }
 
-    fun insertFeeds(item: FeedItem): Long {
+    override fun insertFeeds(item: FeedItem): Long {
         val cv = ContentValues()
         cv.put(DatabaseHelper.FEED_COLUMN_TITLE, item.itemTitle)
         cv.put(DatabaseHelper.FEED_COLUMN_DESCRIPTION, item.itemDesc)
@@ -151,8 +151,18 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return database!!.insertWithOnConflict(DatabaseHelper.FEED_TABLE, null, cv,SQLiteDatabase.CONFLICT_IGNORE)
     }
 
+    override fun insertChannel(channel: ChannelItem): Long {
+        val cv = ContentValues().apply {
+            put(DatabaseHelper.CHANNEL_COLUMN_LINK, channel.linkChannel)
+            put(DatabaseHelper.CHANNEL__COLUMN_NAME, channel.nameChannel)
+            put(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE, channel.urlImage)
+            put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, channel.pathImage!!)
+        }
+        return database!!.insertWithOnConflict(DatabaseHelper.CHANNEL_TABLE, null, cv,SQLiteDatabase.CONFLICT_IGNORE)
+    }
 
-    fun insertAllFeedsByChannel(items: List<FeedItem>, channel:String) {
+
+    override fun insertAllFeedsByChannel(items: List<FeedItem>, channel:String) {
         database?.beginTransaction()
         items.forEach {
             val cv = ContentValues().apply {
@@ -170,26 +180,9 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         database?.endTransaction()
     }
 
-    fun insertChannel(channel: ChannelItem): Long {
-        val cv = ContentValues().apply {
-            put(DatabaseHelper.CHANNEL_COLUMN_LINK, channel.linkChannel)
-            put(DatabaseHelper.CHANNEL__COLUMN_NAME, channel.nameChannel)
-            put(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE, channel.urlImage)
-            put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, channel.pathImage!!)
-        }
-        return database!!.insertWithOnConflict(DatabaseHelper.CHANNEL_TABLE, null, cv,SQLiteDatabase.CONFLICT_IGNORE)
-    }
 
 
-    fun delete(itemFeedId: Long): Long {
-
-        val whereClause = "_id = ?"
-        val whereArgs = arrayOf(itemFeedId.toString())
-        return database!!.delete(DatabaseHelper.FEED_TABLE, whereClause, whereArgs).toLong()
-    }
-
-
-    fun setFavoriteFeed(item: FeedItem): Long {
+    override fun setFavoriteFeed(item: FeedItem): Long {
 
         val whereClause = "${DatabaseHelper.FEED_COLUMN_TITLE} = ?"
         val whereArgs = arrayOf(item.itemTitle)
@@ -202,7 +195,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         return database!!.update(DatabaseHelper.FEED_TABLE, cv, whereClause, whereArgs).toLong()
     }
 
-    fun setIsReadFeed(item: FeedItem): Long {
+    override fun setIsReadFeed(item: FeedItem): Long {
 
         val whereClause = "${DatabaseHelper.FEED_COLUMN_TITLE} = ?"
         val whereArgs = arrayOf(item.itemTitle)
@@ -212,7 +205,7 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     }
 
 
-    fun deleteFeedsByChannel(channel: String): Long {
+    override fun deleteFeedsByChannel(channel: String): Long {
         val whereClause = "${DatabaseHelper.FEED_COLUMN_LINK_CHANNEL} = ?"
         /* val whereClause = "linkChannel = ?"*/
         val whereArgs = arrayOf(channel)
@@ -220,20 +213,20 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
     }
 
 
-    fun getFeedsByChannel(channel: String): ArrayList<FeedItem> {
+    override fun getFeedsByChannel(channel: String): ArrayList<FeedItem> {
         val whereClause = "${DatabaseHelper.FEED_COLUMN_LINK_CHANNEL} = ?"
         /*val whereClause = "linkChannel = ?"*/
         val whereArgs = arrayOf(channel)
-        return getItemFeeds(whereClause, whereArgs)
+        return getAllFeeds(whereClause, whereArgs)
     }
 
-    fun getFavoriteFeeds(): ArrayList<FeedItem> {
+    override fun getFavoriteFeeds(): ArrayList<FeedItem> {
         val whereClause = "${DatabaseHelper.FEED_COLUMN_FAVORITE} = ?"
         val whereArgs = arrayOf(1.toString())
-        return getItemFeeds(whereClause, whereArgs)
+        return getAllFeeds(whereClause, whereArgs)
     }
 
-    fun isExistChannel(channel: String): Boolean {
+    override fun isExistChannel(channel: String): Boolean {
         val whereClause = "${DatabaseHelper.CHANNEL_COLUMN_LINK} = ?"
         /*val whereClause = "link = ?"*/
         val whereArgs = arrayOf(channel)
@@ -248,6 +241,16 @@ class DatabaseAPI(context: Context) : GetLocalDataInterface, Closeable {
         }
         cursor.close()
         return true
+    }
+
+    override fun saveFeedsAndChannel(data: Pair<ArrayList<FeedItem>, ChannelItem>) {
+        val (feeds, channel) = data
+        if (!isExistChannel((channel.linkChannel))) {
+            val path = ImageSaver.saveImageToInternalStorage(channel.urlImage, channel.nameChannel)
+            channel.pathImage = path.toString()
+            insertChannel(channel)
+        }
+        insertAllFeedsByChannel(feeds, channel.linkChannel)
     }
 
 

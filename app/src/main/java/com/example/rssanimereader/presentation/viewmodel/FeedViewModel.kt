@@ -2,7 +2,6 @@ package com.example.rssanimereader.presentation.viewmodel
 
 
 import android.content.Intent
-import android.util.Log
 import android.view.MenuItem
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData

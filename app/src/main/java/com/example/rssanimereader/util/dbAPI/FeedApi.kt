@@ -8,15 +8,15 @@ class FeedApi(private val dataBaseConnection: DatabaseAPI) {
     fun getFeedsByChannel(linkChannel: String): ArrayList<FeedItem> =
         dataBaseConnection.getFeedsByChannel((linkChannel))
 
-    fun getAllFeeds() = dataBaseConnection.getItemFeeds()
+    fun getAllFeeds() = dataBaseConnection.getAllFeeds()
 
     fun getFavoriteFeeds(): ArrayList<FeedItem> = dataBaseConnection.getFavoriteFeeds()
 
-    fun setFavorite(feed: FeedItem) {
+    fun setFavoriteFeed(feed: FeedItem) {
         dataBaseConnection.setFavoriteFeed(feed)
     }
 
-    fun setIsRead(feed: FeedItem) {
+    fun setIsReadFeed(feed: FeedItem) {
         dataBaseConnection.setIsReadFeed(feed)
     }
 }

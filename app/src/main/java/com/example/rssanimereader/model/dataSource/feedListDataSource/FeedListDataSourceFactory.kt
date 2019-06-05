@@ -1,17 +1,15 @@
 package com.example.rssanimereader.model.dataSource.feedListDataSource
 
-import com.example.rssanimereader.service.DownloadUrlSourceManager
-import com.example.rssanimereader.service.RemoteDataSaver
-import com.example.rssanimereader.util.dbAPI.FeedApi
+import com.example.rssanimereader.web.WebApi
+import com.example.rssanimereader.util.dbAPI.ChannelAndFeedApi
 
 class FeedListDataSourceFactory(
-    private val downloadUrlSourceManager: DownloadUrlSourceManager,
-    private val feedApi: FeedApi,
-    private val remoteDataSaver: RemoteDataSaver
+    private val feedApi: ChannelAndFeedApi,
+    private val webApi: WebApi
 ) {
 
 
     fun provideFeedListLocalDataSource() = FeedListLocalDataSource(feedApi)
 
-    fun provideFeedListRemoteDataSource() = FeedListRemoteDataSource(downloadUrlSourceManager, feedApi,remoteDataSaver)
+    fun provideFeedListRemoteDataSource() = FeedListRemoteDataSource(feedApi,webApi)
 }

@@ -9,9 +9,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.work.*
 import com.example.rssanimereader.R
-import com.example.rssanimereader.util.dbAPI.DatabaseAPI
-import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
 import com.example.rssanimereader.presentation.view.MainActivity
+import com.example.rssanimereader.util.dbAPI.DatabaseAPI
+import com.example.rssanimereader.web.parser.RSSRemoteDataParser
 import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 

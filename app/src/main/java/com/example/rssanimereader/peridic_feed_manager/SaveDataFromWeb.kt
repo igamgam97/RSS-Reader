@@ -2,9 +2,9 @@ package com.example.rssanimereader.peridic_feed_manager
 
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.service.RemoteDataParser
-import com.example.rssanimereader.util.ImageSaver
-import com.example.rssanimereader.util.StreamFromURLLoader
+import com.example.rssanimereader.web.RemoteDataParser
+import com.example.rssanimereader.web.ImageSaver
+import com.example.rssanimereader.web.StreamFromURLLoader
 import com.example.rssanimereader.util.dbAPI.ChannelAPI
 import com.example.rssanimereader.util.dbAPI.DatabaseAPI
 import io.reactivex.Completable
@@ -53,9 +53,9 @@ class SaveDataFromWeb(
    /* private fun getFeedsAndChannelApi(urlPath: String) =
         Observable
             .fromIterable( ChannelAPI(dataBase).getUrlChannels())
-            .flatMapSingle { urlPath ->  Single.fromCallable{getFeedsAndChannel(urlPath)}}
-        Single.fromCallable{getFeedsAndChannel(urlPath)}
-            .flatMapCompletable { data -> Completable.fromCallable { saveDataApi(urlPath, data) } }*/
+            .flatMapSingle { urlPath ->  Single.fromCallable{getFeedsAndChannelFromWeb(urlPath)}}
+        Single.fromCallable{getFeedsAndChannelFromWeb(urlPath)}
+            .flatMapCompletable { data -> Completable.fromCallable { saveFeedsAndChannel(urlPath, data) } }*/
 
     private fun getFeedsAndChannel(urlPath: String): Pair<ArrayList<FeedItem>, ChannelItem> {
 

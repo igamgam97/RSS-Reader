@@ -15,11 +15,6 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
 
-        <service
-                android:name=".service.RSSDownloadService"
-                android:exported="false"/>
-
-
         <activity android:name="com.example.rssanimereader.presentation.view.MainActivity"  >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

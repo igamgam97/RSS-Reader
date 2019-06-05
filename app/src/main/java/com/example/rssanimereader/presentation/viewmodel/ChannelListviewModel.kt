@@ -1,7 +1,6 @@
 package com.example.rssanimereader.presentation.viewmodel
 
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.adapter.SwipeHandler
@@ -13,10 +12,8 @@ import io.reactivex.disposables.CompositeDisposable
 
 class ChannelListViewModel(private val channelListDataSource: ChannelListDataSource) : ViewModel(), SwipeHandler {
 
-
     var channels = MutableLiveData<ArrayList<ChannelItem>>()
     val isTypeButtonClicked = MutableLiveData<TypeOfButtonChannelListFragment>()
-    val isSwiped = MutableLiveData<Boolean>()
     var positionOnDelete = 0
     lateinit var tempItem: Pair<Int, ChannelItem>
     private val compositeDisposable = CompositeDisposable()
@@ -36,6 +33,7 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
 
     fun deleteChannel(nameChannel: String) {
         val disposable = channelListDataSource.deleteChannels(nameChannel)
+            .andThen(channelListDataSource.getChannels())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
                 channels.value = data

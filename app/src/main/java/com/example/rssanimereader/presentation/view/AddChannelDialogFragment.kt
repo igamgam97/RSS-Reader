@@ -3,17 +3,15 @@ package com.example.rssanimereader.presentation.view
 import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.DialogFragmentAddChannelBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
 import com.example.rssanimereader.presentation.viewmodel.SearchViewModel
-
-
 
 
 class AddChannelDialogFragment :DialogFragment(){

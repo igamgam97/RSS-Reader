@@ -1,6 +1,5 @@
-package com.example.rssanimereader.util
+package com.example.rssanimereader.web
 
-import com.example.rssanimereader.service.FeedUtilConstants
 import java.net.ConnectException
 import java.net.HttpURLConnection
 import java.net.MalformedURLException

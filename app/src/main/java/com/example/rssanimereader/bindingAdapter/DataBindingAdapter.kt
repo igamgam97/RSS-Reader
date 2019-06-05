@@ -12,13 +12,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.rssanimereader.R
 import com.example.rssanimereader.adapter.SwipeItemTouchHelperCallback
-import com.example.rssanimereader.presentation.view.ListOfTypeFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 

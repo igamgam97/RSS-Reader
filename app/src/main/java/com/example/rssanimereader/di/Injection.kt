@@ -11,13 +11,10 @@ import com.example.rssanimereader.model.repository.FeedListRepository
 import com.example.rssanimereader.model.repository.SearchRepository
 import com.example.rssanimereader.presentation.view.*
 import com.example.rssanimereader.presentation.viewmodel.*
-import com.example.rssanimereader.service.DownloadUrlSourceManager
-import com.example.rssanimereader.service.RemoteDataSaver
+import com.example.rssanimereader.web.WebApi
 import com.example.rssanimereader.util.NetManager
 import com.example.rssanimereader.util.dbAPI.ChannelAPI
-import com.example.rssanimereader.util.dbAPI.DatabaseAPI
-import com.example.rssanimereader.util.dbAPI.FeedApi
-import com.example.rssanimereader.util.feedUtil.parser.RSSRemoteDataParser
+import com.example.rssanimereader.web.parser.RSSRemoteDataParser
 
 object Injection {
 
@@ -29,24 +26,21 @@ object Injection {
     private lateinit var channelListViewModel: ChannelListViewModel
     private lateinit var settingViewModel: SettingsViewModel
     // todo опрокинуть подключение к бд
-    fun provideRemoteDataSaver(): RemoteDataSaver {
+    fun provideRemoteDataSaver(): WebApi {
         val rssRemoteDataParser = RSSRemoteDataParser()
-        return RemoteDataSaver(rssRemoteDataParser, dataBaseConnection)
+        return WebApi(rssRemoteDataParser)
     }
 
-    fun provideFeedApi(datBaseConnection: DatabaseAPI): FeedApi {
+   /* fun provideFeedApi(datBaseConnection: DatabaseAPI): FeedApi {
         return FeedApi(datBaseConnection)
-    }
+    }*/
 
 
     fun provideFeedListViewModel(fragment: FeedListFragment) = if (!Injection::feedListViewModel.isInitialized) {
-        val feedApi = provideFeedApi(dataBaseConnection)
         val netManager = NetManager(contextApplication)
-        val downloadUrlSourceManager = DownloadUrlSourceManager(contextApplication)
         val feedListDataSourceFactory =
             FeedListDataSourceFactory(
-                downloadUrlSourceManager,
-                feedApi,
+                dataBaseConnection,
                 provideRemoteDataSaver()
             )
         val feedListRepository = FeedListRepository(
@@ -73,8 +67,7 @@ object Injection {
 
     fun provideChannelListViewModel(fragment: ChannelListFragment) =
         if (!Injection::channelListViewModel.isInitialized) {
-            val channelApi = ChannelAPI(dataBaseConnection)
-            val channelListDataSource = ChannelListDataSource(channelApi)
+            val channelListDataSource = ChannelListDataSource(dataBaseConnection)
             val channelListViewModelFactory = ChannelListViewModelFactory(channelListDataSource)
             ViewModelProviders.of(fragment, channelListViewModelFactory)
                 .get(ChannelListViewModel::class.java)
@@ -95,8 +88,7 @@ object Injection {
     }
 
     fun provideFeedViewModel(fragment: FeedFragment) = if (!Injection::feedViewModel.isInitialized) {
-        val dataBaseLoader = provideFeedApi(dataBaseConnection)
-        val feedDataSource = FeedDataSource(dataBaseLoader)
+        val feedDataSource = FeedDataSource(dataBaseConnection)
         val feedViewModelFactory = FeedViewModelFactory(feedDataSource)
         ViewModelProviders.of(fragment, feedViewModelFactory)
             .get(FeedViewModel::class.java)

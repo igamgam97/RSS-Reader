@@ -7,7 +7,7 @@ class ChannelAPI(
 ) {
 
 
-    fun getChannels(): ArrayList<ChannelItem> = dataBaseConnection.getAllChannels()
+    fun getAllChannels(): ArrayList<ChannelItem> = dataBaseConnection.getAllChannels()
 
     /*fun deleteChannel(channelName: String): ArrayList<ChannelItem> {
         dataBaseConnection.deleteFeedsByChannel(channelName)
@@ -15,16 +15,19 @@ class ChannelAPI(
         return dataBaseConnection.getAllChannels()
     }*/
 
-    fun deleteChannel(channelName: String): ArrayList<ChannelItem> {
-        dataBaseConnection.deleteFeedsByChannel(channelName)
+    fun deleteChannel(channelName: String){
+        dataBaseConnection.deleteChannel(channelName)
+    }
+
+   /* fun deleteChannel(channelName: String): ArrayList<ChannelItem> {
         dataBaseConnection.deleteChannel(channelName)
         return dataBaseConnection.getAllChannels()
-    }
+    }*/
 
     fun getUrlChannels(): ArrayList<String> =
         dataBaseConnection.getAllUrlChannels()
 
-    fun retractSaveChannel(channelItem: ChannelItem): Long =
+    fun insertChannel(channelItem: ChannelItem): Long =
         dataBaseConnection.insertChannel(channelItem)
 
 }

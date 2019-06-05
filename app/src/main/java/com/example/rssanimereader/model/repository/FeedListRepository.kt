@@ -41,7 +41,7 @@ class FeedListRepository(
 
     fun getChannelsFromDB(linkChannel: String): Observable<String> =
         when (linkChannel) {
-            "" -> feedListDataSourceFactory.provideFeedListRemoteDataSource().getAllChannels()
+            "" -> feedListDataSourceFactory.provideFeedListLocalDataSource().getAllChannels()
             else -> Observable.fromIterable(arrayListOf(linkChannel))
         }
 
@@ -50,7 +50,7 @@ class FeedListRepository(
         .hasInternetConnection()
         .flatMap { hasInternet -> getFeedsByChannelFromWebApi(linkChannel, hasInternet) }
         .flatMap { data ->
-            feedListDataSourceFactory.provideFeedListRemoteDataSource().saveFeedsByChannel(data)
+            feedListDataSourceFactory.provideFeedListLocalDataSource().saveFeedsByChannel(data)
                 .andThen(feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannelFromDB(data.second.linkChannel))
         }
 

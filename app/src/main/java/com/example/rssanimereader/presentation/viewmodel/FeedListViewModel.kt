@@ -1,6 +1,7 @@
 package com.example.rssanimereader.presentation.viewmodel
 
 
+import android.util.Log
 import android.view.MenuItem
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
@@ -46,6 +47,7 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
                         statusError.value = error
                     }, {
                         isLoading.set(false)
+                        Log.d("bag",feeds.value?.size.toString())
                     })
             compositeDisposable.add(disposable)
         }
