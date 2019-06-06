@@ -1,4 +1,4 @@
-package com.example.rssanimereader.data.web
+package com.example.rssanimereader.model.dataSource.webDS.webApi.web
 
 import android.content.Context
 import android.content.ContextWrapper
@@ -12,7 +12,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.net.MalformedURLException
 
-class NewImageSaver {
+class NewImageSaver{
 
     @Throws(MalformedURLException::class)
     private fun downloadImage(urlPath: String): Bitmap {
@@ -22,7 +22,7 @@ class NewImageSaver {
         }
     }
 
-    fun saveImageToInternalStorage(urlPath: String,name: String): Uri {
+    fun saveImageToInternalStorage(urlPath: String, name: String): Uri {
         val bitmap = downloadImage(urlPath)
         val wrapper = ContextWrapper(ProvideContextApplication.applicationContext())
         var file = wrapper.getDir("Images", Context.MODE_PRIVATE)

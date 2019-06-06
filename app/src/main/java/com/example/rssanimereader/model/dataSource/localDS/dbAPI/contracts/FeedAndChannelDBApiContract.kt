@@ -1,7 +1,7 @@
-package com.example.rssanimereader.data.dbAPI.contracts
+package com.example.rssanimereader.model.dataSource.localDS.dbAPI.contracts
 
-import com.example.rssanimereader.entity.ChannelItem
-import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.domain.entity.ChannelItem
+import com.example.rssanimereader.domain.entity.FeedItem
 
 
 

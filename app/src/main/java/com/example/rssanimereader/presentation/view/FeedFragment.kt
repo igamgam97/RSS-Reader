@@ -14,7 +14,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.FragmentFeedBinding
 import com.example.rssanimereader.di.Injection
-import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
 import com.example.rssanimereader.presentation.viewmodel.FeedViewModel
 

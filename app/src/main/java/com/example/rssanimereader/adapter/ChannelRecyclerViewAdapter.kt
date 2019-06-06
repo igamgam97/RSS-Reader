@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rssanimereader.databinding.RvItemChannelBinding
-import com.example.rssanimereader.entity.ChannelItem
+import com.example.rssanimereader.domain.entity.ChannelItem
 
 class ChannelRecyclerViewAdapter(
         private var items: ArrayList<ChannelItem>,

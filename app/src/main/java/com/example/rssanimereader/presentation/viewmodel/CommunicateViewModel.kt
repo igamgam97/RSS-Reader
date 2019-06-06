@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
-import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.presentation.view.ListOfTypeFragment
 
 //todo change -> router

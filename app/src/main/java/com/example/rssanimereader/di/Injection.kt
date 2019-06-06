@@ -3,18 +3,18 @@ package com.example.rssanimereader.di
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.example.rssanimereader.ProvideContextApplication
-import com.example.rssanimereader.model.WebDS
-import com.example.rssanimereader.model.dataSource.LocalDS
-import com.example.rssanimereader.model.dataSource.SettingsDataSource
+import com.example.rssanimereader.model.dataSource.webDS.WebDS
+import com.example.rssanimereader.model.dataSource.localDS.LocalDS
+import com.example.rssanimereader.model.dataSource.settingsDS.SettingsDataSource
 import com.example.rssanimereader.model.repository.ChannelsRepository
 import com.example.rssanimereader.model.repository.FeedsRepository
 import com.example.rssanimereader.presentation.view.*
 import com.example.rssanimereader.presentation.viewmodel.*
 import com.example.rssanimereader.domain.usecase.*
 import com.example.rssanimereader.util.NetManager
-import com.example.rssanimereader.data.web.NewImageSaver
-import com.example.rssanimereader.data.web.WebApi
-import com.example.rssanimereader.data.web.parser.RSSRemoteDataParser
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.NewImageSaver
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.WebApi
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.RSSRemoteDataParser
 
 object Injection {
 
@@ -34,7 +34,7 @@ object Injection {
         return WebApi(rssRemoteDataParser, imageSaver)
     }
 
-    /* fun provideFeedApi(datBaseConnection: DatabaseAPI): FeedApi {
+    /* fun provideFeedApi(datBaseConnection: FeedAndChannelApi): FeedApi {
          return FeedApi(datBaseConnection)
      }*/
 
@@ -91,7 +91,7 @@ object Injection {
             val webDS = WebDS(webApi)
             val localDS = LocalDS(dataBaseConnection)
             val channelRepository = ChannelsRepository(webDS, localDS)
-            val getChannelsUseCase = GetChannelsUseCase(channelRepository)
+            val getChannelsUseCase = GetChannelsFromDBUseCase(channelRepository)
             val deleteChannelsUseCase = DeleteChannelsUseCase(channelRepository)
             val retractDeleteBySwipeChannelUseCase = RetractDeleteBySwipeChannelUseCase(channelRepository)
             val channelListViewModelFactory = ChannelListViewModelFactory(

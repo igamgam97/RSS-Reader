@@ -1,4 +1,4 @@
-package com.example.rssanimereader.data.dbAPI.contracts
+package com.example.rssanimereader.model.dataSource.localDS.dbAPI.contracts
 
 
 object DBContract {

@@ -1,9 +1,9 @@
-package com.example.rssanimereader.data.dbAPI
+package com.example.rssanimereader.model.dataSource.localDS.dbAPI
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import com.example.rssanimereader.data.dbAPI.contracts.DBContract
+import com.example.rssanimereader.model.dataSource.localDS.dbAPI.contracts.DBContract
 
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(

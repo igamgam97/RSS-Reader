@@ -1,4 +1,4 @@
-package com.example.rssanimereader.data.web
+package com.example.rssanimereader.model.dataSource.webDS.webApi.web
 
 import android.content.Context.MODE_PRIVATE
 import android.content.ContextWrapper

@@ -4,16 +4,16 @@ package com.example.rssanimereader.presentation.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.adapter.SwipeHandler
-import com.example.rssanimereader.entity.ChannelItem
+import com.example.rssanimereader.domain.entity.ChannelItem
 import com.example.rssanimereader.presentation.view.TypeOfButtonChannelListFragment
 import com.example.rssanimereader.domain.usecase.DeleteChannelsUseCase
-import com.example.rssanimereader.domain.usecase.GetChannelsUseCase
+import com.example.rssanimereader.domain.usecase.GetChannelsFromDBUseCase
 import com.example.rssanimereader.domain.usecase.RetractDeleteBySwipeChannelUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 class ChannelListViewModel(
-    private val getChannelsUseCase: GetChannelsUseCase,
+    private val getChannelsFromDBUseCase: GetChannelsFromDBUseCase,
     private val deleteChannelsUseCase: DeleteChannelsUseCase,
     private val retractDeleteBySwipeChannelUseCase: RetractDeleteBySwipeChannelUseCase
 ) : ViewModel(), SwipeHandler {
@@ -29,7 +29,7 @@ class ChannelListViewModel(
     }
 
     fun getAllChannels() {
-        val disposable = getChannelsUseCase()
+        val disposable = getChannelsFromDBUseCase()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
                 channels.value = data

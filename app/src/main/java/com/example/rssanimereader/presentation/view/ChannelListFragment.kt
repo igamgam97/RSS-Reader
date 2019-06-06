@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rssanimereader.adapter.ChannelRecyclerViewAdapter
 import com.example.rssanimereader.databinding.FragmentChannelListBinding
 import com.example.rssanimereader.di.Injection
-import com.example.rssanimereader.entity.ChannelItem
+import com.example.rssanimereader.domain.entity.ChannelItem
 import com.example.rssanimereader.presentation.viewmodel.ChannelListViewModel
 import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
 import com.google.android.material.snackbar.Snackbar

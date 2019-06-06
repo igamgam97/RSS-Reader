@@ -8,7 +8,7 @@
 
         <variable
                 name="feed"
-                type="com.example.rssanimereader.entity.FeedItem"/>
+                type="com.example.rssanimereader.domain.entity.FeedItem"/>
     </data>
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

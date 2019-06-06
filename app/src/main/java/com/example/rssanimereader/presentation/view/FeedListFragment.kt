@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rssanimereader.adapter.FeedRecyclerViewAdapter
 import com.example.rssanimereader.databinding.FragmentFeedListBinding
 import com.example.rssanimereader.di.Injection
-import com.example.rssanimereader.entity.FeedItem
+import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
 import com.example.rssanimereader.presentation.viewmodel.FeedListViewModel
 import java.io.IOException

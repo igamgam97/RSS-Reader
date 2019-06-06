@@ -1,7 +1,7 @@
 package com.example.rssanimereader.util
 
 import android.net.Uri
-import com.example.rssanimereader.data.web.ImageSaver
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.ImageSaver
 import java.util.regex.Pattern
 
 

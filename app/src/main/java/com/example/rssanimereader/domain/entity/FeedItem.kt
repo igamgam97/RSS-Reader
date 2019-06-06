@@ -1,4 +1,4 @@
-package com.example.rssanimereader.entity
+package com.example.rssanimereader.domain.entity
 
 data class FeedItem(
     val itemTitle: String, var itemDesc: String,

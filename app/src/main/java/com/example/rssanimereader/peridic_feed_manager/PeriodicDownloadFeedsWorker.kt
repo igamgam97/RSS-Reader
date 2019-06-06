@@ -6,16 +6,17 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.work.*
 import com.example.rssanimereader.R
-import com.example.rssanimereader.data.dbAPI.DatabaseAPI
-import com.example.rssanimereader.data.web.NewImageSaver
-import com.example.rssanimereader.data.web.WebApi
-import com.example.rssanimereader.data.web.parser.RSSRemoteDataParser
+import com.example.rssanimereader.model.dataSource.localDS.dbAPI.FeedAndChannelApi
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.NewImageSaver
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.WebApi
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.RSSRemoteDataParser
 import com.example.rssanimereader.domain.usecase.SavePeriodicallyAllFeedsWebUseCase
-import com.example.rssanimereader.model.WebDS
-import com.example.rssanimereader.model.dataSource.LocalDS
+import com.example.rssanimereader.model.dataSource.webDS.WebDS
+import com.example.rssanimereader.model.dataSource.localDS.LocalDS
 import com.example.rssanimereader.model.repository.ChannelsRepository
 import com.example.rssanimereader.model.repository.FeedsRepository
 import com.example.rssanimereader.presentation.view.MainActivity
@@ -53,7 +54,7 @@ class PeriodicDownloadFeedsWorker(val context: Context, workerParams: WorkerPara
     }
 
     override fun doWork() = try {
-        val dataBaseConnection = DatabaseAPI(context).open()
+        val dataBaseConnection = FeedAndChannelApi(context).open()
         val rssRemoteDataParser = RSSRemoteDataParser()
         val imageSaver = NewImageSaver()
         val webApi = WebApi(rssRemoteDataParser, imageSaver)
@@ -64,8 +65,10 @@ class PeriodicDownloadFeedsWorker(val context: Context, workerParams: WorkerPara
         val netManager = NetManager(context)
         val savePeriodicallyAllFeedsWebUseCase =
             SavePeriodicallyAllFeedsWebUseCase(feedsRepository, channelsRepository, netManager)
+        Log.d("bag","PeriodicDownloadFeedsWorker work")
         val disposable = savePeriodicallyAllFeedsWebUseCase()
             .subscribe({
+                Log.d("bag","savePeriodicatllyAllFeeds work")
                 showPeriodicNotificationOfDownloadFeeds(
                     "New feedsDownloads", "We downloads feeds for you",
                     1

@@ -11,7 +11,7 @@ class GetFeedsFromWebUseCase(
     private val netManager: NetManager
     ) {
     operator fun invoke(linkChannel: String) =
-        feedsRepository.getChannelsFromDB(linkChannel)
+        feedsRepository.getChannelsLinkFromDB(linkChannel)
             .concatMapSingle { link -> getFeedsFromWeb(link).map { link to it } }
 
     private fun getFeedsFromWeb(linkChannel: String) =

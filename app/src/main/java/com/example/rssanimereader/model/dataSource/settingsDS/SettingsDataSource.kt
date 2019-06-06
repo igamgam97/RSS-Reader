@@ -1,7 +1,7 @@
-package com.example.rssanimereader.model.dataSource
+package com.example.rssanimereader.model.dataSource.settingsDS
 
 import android.content.SharedPreferences
-import com.example.rssanimereader.entity.SettingsItem
+import com.example.rssanimereader.domain.entity.SettingsItem
 
 class SettingsDataSource(private val sharedPreferences: SharedPreferences) {
 

@@ -1,4 +1,4 @@
-package com.example.rssanimereader.data.dbAPI
+package com.example.rssanimereader.model.dataSource.localDS.dbAPI
 
 
 import android.content.ContentValues
@@ -6,21 +6,21 @@ import android.content.Context
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import androidx.core.database.getStringOrNull
-import com.example.rssanimereader.entity.ChannelItem
-import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.data.dbAPI.contracts.ChannelAndFeedApi
-import com.example.rssanimereader.data.dbAPI.contracts.DBContract
-import com.example.rssanimereader.data.web.ImageSaver
+import com.example.rssanimereader.model.dataSource.localDS.dbAPI.contracts.ChannelAndFeedApi
+import com.example.rssanimereader.model.dataSource.localDS.dbAPI.contracts.DBContract
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.ImageSaver
+import com.example.rssanimereader.domain.entity.ChannelItem
+import com.example.rssanimereader.domain.entity.FeedItem
 import java.io.Closeable
 
 
-class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
+class FeedAndChannelApi(context: Context) : Closeable, ChannelAndFeedApi {
     private val dbHelper: DatabaseHelper =
         DatabaseHelper(context.applicationContext)
     private var database: SQLiteDatabase? = null
 
 
-    fun open(): DatabaseAPI {
+    fun open(): FeedAndChannelApi {
         database = dbHelper.writableDatabase
         return this
     }
@@ -42,17 +42,17 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
             DBContract.FeedTable.TABLE_NAME,
             null, whereClause, whereArgs, null, null, "${DBContract.FeedTable.COLUMN_DOWNLOAD_DATE} DESC"
         )
-        if (cursor.moveToFirst()) {
-            do {
-                with(cursor) {
-                    val title = getString(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_TITLE))
-                    val description = getString(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_DESCRIPTION))
-                    val link = getString(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_LINK))
-                    val pubDate = getString(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_PUB_DATE))
-                    val favorite = getInt(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_FAVORITE)) == 1
-                    val isRead = getInt(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_IS_READ)) == 1
-                    val downloadDate = getString(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_DOWNLOAD_DATE))
-                    val pathImage = getStringOrNull(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_PATH_IMAGE))
+        with(cursor) {
+            if (moveToFirst()) {
+                do {
+                    val title = getString(getColumnIndex(DBContract.FeedTable.COLUMN_TITLE))
+                    val description = getString(getColumnIndex(DBContract.FeedTable.COLUMN_DESCRIPTION))
+                    val link = getString(getColumnIndex(DBContract.FeedTable.COLUMN_LINK))
+                    val pubDate = getString(getColumnIndex(DBContract.FeedTable.COLUMN_PUB_DATE))
+                    val favorite = getInt(getColumnIndex(DBContract.FeedTable.COLUMN_FAVORITE)) == 1
+                    val isRead = getInt(getColumnIndex(DBContract.FeedTable.COLUMN_IS_READ)) == 1
+                    val downloadDate = getString(getColumnIndex(DBContract.FeedTable.COLUMN_DOWNLOAD_DATE))
+                    val pathImage = getStringOrNull(getColumnIndex(DBContract.FeedTable.COLUMN_PATH_IMAGE))
                     items.add(
                         FeedItem(
                             title,
@@ -65,8 +65,8 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
                             isRead
                         )
                     )
-                }
-            } while (cursor.moveToNext())
+                } while (moveToNext())
+            }
         }
         cursor.close()
         return items
@@ -103,16 +103,16 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
             DBContract.ChannelTable.TABLE_NAME,
             null, null, null, null, null, null
         )
-        if (cursor.moveToFirst()) {
-            do {
-                val link = cursor.getString(cursor.getColumnIndex(DBContract.ChannelTable.COLUMN_LINK))
-                val imagePath = cursor.getString(cursor.getColumnIndex(DBContract.ChannelTable.COLUMN_PATH_IMAGE))
-                val nameChannel = cursor.getString(cursor.getColumnIndex(DBContract.ChannelTable.COLUMN_NAME))
-                val image = cursor.getString(cursor.getColumnIndex(DBContract.ChannelTable.COLUMN_IMAGE))
-                items.add(ChannelItem(link, nameChannel, imagePath, image))
-
-            } while (cursor.moveToNext())
-
+        with(cursor) {
+            if (moveToFirst()) {
+                do {
+                    val link = getString(getColumnIndex(DBContract.ChannelTable.COLUMN_LINK))
+                    val imagePath = getString(getColumnIndex(DBContract.ChannelTable.COLUMN_PATH_IMAGE))
+                    val nameChannel = getString(getColumnIndex(DBContract.ChannelTable.COLUMN_NAME))
+                    val image = getString(getColumnIndex(DBContract.ChannelTable.COLUMN_IMAGE))
+                    items.add(ChannelItem(link, nameChannel, imagePath, image))
+                } while (moveToNext())
+            }
         }
         cursor.close()
         return items
@@ -131,12 +131,15 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
             DBContract.ChannelTable.TABLE_NAME,
             null, null, null, null, null, null
         )
-        if (cursor.moveToFirst()) {
-            do {
-                val link = cursor.getString(cursor.getColumnIndex(DBContract.ChannelTable.COLUMN_LINK))
-                items.add(link)
-            } while (cursor.moveToNext())
 
+        with(cursor) {
+            if (moveToFirst()) {
+                do {
+                    val link = getString(getColumnIndex(DBContract.ChannelTable.COLUMN_LINK))
+                    items.add(link)
+                } while (moveToNext())
+
+            }
         }
         cursor.close()
         return items
@@ -149,7 +152,12 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
         cv.put(DBContract.FeedTable.COLUMN_LINK, item.itemLink)
         cv.put(DBContract.FeedTable.COLUMN_PUB_DATE, item.itemPubDate)
         /*cv.put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, item.linkChannel)*/
-        return database!!.insertWithOnConflict(DBContract.FeedTable.TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
+        return database!!.insertWithOnConflict(
+            DBContract.FeedTable.TABLE_NAME,
+            null,
+            cv,
+            SQLiteDatabase.CONFLICT_IGNORE
+        )
     }
 
     override fun insertChannel(channel: ChannelItem): Long {
@@ -159,7 +167,12 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
             put(DBContract.ChannelTable.COLUMN_PATH_IMAGE, channel.urlImage)
             put(DBContract.ChannelTable.COLUMN_IMAGE, channel.pathImage!!)
         }
-        return database!!.insertWithOnConflict(DBContract.ChannelTable.TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
+        return database!!.insertWithOnConflict(
+            DBContract.ChannelTable.TABLE_NAME,
+            null,
+            cv,
+            SQLiteDatabase.CONFLICT_IGNORE
+        )
     }
 
 
@@ -183,7 +196,6 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
 
 
     override fun setFavoriteFeed(item: FeedItem): Long {
-
         val whereClause = "${DBContract.FeedTable.COLUMN_TITLE} = ?"
         val whereArgs = arrayOf(item.itemTitle)
         val cv = ContentValues()
@@ -207,7 +219,6 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
 
     override fun deleteFeedsByChannel(channel: String): Long {
         val whereClause = "${DBContract.FeedTable.COLUMN_LINK_CHANNEL} = ?"
-        /* val whereClause = "linkChannel = ?"*/
         val whereArgs = arrayOf(channel)
         return database!!.delete(DBContract.FeedTable.TABLE_NAME, whereClause, whereArgs).toLong()
     }
@@ -215,7 +226,6 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
 
     override fun getFeedsByChannel(channel: String): ArrayList<FeedItem> {
         val whereClause = "${DBContract.FeedTable.COLUMN_LINK_CHANNEL} = ?"
-        /*val whereClause = "linkChannel = ?"*/
         val whereArgs = arrayOf(channel)
         return getAllFeeds(whereClause, whereArgs)
     }
@@ -228,9 +238,7 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
 
     override fun isExistChannel(channel: String): Boolean {
         val whereClause = "${DBContract.ChannelTable.COLUMN_LINK} = ?"
-        /*val whereClause = "link = ?"*/
         val whereArgs = arrayOf(channel)
-
         val cursor = database!!.query(
             DBContract.ChannelTable.TABLE_NAME, null, whereClause,
             whereArgs, null, null, null

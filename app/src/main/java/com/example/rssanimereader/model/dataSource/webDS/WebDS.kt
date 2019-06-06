@@ -1,6 +1,6 @@
-package com.example.rssanimereader.model
+package com.example.rssanimereader.model.dataSource.webDS
 
-import com.example.rssanimereader.data.web.WebApi
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.WebApi
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 

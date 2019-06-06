@@ -1,10 +1,10 @@
-package com.example.rssanimereader.data.web.parser
+package com.example.rssanimereader.model.dataSource.webDS.webApi.web
 
 import android.annotation.SuppressLint
 import android.util.Xml
-import com.example.rssanimereader.entity.ChannelItem
-import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.data.web.RemoteDataParser
+import com.example.rssanimereader.domain.entity.ChannelItem
+import com.example.rssanimereader.domain.entity.FeedItem
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.contracts.FeedAndChannelParserContract
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
@@ -16,24 +16,10 @@ import kotlin.collections.ArrayList
 
 
 class RSSRemoteDataParser(
-) : RemoteDataParser {
-    private companion object {
-        val ns: String? = null
-        const val TAG_FEED = "rss"
-        const val TAG_CHANNEL = "channel"
-        const val TAG_IMAGE = "image"
-        const val TAG_ITEM = "item"
-        const val TAG_TITLE = "title"
-        const val TAG_CHANNEL_URL_IMAGE = "url"
-        const val TAG_DESCRIPTION = "description"
-        const val TAG_LINK = "link"
-        const val TAG_PUBLISHED = "pubDate"
-        const val TAG__CHANNEL_TITLE = "title"
-        const val TAG_ENCLOSURE = "enclosure"
-    }
+) : FeedAndChannelParserContract {
     var source: String? = null
 
-    override fun parse(input: InputStream, source:String): Pair<ArrayList<FeedItem>, ChannelItem> {
+    override fun parse(input: InputStream, source: String): Pair<ArrayList<FeedItem>, ChannelItem> {
         this.source = source
         input.use {
             val parser = Xml.newPullParser().apply {
@@ -91,11 +77,11 @@ class RSSRemoteDataParser(
                 else -> skip(parser)
             }
         }
-        if (channelTitle !=null && channelImageURl !=null){
+        if (channelTitle != null && channelImageURl != null) {
             val channel = ChannelItem(source!!, channelTitle, channelImageURl)
 
             return Pair(episodes, channel)
-        }else{
+        } else {
             throw IOException()
         }
 
@@ -157,8 +143,8 @@ class RSSRemoteDataParser(
             .format(Calendar.getInstance().time)
             .toString()
 
-        if (title != null && subtitle !=null && link != null && publishedDate != null) {
-           /* val pathImage = SaveImageForCashPage(subtitle, title).toString()*/
+        if (title != null && subtitle != null && link != null && publishedDate != null) {
+            /* val pathImage = SaveImageForCashPage(subtitle, title).toString()*/
             return FeedItem(
                 title,
                 subtitle,
@@ -166,12 +152,11 @@ class RSSRemoteDataParser(
                 publishedDate,
                 false,
                 currentDate,
-             /*   currentDateandTime,*/
+                /*   currentDateandTime,*/
                 "",
                 false
             )
-        }
-        else{
+        } else {
             throw IOException()
         }
     }
@@ -226,7 +211,11 @@ class RSSRemoteDataParser(
 
     @Throws(IOException::class, XmlPullParserException::class)
     private fun readEnclosure(parser: XmlPullParser): String {
-        parser.require(XmlPullParser.START_TAG, ns, TAG_ENCLOSURE)
+        parser.require(
+            XmlPullParser.START_TAG,
+            ns,
+            TAG_ENCLOSURE
+        )
         val link = parser.getAttributeValue(null, "url")
             ?: throw XmlPullParserException("Failed to parse <enclosure>")
         parser.nextTag()
@@ -248,6 +237,21 @@ class RSSRemoteDataParser(
                 XmlPullParser.START_TAG -> depth++
             }
         }
+    }
+
+    private companion object {
+        val ns: String? = null
+        const val TAG_FEED = "rss"
+        const val TAG_CHANNEL = "channel"
+        const val TAG_IMAGE = "image"
+        const val TAG_ITEM = "item"
+        const val TAG_TITLE = "title"
+        const val TAG_CHANNEL_URL_IMAGE = "url"
+        const val TAG_DESCRIPTION = "description"
+        const val TAG_LINK = "link"
+        const val TAG_PUBLISHED = "pubDate"
+        const val TAG__CHANNEL_TITLE = "title"
+        const val TAG_ENCLOSURE = "enclosure"
     }
 
 

@@ -8,7 +8,7 @@
 
         <variable
                 name="channel"
-                type="com.example.rssanimereader.entity.ChannelItem"/>
+                type="com.example.rssanimereader.domain.entity.ChannelItem"/>
     </data>
     <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

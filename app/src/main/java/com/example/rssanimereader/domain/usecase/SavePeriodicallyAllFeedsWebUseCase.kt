@@ -11,7 +11,7 @@ class SavePeriodicallyAllFeedsWebUseCase(
     private val netManager: NetManager
 ) {
     operator fun invoke() =
-        feedsRepository.getChannelsFromDB("")
+        feedsRepository.getChannelsLinkFromDB("")
             .concatMapCompletable { link -> getFeedsFromWeb(link)}
 
     private fun getFeedsFromWeb(linkChannel: String) =

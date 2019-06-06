@@ -2,7 +2,7 @@ package com.example.rssanimereader.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.rssanimereader.model.dataSource.SettingsDataSource
+import com.example.rssanimereader.model.dataSource.settingsDS.SettingsDataSource
 import com.example.rssanimereader.presentation.viewmodel.*
 import com.example.rssanimereader.domain.usecase.*
 
@@ -34,14 +34,14 @@ class SearchViewModelFactory(private val isChannelExistUseCase: CheckIsChannelEx
 }
 
 class ChannelListViewModelFactory(
-    private val getChannelsUseCase: GetChannelsUseCase,
+    private val getChannelsFromDBUseCase: GetChannelsFromDBUseCase,
     private val deleteChannelsUseCase: DeleteChannelsUseCase,
     private val retractDeleteBySwipeChannelUseCase: RetractDeleteBySwipeChannelUseCase
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ChannelListViewModel::class.java)) {
             return ChannelListViewModel(
-                getChannelsUseCase,
+                getChannelsFromDBUseCase,
                 deleteChannelsUseCase,
                 retractDeleteBySwipeChannelUseCase
             ) as T

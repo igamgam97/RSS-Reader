@@ -1,4 +1,4 @@
-package com.example.rssanimereader.data.web
+package com.example.rssanimereader.model.dataSource.webDS.webApi.web
 
 import java.net.ConnectException
 import java.net.HttpURLConnection
@@ -23,6 +23,12 @@ class StreamFromURLLoader  {
             return httpConnection
         } else throw ConnectException("Error connection")
     }
+
+object FeedUtilConstants {
+    const val READ_TIMEOUT_VALUE = 15000
+    const val CONNECT_TIMEOUT_VALUE = 10000
+
+}
 
 }
 
