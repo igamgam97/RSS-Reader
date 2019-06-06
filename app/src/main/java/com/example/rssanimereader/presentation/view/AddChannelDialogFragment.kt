@@ -8,7 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.rssanimereader.databinding.DialogFragmentAddChannelBinding
+import com.example.rssanimereader.databinding.AddChanneDialogFragmentlBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
 import com.example.rssanimereader.presentation.viewmodel.AddChannelViewModel
@@ -18,7 +18,7 @@ class AddChannelDialogFragment :DialogFragment(){
     lateinit var addChannelViewModel:AddChannelViewModel
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         Log.d("bag","there")
-        val binding = DialogFragmentAddChannelBinding.inflate(
+        val binding = AddChanneDialogFragmentlBinding.inflate(
             LayoutInflater.from(context), null, false
         )
         addChannelViewModel = Injection.provideAddChannelViewModel(this)

@@ -12,7 +12,7 @@ import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.example.rssanimereader.databinding.FragmentFeedBinding
+import com.example.rssanimereader.databinding.FeedFragmentBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
@@ -38,7 +38,7 @@ class FeedFragment : Fragment() {
         })
         communicateViewModel.selectedFeed?.let {
             feedViewModel.feedItem = ObservableField(it)
-            feedViewModel.isFavorite = ObservableField(it.itemFavorite)
+            feedViewModel.isFavorite.set(it.itemFavorite)
             feedViewModel.setIsReadFeed()
         }
 
@@ -48,7 +48,7 @@ class FeedFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = FragmentFeedBinding.inflate(inflater, container, false).apply {
+    ): View? = FeedFragmentBinding.inflate(inflater, container, false).apply {
         feedViewModel = this@FeedFragment.feedViewModel
     }.root
 

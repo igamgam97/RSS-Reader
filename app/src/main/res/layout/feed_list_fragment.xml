@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+        xmlns:tools="http://schemas.android.com/tools" xmlns:binding="http://schemas.android.com/tools">
 
     <data>
         <import type="android.view.View"/>
@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:refreshing="@{viewModel.isLoading}"
-            android:onEnabled = "@{viewModel.channelLink}"
+            android:swipeToRefreshEnabled="@{viewModel.channelLink}"
             app:onRefreshListener="@{() -> viewModel.onRefresh()}">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     android:theme="@style/Toolbar"
-                    app:onToolbarItemSelected ="@{viewModel::onMenuItemClick}"
+                    app:onToolbarItemSelected="@{viewModel::onMenuItemClick}"
                     app:menu="@menu/feed_list_menu"
                     android:visibility="visible">
             </androidx.appcompat.widget.Toolbar>
@@ -42,7 +42,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    tools:listitem="@layout/rv_item_feed"
+                    tools:listitem="@layout/feed_item_rv"
                     app:layout_constraintTop_toBottomOf="@+id/feed_list_toolbar"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

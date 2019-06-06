@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.rssanimereader.R
-import com.example.rssanimereader.databinding.FragmentSettingsBinding
+import com.example.rssanimereader.databinding.SettingsFragmentBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.presentation.viewmodel.SettingsViewModel
 
@@ -35,7 +35,7 @@ class SettingsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentSettingsBinding.inflate(inflater, container, false).apply {
+    ) = SettingsFragmentBinding.inflate(inflater, container, false).apply {
         settingsViewModel = this@SettingsFragment.settingsViewModel
     }.root
 

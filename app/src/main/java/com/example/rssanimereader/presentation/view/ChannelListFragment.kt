@@ -10,7 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rssanimereader.adapter.ChannelRecyclerViewAdapter
-import com.example.rssanimereader.databinding.FragmentChannelListBinding
+import com.example.rssanimereader.databinding.ChannelListFragmentBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.domain.entity.ChannelItem
 import com.example.rssanimereader.presentation.viewmodel.ChannelListViewModel
@@ -24,7 +24,7 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
     private lateinit var viewModel: ChannelListViewModel
     private lateinit var communicateViewModel: CommunicateViewModel
     private lateinit var addChannelDialogFragment: AddChannelDialogFragment
-    private lateinit var binding: FragmentChannelListBinding
+    private lateinit var binding: ChannelListFragmentBinding
     lateinit var tempItem: Pair<Int, ChannelItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,7 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentChannelListBinding.inflate(inflater, container, false).apply {
+        binding = ChannelListFragmentBinding.inflate(inflater, container, false).apply {
             executePendingBindings()
             feedRv.layoutManager = LinearLayoutManager(activity)
             feedRv.adapter = channelRecyclerViewAdapter

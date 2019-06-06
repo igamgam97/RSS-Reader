@@ -3,7 +3,7 @@ package com.example.rssanimereader.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.rssanimereader.databinding.RvItemFeedBinding
+import com.example.rssanimereader.databinding.FeedItemRvBinding
 import com.example.rssanimereader.domain.entity.FeedItem
 
 class FeedRecyclerViewAdapter(
@@ -13,7 +13,7 @@ class FeedRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = RvItemFeedBinding.inflate(layoutInflater, parent, false)
+        val binding = FeedItemRvBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 
@@ -30,7 +30,7 @@ class FeedRecyclerViewAdapter(
         fun onItemClick(position: Int)
     }
 
-    class ViewHolder(private var binding: RvItemFeedBinding) :
+    class ViewHolder(private var binding: FeedItemRvBinding) :
             RecyclerView.ViewHolder(binding.root) {
 
         fun bind(feed: FeedItem, listener: OnItemClickListener?) {

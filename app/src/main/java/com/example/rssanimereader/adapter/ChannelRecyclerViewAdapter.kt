@@ -3,7 +3,7 @@ package com.example.rssanimereader.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.rssanimereader.databinding.RvItemChannelBinding
+import com.example.rssanimereader.databinding.ChannelItemRvBinding
 import com.example.rssanimereader.domain.entity.ChannelItem
 
 class ChannelRecyclerViewAdapter(
@@ -13,7 +13,7 @@ class ChannelRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val binding = RvItemChannelBinding.inflate(layoutInflater, parent, false)
+        val binding = ChannelItemRvBinding.inflate(layoutInflater, parent, false)
         return ViewHolder(binding)
     }
 
@@ -41,7 +41,7 @@ class ChannelRecyclerViewAdapter(
     }
 
 
-    class ViewHolder(private var binding: RvItemChannelBinding) :
+    class ViewHolder(private var binding: ChannelItemRvBinding) :
             RecyclerView.ViewHolder(binding.root) {
 
         fun bind(channel: ChannelItem, listener: OnItemClickListener?) {

@@ -12,7 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rssanimereader.adapter.FeedRecyclerViewAdapter
-import com.example.rssanimereader.databinding.FragmentFeedListBinding
+import com.example.rssanimereader.databinding.FeedListFragmentBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
@@ -61,7 +61,7 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? =
-        FragmentFeedListBinding.inflate(inflater, container, false).apply {
+        FeedListFragmentBinding.inflate(inflater, container, false).apply {
             viewModel = this@FeedListFragment.viewModel
             executePendingBindings()
             feedRv.layoutManager = LinearLayoutManager(activity)

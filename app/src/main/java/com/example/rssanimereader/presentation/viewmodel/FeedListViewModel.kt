@@ -3,6 +3,7 @@ package com.example.rssanimereader.presentation.viewmodel
 
 import android.util.Log
 import android.view.MenuItem
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,8 +21,8 @@ class FeedListViewModel(
 ) : ViewModel() {
     //todo убрать lateinit var
     private val compositeDisposable = CompositeDisposable()
-    val isLoading = ObservableField(false)
-    val isLoadingFromCache = ObservableField(false)
+    val isLoading = ObservableBoolean(false)
+    val isLoadingFromCache = ObservableBoolean(false)
     val feeds = MutableLiveData<ArrayList<FeedItem>>()
     var channelLink = ObservableField("")
     val statusError = MutableLiveData<Throwable>()

@@ -3,7 +3,9 @@ package com.example.rssanimereader.presentation.viewmodel
 
 import android.content.Intent
 import android.view.MenuItem
+import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
@@ -19,7 +21,7 @@ class FeedViewModel(
 ) : ViewModel() {
 
     lateinit var feedItem: ObservableField<FeedItem>
-    lateinit var isFavorite: ObservableField<Boolean>
+    lateinit var isFavorite: ObservableBoolean
     val shareData = MutableLiveData<Intent>()
     private val compositeDisposable = CompositeDisposable()
 

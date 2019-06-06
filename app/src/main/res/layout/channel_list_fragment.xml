@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:binding="http://schemas.android.com/tools"
 >
 
     <data>
@@ -57,13 +58,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/special_button_container"
-                bgColorSwipeLeft="@{@color/colorPrimary}"
-                bgColorSwipeRight="@{@color/colorPrimary}"
-                drawableSwipeLeft="@{@drawable/ic_dashboard_black_24dp}"
-                drawableSwipeRight="@{@drawable/ic_dashboard_black_24dp}"
-                onItemSwipeLeft="@{(position) ->channelListViewModel.onItemSwipedLeft(position)}"
-                onItemSwipeRight="@{(position) -> channelListViewModel.onItemSwipedRight(position)}"
-                swipeEnabled="@{true}"/>
+                android:bgColorSwipeLeft="@{@color/colorPrimary}"
+                android:bgColorSwipeRight="@{@color/colorPrimary}"
+                android:drawableSwipeLeft="@{@drawable/ic_dashboard_black_24dp}"
+                android:drawableSwipeRight="@{@drawable/ic_dashboard_black_24dp}"
+                android:onItemSwipeLeft="@{(position) ->channelListViewModel.onItemSwipedLeft(position)}"
+                android:onItemSwipeRight="@{(position) -> channelListViewModel.onItemSwipedRight(position)}"
+                android:swipeEnabled="@{true}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

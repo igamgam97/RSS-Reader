@@ -22,17 +22,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 @BindingMethods(
     BindingMethod(
         type = BottomNavigationView::class,
-        attribute = "app:onNavigationItemSelected",
+        attribute = "android:onNavigationItemSelected",
         method = "setOnNavigationItemSelectedListener"
     ),
     BindingMethod(
         type = BottomNavigationView::class,
-        attribute = "app:onSelectedItemId",
+        attribute = "android:onSelectedItemId",
         method = "setSelectedItemId"
     )
 )
 class NavigationViewDataBindingAdapter {
-
 }
 
 @BindingMethods(
@@ -43,16 +42,6 @@ class NavigationViewDataBindingAdapter {
     )
 )
 class ToolbarViewDataBindingAdapter {}
-
-@BindingMethods(
-    BindingMethod(
-        type = Spinner::class,
-        attribute = "app:onSpinnerItemSelected",
-        method = "setSpinnerItemSelectedListener"
-    )
-)
-class SpinnerViewDataBindingAdapter {}
-
 
 object SimpleBindingAdapter {
     @BindingAdapter("android:loadImage")
@@ -76,7 +65,7 @@ object SimpleBindingAdapter {
 
     }*/
 
-    @BindingAdapter("android:onEnabled")
+    @BindingAdapter("android:swipeToRefreshEnabled")
     @JvmStatic
     fun setEnabled(swipeRefreshLayout: SwipeRefreshLayout, typeOfFeedsList: String) {
         swipeRefreshLayout.isEnabled = typeOfFeedsList != "favorite"
@@ -84,7 +73,14 @@ object SimpleBindingAdapter {
     }
 
     @BindingAdapter(
-        value = ["swipeEnabled", "drawableSwipeLeft", "drawableSwipeRight", "bgColorSwipeLeft", "bgColorSwipeRight", "onItemSwipeLeft", "onItemSwipeRight"],
+        value = [
+            "android:swipeEnabled",
+            "android:drawableSwipeLeft",
+            "android:drawableSwipeRight",
+            "android:bgColorSwipeLeft",
+            "android:bgColorSwipeRight",
+            "android:onItemSwipeLeft",
+            "android:onItemSwipeRight"],
         requireAll = false
     )
     @JvmStatic
@@ -114,7 +110,7 @@ object SimpleBindingAdapter {
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    @BindingAdapter("binding:loadData")
+    @BindingAdapter("android:loadData")
     @JvmStatic
     fun loadDataFromHtml(webView: WebView, html: String) {
         /*webView.settings.loadWithOverviewMode = true*/

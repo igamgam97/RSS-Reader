@@ -33,7 +33,7 @@ class SwipeItemTouchHelperCallback private constructor(dragDirs: Int, swipeDirs:
     }
 
     private fun setPaintColor(paint: Paint, color: Int) {
-        paint.setColor(color)
+        paint.color = color
     }
 
 
@@ -52,9 +52,9 @@ class SwipeItemTouchHelperCallback private constructor(dragDirs: Int, swipeDirs:
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
         if (direction == ItemTouchHelper.LEFT) {
-            onItemSwipeLeftListener!!.onItemSwiped(position)
+            onItemSwipeLeftListener.onItemSwiped(position)
         } else if (direction == ItemTouchHelper.RIGHT) {
-            onItemSwipeRightListener!!.onItemSwiped(position)
+            onItemSwipeRightListener.onItemSwiped(position)
         }
     }
 
@@ -83,7 +83,7 @@ class SwipeItemTouchHelperCallback private constructor(dragDirs: Int, swipeDirs:
                     itemView.bottom .toFloat() - width
                 )
                 c.drawRect(background, paintLeft)
-                c.drawBitmap(ViewUtil.getBitmap(drawableLeft!!), null, iconDest, paintLeft)
+                c.drawBitmap(ViewUtil.getBitmap(drawableLeft), null, iconDest, paintLeft)
             } else {
                 val background = RectF(
                     itemView.right .toFloat() + dX,
@@ -98,7 +98,7 @@ class SwipeItemTouchHelperCallback private constructor(dragDirs: Int, swipeDirs:
                     itemView.bottom .toFloat() - width
                 )
                 c.drawRect(background, paintRight)
-                c.drawBitmap(ViewUtil.getBitmap(drawableRight!!), null, iconDest, paintRight)
+                c.drawBitmap(ViewUtil.getBitmap(drawableRight), null, iconDest, paintRight)
             }
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
