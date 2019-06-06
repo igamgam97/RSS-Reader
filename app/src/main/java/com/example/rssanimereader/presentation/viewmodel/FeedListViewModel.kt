@@ -8,12 +8,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.model.repository.FeedListRepository
+import com.example.rssanimereader.usecase.GetFeedsFromDBUseCase
+import com.example.rssanimereader.usecase.GetFeedsFromWebUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
 
-class FeedListViewModel(private val feedListRepository: FeedListRepository) : ViewModel() {
+class FeedListViewModel(
+    private val getFeedsFromDBUseCase: GetFeedsFromDBUseCase,
+    private val getFeedsFromWebUseCase: GetFeedsFromWebUseCase
+) : ViewModel() {
     //todo убрать lateinit var
     private val compositeDisposable = CompositeDisposable()
     val isLoading = ObservableField(false)
@@ -33,8 +37,7 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
         isLoading.set(true)
         channelLink.get()?.let { it ->
             val newFeeds = ArrayList<FeedItem>()
-            val disposable = feedListRepository.getChannelsFromDB(it)
-                .concatMapSingle { link -> feedListRepository.getFeedsFromWeb(link).map { link to it } }
+            val disposable = getFeedsFromWebUseCase(it)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { (link, feeds) ->
@@ -47,7 +50,7 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
                         statusError.value = error
                     }, {
                         isLoading.set(false)
-                        Log.d("bag",feeds.value?.size.toString())
+                        Log.d("bag", feeds.value?.size.toString())
                     })
             compositeDisposable.add(disposable)
         }
@@ -56,7 +59,7 @@ class FeedListViewModel(private val feedListRepository: FeedListRepository) : Vi
     fun getFeedsFromCache() {
         isLoadingFromCache.set(true)
         channelLink.get()?.let { channelLink ->
-            val disposable = feedListRepository.getFeedsFromCashe(channelLink)
+            val disposable = getFeedsFromDBUseCase(channelLink)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { feeds ->

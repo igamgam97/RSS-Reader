@@ -3,14 +3,16 @@ package com.example.rssanimereader.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.rssanimereader.model.dataSource.SettingsDataSource
-import com.example.rssanimereader.model.repository.FeedListRepository
 import com.example.rssanimereader.presentation.viewmodel.*
 import com.example.rssanimereader.usecase.*
 
-class FeedListViewModelFactory(private val repository: FeedListRepository) : ViewModelProvider.Factory {
+class FeedListViewModelFactory(
+    private val getFeedsFromDBUseCase: GetFeedsFromDBUseCase,
+    private val getFeedsFromWebUseCase: GetFeedsFromWebUseCase
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FeedListViewModel::class.java)) {
-            return FeedListViewModel(repository) as T
+            return FeedListViewModel(getFeedsFromDBUseCase,getFeedsFromWebUseCase) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel Class")
@@ -38,7 +40,11 @@ class ChannelListViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ChannelListViewModel::class.java)) {
-            return ChannelListViewModel(getChannelsUseCase, deleteChannelsUseCase, retractDeleteBySwipeChannelUseCase) as T
+            return ChannelListViewModel(
+                getChannelsUseCase,
+                deleteChannelsUseCase,
+                retractDeleteBySwipeChannelUseCase
+            ) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel Class")

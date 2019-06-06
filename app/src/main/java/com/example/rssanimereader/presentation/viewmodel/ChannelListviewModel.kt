@@ -40,7 +40,6 @@ class ChannelListViewModel(
 
     fun deleteChannel(nameChannel: String) {
         val disposable = deleteChannelsUseCase(nameChannel)
-            .andThen(getChannelsUseCase())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
                 channels.value = data
