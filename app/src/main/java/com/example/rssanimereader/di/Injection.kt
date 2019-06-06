@@ -10,12 +10,11 @@ import com.example.rssanimereader.model.repository.ChannelsRepository
 import com.example.rssanimereader.model.repository.FeedsRepository
 import com.example.rssanimereader.presentation.view.*
 import com.example.rssanimereader.presentation.viewmodel.*
-import com.example.rssanimereader.usecase.*
+import com.example.rssanimereader.domain.usecase.*
 import com.example.rssanimereader.util.NetManager
-import com.example.rssanimereader.util.dbAPI.ChannelAPI
-import com.example.rssanimereader.web.NewImageSaver
-import com.example.rssanimereader.web.WebApi
-import com.example.rssanimereader.web.parser.RSSRemoteDataParser
+import com.example.rssanimereader.data.web.NewImageSaver
+import com.example.rssanimereader.data.web.WebApi
+import com.example.rssanimereader.data.web.parser.RSSRemoteDataParser
 
 object Injection {
 
@@ -23,7 +22,7 @@ object Injection {
     private val dataBaseConnection = ProvideContextApplication.getDataBaseConnection()
     private lateinit var feedListViewModel: FeedListViewModel
     private lateinit var feedViewModel: FeedViewModel
-    private lateinit var searchViewModel: SearchViewModel
+    private lateinit var addChannelViewModel: AddChannelViewModel
     private lateinit var channelListViewModel: ChannelListViewModel
     private lateinit var settingViewModel: SettingsViewModel
     var webDS: WebDS? = null
@@ -73,8 +72,7 @@ object Injection {
 
 
     fun provideAddChannelViewModel(fragment: AddChannelDialogFragment) =
-        if (!Injection::searchViewModel.isInitialized) {
-            val channelSubscriptionsAPI = ChannelAPI(dataBaseConnection)
+        if (!Injection::addChannelViewModel.isInitialized) {
             val webApi = provideWebApi()
             val webDS = WebDS(webApi)
             val localDS = LocalDS(dataBaseConnection)
@@ -82,9 +80,9 @@ object Injection {
             val checkIsChannelCorrectUseCase = CheckIsChannelExistUseCase(channelRepository)
             val searchViewModelFactory = SearchViewModelFactory(checkIsChannelCorrectUseCase)
             ViewModelProviders.of(fragment, searchViewModelFactory)
-                .get(SearchViewModel::class.java)
+                .get(AddChannelViewModel::class.java)
         } else {
-            searchViewModel
+            addChannelViewModel
         }
 
     fun provideChannelListViewModel(fragment: ChannelListFragment) =

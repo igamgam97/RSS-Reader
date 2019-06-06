@@ -6,8 +6,8 @@
         <import type="android.view.View"/>
 
         <variable
-                name="searchViewModel"
-                type="com.example.rssanimereader.presentation.viewmodel.SearchViewModel"/>
+                name="addChannelViewModel"
+                type="com.example.rssanimereader.presentation.viewmodel.AddChannelViewModel"/>
 
     </data>
 
@@ -23,7 +23,7 @@
                 android:ems="10"
                 android:hint="@string/sites_and_feeds"
                 android:inputType="text"
-                android:text="@={searchViewModel.targetChannel}"
+                android:text="@={addChannelViewModel.targetChannel}"
                 android:importantForAutofill="no" tools:targetApi="o"/>
     </LinearLayout>
 

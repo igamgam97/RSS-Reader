@@ -5,11 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.adapter.SwipeHandler
 import com.example.rssanimereader.entity.ChannelItem
-import com.example.rssanimereader.model.dataSource.ChannelListDataSource
 import com.example.rssanimereader.presentation.view.TypeOfButtonChannelListFragment
-import com.example.rssanimereader.usecase.DeleteChannelsUseCase
-import com.example.rssanimereader.usecase.GetChannelsUseCase
-import com.example.rssanimereader.usecase.RetractDeleteBySwipeChannelUseCase
+import com.example.rssanimereader.domain.usecase.DeleteChannelsUseCase
+import com.example.rssanimereader.domain.usecase.GetChannelsUseCase
+import com.example.rssanimereader.domain.usecase.RetractDeleteBySwipeChannelUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 

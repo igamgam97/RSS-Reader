@@ -11,21 +11,21 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.DialogFragmentAddChannelBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
-import com.example.rssanimereader.presentation.viewmodel.SearchViewModel
+import com.example.rssanimereader.presentation.viewmodel.AddChannelViewModel
 
 
 class AddChannelDialogFragment :DialogFragment(){
-    lateinit var searchViewModel:SearchViewModel
+    lateinit var addChannelViewModel:AddChannelViewModel
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         Log.d("bag","there")
         val binding = DialogFragmentAddChannelBinding.inflate(
             LayoutInflater.from(context), null, false
         )
-        searchViewModel = Injection.provideAddChannelViewModel(this)
-        searchViewModel.isClickSearchButton.observe(this, Observer<Boolean> {
+        addChannelViewModel = Injection.provideAddChannelViewModel(this)
+        addChannelViewModel.isClickSearchButton.observe(this, Observer<Boolean> {
             onSearchClick()
         })
-        binding.searchViewModel = this@AddChannelDialogFragment.searchViewModel
+        binding.addChannelViewModel = this@AddChannelDialogFragment.addChannelViewModel
         return AlertDialog.Builder(requireContext())
             .setTitle("Search channel")
             .setMessage("PleaseChooseChannel")
@@ -39,8 +39,8 @@ class AddChannelDialogFragment :DialogFragment(){
         super.onResume()
         val alertDialog = dialog as AlertDialog?
         val okButton = alertDialog!!.getButton(AlertDialog.BUTTON_POSITIVE)
-        okButton.setOnClickListener{searchViewModel.searchChannel()}
-        searchViewModel.statusError.observe(this, Observer {
+        okButton.setOnClickListener{addChannelViewModel.searchChannel()}
+        addChannelViewModel.statusError.observe(this, Observer {
             if (it==false) {
                 alertDialog.setMessage("Incorrect url")
             }
@@ -50,7 +50,7 @@ class AddChannelDialogFragment :DialogFragment(){
 
     fun onSearchClick() {
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
-        searchViewModel.targetChannel.get()?.let { communicateViewModel.onFeedListFragmentStateFromSearchFragment(it) }
+        addChannelViewModel.targetChannel.get()?.let { communicateViewModel.onFeedListFragmentStateFromSearchFragment(it) }
         dismiss()
     }
 }

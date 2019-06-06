@@ -4,7 +4,6 @@ import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
 import com.example.rssanimereader.model.WebDS
 import com.example.rssanimereader.model.dataSource.LocalDS
-import com.example.rssanimereader.web.WebApi
 import io.reactivex.Completable
 import io.reactivex.Single
 

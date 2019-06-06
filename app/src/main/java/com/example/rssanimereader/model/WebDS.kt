@@ -1,6 +1,6 @@
 package com.example.rssanimereader.model
 
-import com.example.rssanimereader.web.WebApi
+import com.example.rssanimereader.data.web.WebApi
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 

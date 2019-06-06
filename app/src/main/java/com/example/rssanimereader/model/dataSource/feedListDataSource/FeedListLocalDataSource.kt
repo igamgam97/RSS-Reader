@@ -2,7 +2,7 @@ package com.example.rssanimereader.model.dataSource.feedListDataSource
 
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.util.dbAPI.ChannelAndFeedApi
+import com.example.rssanimereader.data.dbAPI.contracts.ChannelAndFeedApi
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single

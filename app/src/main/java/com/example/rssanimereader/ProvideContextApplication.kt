@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
-import com.example.rssanimereader.util.dbAPI.DatabaseAPI
+import com.example.rssanimereader.data.dbAPI.DatabaseAPI
 
 
 class ProvideContextApplication : Application() {

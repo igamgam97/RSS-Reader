@@ -9,9 +9,17 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.work.*
 import com.example.rssanimereader.R
+import com.example.rssanimereader.data.dbAPI.DatabaseAPI
+import com.example.rssanimereader.data.web.NewImageSaver
+import com.example.rssanimereader.data.web.WebApi
+import com.example.rssanimereader.data.web.parser.RSSRemoteDataParser
+import com.example.rssanimereader.domain.usecase.SavePeriodicallyAllFeedsWebUseCase
+import com.example.rssanimereader.model.WebDS
+import com.example.rssanimereader.model.dataSource.LocalDS
+import com.example.rssanimereader.model.repository.ChannelsRepository
+import com.example.rssanimereader.model.repository.FeedsRepository
 import com.example.rssanimereader.presentation.view.MainActivity
-import com.example.rssanimereader.util.dbAPI.DatabaseAPI
-import com.example.rssanimereader.web.parser.RSSRemoteDataParser
+import com.example.rssanimereader.util.NetManager
 import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.TimeUnit
 
@@ -20,7 +28,7 @@ class PeriodicDownloadFeedsWorker(val context: Context, workerParams: WorkerPara
     Worker(context, workerParams) {
 
     private val compositeDisposable = CompositeDisposable()
-    fun showPeriodicNotificationOfDownloadFeeds(title: String, text: String, id: Int){
+    fun showPeriodicNotificationOfDownloadFeeds(title: String, text: String, id: Int) {
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra(Constants.EXTRA_ID, id)
@@ -47,14 +55,22 @@ class PeriodicDownloadFeedsWorker(val context: Context, workerParams: WorkerPara
     override fun doWork() = try {
         val dataBaseConnection = DatabaseAPI(context).open()
         val rssRemoteDataParser = RSSRemoteDataParser()
-        val saveDataFromWeb = SaveDataFromWeb(rssRemoteDataParser, dataBaseConnection)
-        val disposable = saveDataFromWeb.downloadAndSaveAllFeedsApi()
-            .subscribe ({
-           showPeriodicNotificationOfDownloadFeeds(
+        val imageSaver = NewImageSaver()
+        val webApi = WebApi(rssRemoteDataParser, imageSaver)
+        val webDS = WebDS(webApi)
+        val localDS = LocalDS(dataBaseConnection)
+        val feedsRepository = FeedsRepository(webDS, localDS)
+        val channelsRepository = ChannelsRepository(webDS, localDS)
+        val netManager = NetManager(context)
+        val savePeriodicallyAllFeedsWebUseCase =
+            SavePeriodicallyAllFeedsWebUseCase(feedsRepository, channelsRepository, netManager)
+        val disposable = savePeriodicallyAllFeedsWebUseCase()
+            .subscribe({
+                showPeriodicNotificationOfDownloadFeeds(
                     "New feedsDownloads", "We downloads feeds for you",
                     1
                 )
-        }, {error -> onError()})
+            }, { error -> onError() })
         compositeDisposable.add(disposable)
         Result.success()
     } catch (e: Exception) {
@@ -81,7 +97,7 @@ object PeriodicDownloadFeedsWorkerUtils {
         val constraints = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
-               /* .setRequiresDeviceIdle(false)*/
+                /* .setRequiresDeviceIdle(false)*/
                 .build()
         } else {
             Constraints.Builder()
@@ -96,7 +112,7 @@ object PeriodicDownloadFeedsWorkerUtils {
             TimeUnit.MINUTES
         )
             .setConstraints(constraints)
-            /*.setInitialDelay(1, TimeUnit.HOURS)*/
+        /*.setInitialDelay(1, TimeUnit.HOURS)*/
         val myWork = myWorkBuilder.build()
         WorkManager.getInstance()
             .enqueueUniquePeriodicWork("jobTag", ExistingPeriodicWorkPolicy.KEEP, myWork)

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.rssanimereader.model.dataSource.SettingsDataSource
 import com.example.rssanimereader.presentation.viewmodel.*
-import com.example.rssanimereader.usecase.*
+import com.example.rssanimereader.domain.usecase.*
 
 class FeedListViewModelFactory(
     private val getFeedsFromDBUseCase: GetFeedsFromDBUseCase,
@@ -24,8 +24,8 @@ class FeedListViewModelFactory(
 class SearchViewModelFactory(private val isChannelExistUseCase: CheckIsChannelExistUseCase) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
-            return SearchViewModel(isChannelExistUseCase) as T
+        if (modelClass.isAssignableFrom(AddChannelViewModel::class.java)) {
+            return AddChannelViewModel(isChannelExistUseCase) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel Class")
@@ -78,7 +78,7 @@ class AddChannelViewModelFactory(private val isChannelExistUseCase: CheckIsChann
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AddChannelViewModelFactory::class.java)) {
-            return SearchViewModel(isChannelExistUseCase) as T
+            return AddChannelViewModel(isChannelExistUseCase) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel Class")

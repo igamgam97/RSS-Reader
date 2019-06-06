@@ -8,8 +8,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.usecase.SetIsFavoriteFeedsUseCase
-import com.example.rssanimereader.usecase.SetIsReadUseCase
+import com.example.rssanimereader.domain.usecase.SetIsFavoriteFeedsUseCase
+import com.example.rssanimereader.domain.usecase.SetIsReadUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
