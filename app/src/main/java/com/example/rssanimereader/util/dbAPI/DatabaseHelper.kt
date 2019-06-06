@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(
         context,
-        DATABASE_NAME, null,
-        SCHEMA
+        DBContract.DATABASE_NAME, null,
+        DBContract.SCHEMA
 ) {
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -18,50 +18,31 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $FEED_TABLE")
-        db.execSQL("DROP TABLE IF EXISTS $CHANNEL_TABLE")
+        db.execSQL("DROP TABLE IF EXISTS ${DBContract.FeedTable.TABLE_NAME}")
+        db.execSQL("DROP TABLE IF EXISTS ${DBContract.ChannelTable.TABLE_NAME}")
         onCreate(db)
     }
 
     companion object {
-        private const val DATABASE_NAME = "rss_reader_store.db"
-        private const val SCHEMA = 21
-        const val FEED_TABLE = "feeds"
-        const val FEED_COLUMN_ID = "_id"
-        const val FEED_COLUMN_TITLE = "title"
-        const val FEED_COLUMN_DESCRIPTION = "description"
-        const val FEED_COLUMN_LINK = "feed_link"
-        const val FEED_COLUMN_PUB_DATE = "pubDate"
-        const val FEED_COLUMN_LINK_CHANNEL = "linkChannel"
-        const val FEED_COLUMN_FAVORITE = "favorite"
-        const val FEED_COLUMN_PATH_IMAGE = "pathImage"
-        const val FEED_COLUMN_DOWNLOAD_DATE = "downloadDate"
-        const val FEED_COLUMN_IS_READ = "isRead"
+
+        const val CREATE_TABLE_FEED = """CREATE TABLE ${DBContract.FeedTable.TABLE_NAME} (
+            ${DBContract.FeedTable.COLUMN_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
+            ${DBContract.FeedTable.COLUMN_TITLE} TEXT UNIQUE,
+            ${DBContract.FeedTable.COLUMN_DESCRIPTION} TEXT,
+            ${DBContract.FeedTable.COLUMN_LINK} TEXT,
+            ${DBContract.FeedTable.COLUMN_PUB_DATE}  TEXT,
+            ${DBContract.FeedTable.COLUMN_FAVORITE} INTEGER DEFAULT 0,
+            ${DBContract.FeedTable.COLUMN_PATH_IMAGE} TEXT,
+            ${DBContract.FeedTable.COLUMN_LINK_CHANNEL}  TEXT,
+            ${DBContract.FeedTable.COLUMN_IS_READ} INTEGER DEFAULT 0,
+            ${DBContract.FeedTable.COLUMN_DOWNLOAD_DATE} TEXT);"""
 
 
-        const val CREATE_TABLE_FEED = """CREATE TABLE $FEED_TABLE (
-            $FEED_COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-            $FEED_COLUMN_TITLE TEXT UNIQUE,
-            $FEED_COLUMN_DESCRIPTION TEXT,
-            $FEED_COLUMN_LINK TEXT,
-            $FEED_COLUMN_PUB_DATE  TEXT,
-            $FEED_COLUMN_FAVORITE INTEGER DEFAULT 0,
-            $FEED_COLUMN_PATH_IMAGE TEXT,
-            $FEED_COLUMN_LINK_CHANNEL  TEXT,
-            $FEED_COLUMN_IS_READ INTEGER DEFAULT 0,
-            $FEED_COLUMN_DOWNLOAD_DATE TEXT);"""
-
-        const val CHANNEL_TABLE = "channels"
-        const val CHANNEL__COLUMN_NAME = "name"
-        const val CHANNEL_COLUMN_LINK = "link"
-        const val CHANNEL_COLUMN_PATH_IMAGE = "path_image"
-        const val CHANNEL_COLUMN_IMAGE = "pathImage"
-
-        const val CREATE_TABLE_CHANNEL = """CREATE TABLE $CHANNEL_TABLE (
-            $CHANNEL_COLUMN_LINK TEXT PRIMARY KEY,
-            $CHANNEL__COLUMN_NAME TEXT,
-            $CHANNEL_COLUMN_IMAGE TEXT,
-            $CHANNEL_COLUMN_PATH_IMAGE TEXT);"""
+        const val CREATE_TABLE_CHANNEL = """CREATE TABLE ${DBContract.ChannelTable.TABLE_NAME} (
+            ${DBContract.ChannelTable.COLUMN_LINK} TEXT PRIMARY KEY,
+            ${DBContract.ChannelTable.COLUMN_NAME} TEXT,
+            ${DBContract.ChannelTable.COLUMN_IMAGE} TEXT,
+            ${DBContract.ChannelTable.COLUMN_PATH_IMAGE} TEXT);"""
 
     }
 

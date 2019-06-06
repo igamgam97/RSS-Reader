@@ -37,20 +37,20 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
     override fun getAllFeeds(whereClause: String?, whereArgs: Array<String>?): ArrayList<FeedItem> {
         val items = ArrayList<FeedItem>()
         val cursor = database!!.query(
-            DatabaseHelper.FEED_TABLE,
-            null, whereClause, whereArgs, null, null, "${DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE} DESC"
+            DBContract.FeedTable.TABLE_NAME,
+            null, whereClause, whereArgs, null, null, "${DBContract.FeedTable.COLUMN_DOWNLOAD_DATE} DESC"
         )
         if (cursor.moveToFirst()) {
             do {
                 with(cursor) {
-                    val title = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_TITLE))
-                    val description = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_DESCRIPTION))
-                    val link = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_LINK))
-                    val pubDate = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PUB_DATE))
-                    val favorite = getInt(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_FAVORITE)) == 1
-                    val isRead = getInt(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_IS_READ)) == 1
-                    val downloadDate = getString(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE))
-                    val pathImage = getStringOrNull(cursor.getColumnIndex(DatabaseHelper.FEED_COLUMN_PATH_IMAGE))
+                    val title = getString(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_TITLE))
+                    val description = getString(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_DESCRIPTION))
+                    val link = getString(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_LINK))
+                    val pubDate = getString(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_PUB_DATE))
+                    val favorite = getInt(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_FAVORITE)) == 1
+                    val isRead = getInt(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_IS_READ)) == 1
+                    val downloadDate = getString(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_DOWNLOAD_DATE))
+                    val pathImage = getStringOrNull(cursor.getColumnIndex(DBContract.FeedTable.COLUMN_PATH_IMAGE))
                     items.add(
                         FeedItem(
                             title,
@@ -71,7 +71,7 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
     }
 
     override val count: Long
-        get() = DatabaseUtils.queryNumEntries(database, DatabaseHelper.FEED_TABLE)
+        get() = DatabaseUtils.queryNumEntries(database, DBContract.FeedTable.TABLE_NAME)
 
 
     override fun close() {
@@ -98,15 +98,15 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
     override fun getAllChannels(): ArrayList<ChannelItem> {
         val items = ArrayList<ChannelItem>()
         val cursor = database!!.query(
-            DatabaseHelper.CHANNEL_TABLE,
+            DBContract.ChannelTable.TABLE_NAME,
             null, null, null, null, null, null
         )
         if (cursor.moveToFirst()) {
             do {
-                val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_LINK))
-                val imagePath = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE))
-                val nameChannel = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL__COLUMN_NAME))
-                val image = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_IMAGE))
+                val link = cursor.getString(cursor.getColumnIndex(DBContract.ChannelTable.COLUMN_LINK))
+                val imagePath = cursor.getString(cursor.getColumnIndex(DBContract.ChannelTable.COLUMN_PATH_IMAGE))
+                val nameChannel = cursor.getString(cursor.getColumnIndex(DBContract.ChannelTable.COLUMN_NAME))
+                val image = cursor.getString(cursor.getColumnIndex(DBContract.ChannelTable.COLUMN_IMAGE))
                 items.add(ChannelItem(link, nameChannel, imagePath, image))
 
             } while (cursor.moveToNext())
@@ -120,18 +120,18 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
         deleteFeedsByChannel(channelLink)
         val whereClause = "link = ?"
         val whereArgs = arrayOf(channelLink)
-        return database!!.delete(DatabaseHelper.CHANNEL_TABLE, whereClause, whereArgs).toLong()
+        return database!!.delete(DBContract.ChannelTable.TABLE_NAME, whereClause, whereArgs).toLong()
     }
 
     override fun getAllUrlChannels(): ArrayList<String> {
         val items = ArrayList<String>()
         val cursor = database!!.query(
-            DatabaseHelper.CHANNEL_TABLE,
+            DBContract.ChannelTable.TABLE_NAME,
             null, null, null, null, null, null
         )
         if (cursor.moveToFirst()) {
             do {
-                val link = cursor.getString(cursor.getColumnIndex(DatabaseHelper.CHANNEL_COLUMN_LINK))
+                val link = cursor.getString(cursor.getColumnIndex(DBContract.ChannelTable.COLUMN_LINK))
                 items.add(link)
             } while (cursor.moveToNext())
 
@@ -142,22 +142,22 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
 
     override fun insertFeeds(item: FeedItem): Long {
         val cv = ContentValues()
-        cv.put(DatabaseHelper.FEED_COLUMN_TITLE, item.itemTitle)
-        cv.put(DatabaseHelper.FEED_COLUMN_DESCRIPTION, item.itemDesc)
-        cv.put(DatabaseHelper.FEED_COLUMN_LINK, item.itemLink)
-        cv.put(DatabaseHelper.FEED_COLUMN_PUB_DATE, item.itemPubDate)
+        cv.put(DBContract.FeedTable.COLUMN_TITLE, item.itemTitle)
+        cv.put(DBContract.FeedTable.COLUMN_DESCRIPTION, item.itemDesc)
+        cv.put(DBContract.FeedTable.COLUMN_LINK, item.itemLink)
+        cv.put(DBContract.FeedTable.COLUMN_PUB_DATE, item.itemPubDate)
         /*cv.put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, item.linkChannel)*/
-        return database!!.insertWithOnConflict(DatabaseHelper.FEED_TABLE, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
+        return database!!.insertWithOnConflict(DBContract.FeedTable.TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
     }
 
     override fun insertChannel(channel: ChannelItem): Long {
         val cv = ContentValues().apply {
-            put(DatabaseHelper.CHANNEL_COLUMN_LINK, channel.linkChannel)
-            put(DatabaseHelper.CHANNEL__COLUMN_NAME, channel.nameChannel)
-            put(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE, channel.urlImage)
-            put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, channel.pathImage!!)
+            put(DBContract.ChannelTable.COLUMN_LINK, channel.linkChannel)
+            put(DBContract.ChannelTable.COLUMN_NAME, channel.nameChannel)
+            put(DBContract.ChannelTable.COLUMN_PATH_IMAGE, channel.urlImage)
+            put(DBContract.ChannelTable.COLUMN_IMAGE, channel.pathImage!!)
         }
-        return database!!.insertWithOnConflict(DatabaseHelper.CHANNEL_TABLE, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
+        return database!!.insertWithOnConflict(DBContract.ChannelTable.TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
     }
 
 
@@ -165,15 +165,15 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
         database?.beginTransaction()
         items.forEach {
             val cv = ContentValues().apply {
-                put(DatabaseHelper.FEED_COLUMN_TITLE, it.itemTitle)
-                put(DatabaseHelper.FEED_COLUMN_DESCRIPTION, it.itemDesc)
-                put(DatabaseHelper.FEED_COLUMN_LINK, it.itemLink)
-                put(DatabaseHelper.FEED_COLUMN_PUB_DATE, it.itemPubDate)
-                put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, channel)
-                put(DatabaseHelper.FEED_COLUMN_DOWNLOAD_DATE, it.downloadDate)
-                put(DatabaseHelper.FEED_COLUMN_PATH_IMAGE, it.pathImage)
+                put(DBContract.FeedTable.COLUMN_TITLE, it.itemTitle)
+                put(DBContract.FeedTable.COLUMN_DESCRIPTION, it.itemDesc)
+                put(DBContract.FeedTable.COLUMN_LINK, it.itemLink)
+                put(DBContract.FeedTable.COLUMN_PUB_DATE, it.itemPubDate)
+                put(DBContract.FeedTable.COLUMN_LINK_CHANNEL, channel)
+                put(DBContract.FeedTable.COLUMN_DOWNLOAD_DATE, it.downloadDate)
+                put(DBContract.FeedTable.COLUMN_PATH_IMAGE, it.pathImage)
             }
-            database!!.insertWithOnConflict(DatabaseHelper.FEED_TABLE, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
+            database!!.insertWithOnConflict(DBContract.FeedTable.TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
         }
         database?.setTransactionSuccessful()
         database?.endTransaction()
@@ -182,55 +182,55 @@ class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
 
     override fun setFavoriteFeed(item: FeedItem): Long {
 
-        val whereClause = "${DatabaseHelper.FEED_COLUMN_TITLE} = ?"
+        val whereClause = "${DBContract.FeedTable.COLUMN_TITLE} = ?"
         val whereArgs = arrayOf(item.itemTitle)
         val cv = ContentValues()
         if (item.itemFavorite) {
-            cv.put(DatabaseHelper.FEED_COLUMN_FAVORITE, 1)
+            cv.put(DBContract.FeedTable.COLUMN_FAVORITE, 1)
         } else {
-            cv.put(DatabaseHelper.FEED_COLUMN_FAVORITE, 0)
+            cv.put(DBContract.FeedTable.COLUMN_FAVORITE, 0)
         }
-        return database!!.update(DatabaseHelper.FEED_TABLE, cv, whereClause, whereArgs).toLong()
+        return database!!.update(DBContract.FeedTable.TABLE_NAME, cv, whereClause, whereArgs).toLong()
     }
 
     override fun setIsReadFeed(item: FeedItem): Long {
 
-        val whereClause = "${DatabaseHelper.FEED_COLUMN_TITLE} = ?"
+        val whereClause = "${DBContract.FeedTable.COLUMN_TITLE} = ?"
         val whereArgs = arrayOf(item.itemTitle)
         val cv = ContentValues()
-        cv.put(DatabaseHelper.FEED_COLUMN_IS_READ, 1)
-        return database!!.update(DatabaseHelper.FEED_TABLE, cv, whereClause, whereArgs).toLong()
+        cv.put(DBContract.FeedTable.COLUMN_IS_READ, 1)
+        return database!!.update(DBContract.FeedTable.TABLE_NAME, cv, whereClause, whereArgs).toLong()
     }
 
 
     override fun deleteFeedsByChannel(channel: String): Long {
-        val whereClause = "${DatabaseHelper.FEED_COLUMN_LINK_CHANNEL} = ?"
+        val whereClause = "${DBContract.FeedTable.COLUMN_LINK_CHANNEL} = ?"
         /* val whereClause = "linkChannel = ?"*/
         val whereArgs = arrayOf(channel)
-        return database!!.delete(DatabaseHelper.FEED_TABLE, whereClause, whereArgs).toLong()
+        return database!!.delete(DBContract.FeedTable.TABLE_NAME, whereClause, whereArgs).toLong()
     }
 
 
     override fun getFeedsByChannel(channel: String): ArrayList<FeedItem> {
-        val whereClause = "${DatabaseHelper.FEED_COLUMN_LINK_CHANNEL} = ?"
+        val whereClause = "${DBContract.FeedTable.COLUMN_LINK_CHANNEL} = ?"
         /*val whereClause = "linkChannel = ?"*/
         val whereArgs = arrayOf(channel)
         return getAllFeeds(whereClause, whereArgs)
     }
 
     override fun getFavoriteFeeds(): ArrayList<FeedItem> {
-        val whereClause = "${DatabaseHelper.FEED_COLUMN_FAVORITE} = ?"
+        val whereClause = "${DBContract.FeedTable.COLUMN_FAVORITE} = ?"
         val whereArgs = arrayOf(1.toString())
         return getAllFeeds(whereClause, whereArgs)
     }
 
     override fun isExistChannel(channel: String): Boolean {
-        val whereClause = "${DatabaseHelper.CHANNEL_COLUMN_LINK} = ?"
+        val whereClause = "${DBContract.ChannelTable.COLUMN_LINK} = ?"
         /*val whereClause = "link = ?"*/
         val whereArgs = arrayOf(channel)
 
         val cursor = database!!.query(
-            DatabaseHelper.CHANNEL_TABLE, null, whereClause,
+            DBContract.ChannelTable.TABLE_NAME, null, whereClause,
             whereArgs, null, null, null
         )
         if (cursor.count <= 0) {
