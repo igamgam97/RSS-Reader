@@ -25,7 +25,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
 
     companion object {
         private const val DATABASE_NAME = "rss_reader_store.db"
-        private const val SCHEMA = 20
+        private const val SCHEMA = 21
         const val FEED_TABLE = "feeds"
         const val FEED_COLUMN_ID = "_id"
         const val FEED_COLUMN_TITLE = "title"

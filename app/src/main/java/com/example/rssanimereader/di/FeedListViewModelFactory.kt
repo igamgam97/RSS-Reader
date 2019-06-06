@@ -2,12 +2,10 @@ package com.example.rssanimereader.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.rssanimereader.model.dataSource.ChannelListDataSource
-import com.example.rssanimereader.model.dataSource.FeedDataSource
 import com.example.rssanimereader.model.dataSource.SettingsDataSource
 import com.example.rssanimereader.model.repository.FeedListRepository
-import com.example.rssanimereader.model.repository.SearchRepository
 import com.example.rssanimereader.presentation.viewmodel.*
+import com.example.rssanimereader.usecase.*
 
 class FeedListViewModelFactory(private val repository: FeedListRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
@@ -21,10 +19,11 @@ class FeedListViewModelFactory(private val repository: FeedListRepository) : Vie
 }
 
 
-class SearchViewModelFactory(private val repository: SearchRepository) : ViewModelProvider.Factory {
+class SearchViewModelFactory(private val isChannelExistUseCase: CheckIsChannelExistUseCase) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
-            return SearchViewModel(repository) as T
+            return SearchViewModel(isChannelExistUseCase) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel Class")
@@ -32,10 +31,14 @@ class SearchViewModelFactory(private val repository: SearchRepository) : ViewMod
 
 }
 
-class ChannelListViewModelFactory(private val dataSource: ChannelListDataSource) : ViewModelProvider.Factory {
+class ChannelListViewModelFactory(
+    private val getChannelsUseCase: GetChannelsUseCase,
+    private val deleteChannelsUseCase: DeleteChannelsUseCase,
+    private val retractDeleteBySwipeChannelUseCase: RetractDeleteBySwipeChannelUseCase
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ChannelListViewModel::class.java)) {
-            return ChannelListViewModel(dataSource) as T
+            return ChannelListViewModel(getChannelsUseCase, deleteChannelsUseCase, retractDeleteBySwipeChannelUseCase) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel Class")
@@ -52,20 +55,24 @@ class SettingsViewModelFactory(private val dataSource: SettingsDataSource) : Vie
     }
 }
 
-class FeedViewModelFactory(private val dataSource: FeedDataSource) : ViewModelProvider.Factory {
+class FeedViewModelFactory(
+    private val setIsFavoriteFeedsUseCase: SetIsFavoriteFeedsUseCase,
+    private val setIsReadUseCase: SetIsReadUseCase
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FeedViewModel::class.java)) {
-            return FeedViewModel(dataSource) as T
+            return FeedViewModel(setIsFavoriteFeedsUseCase, setIsReadUseCase) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel Class")
     }
 }
 
-class AddChannelViewModelFactory(private val repository: SearchRepository) : ViewModelProvider.Factory {
+class AddChannelViewModelFactory(private val isChannelExistUseCase: CheckIsChannelExistUseCase) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AddChannelViewModelFactory::class.java)) {
-            return SearchViewModel(repository) as T
+            return SearchViewModel(isChannelExistUseCase) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel Class")

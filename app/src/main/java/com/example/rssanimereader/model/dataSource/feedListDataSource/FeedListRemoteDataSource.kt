@@ -10,7 +10,7 @@ class FeedListRemoteDataSource(
     private val webApi: WebApi
 ) {
 
-    fun getFeedsByChannelFromWeb(linkChannel: String) =
+    fun getFeedsAndChannelFromWeb(linkChannel: String) =
         Single
             .fromCallable { webApi.getFeedsAndChannelFromWeb(linkChannel) }
             .subscribeOn(Schedulers.io())

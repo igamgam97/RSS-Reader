@@ -7,10 +7,17 @@ import com.example.rssanimereader.adapter.SwipeHandler
 import com.example.rssanimereader.entity.ChannelItem
 import com.example.rssanimereader.model.dataSource.ChannelListDataSource
 import com.example.rssanimereader.presentation.view.TypeOfButtonChannelListFragment
+import com.example.rssanimereader.usecase.DeleteChannelsUseCase
+import com.example.rssanimereader.usecase.GetChannelsUseCase
+import com.example.rssanimereader.usecase.RetractDeleteBySwipeChannelUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
-class ChannelListViewModel(private val channelListDataSource: ChannelListDataSource) : ViewModel(), SwipeHandler {
+class ChannelListViewModel(
+    private val getChannelsUseCase: GetChannelsUseCase,
+    private val deleteChannelsUseCase: DeleteChannelsUseCase,
+    private val retractDeleteBySwipeChannelUseCase: RetractDeleteBySwipeChannelUseCase
+) : ViewModel(), SwipeHandler {
 
     var channels = MutableLiveData<ArrayList<ChannelItem>>()
     val isTypeButtonClicked = MutableLiveData<TypeOfButtonChannelListFragment>()
@@ -23,7 +30,7 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
     }
 
     fun getAllChannels() {
-        val disposable = channelListDataSource.getChannels()
+        val disposable = getChannelsUseCase()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
                 channels.value = data
@@ -32,8 +39,8 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
     }
 
     fun deleteChannel(nameChannel: String) {
-        val disposable = channelListDataSource.deleteChannels(nameChannel)
-            .andThen(channelListDataSource.getChannels())
+        val disposable = deleteChannelsUseCase(nameChannel)
+            .andThen(getChannelsUseCase())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe { data ->
                 channels.value = data
@@ -54,7 +61,7 @@ class ChannelListViewModel(private val channelListDataSource: ChannelListDataSou
     }
 
     fun retractSaveChannel(channelItem: ChannelItem) {
-        val disposable = channelListDataSource.retractSaveChannel(channelItem)
+        val disposable = retractDeleteBySwipeChannelUseCase(channelItem)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {}
         compositeDisposable.add(disposable)

@@ -5,7 +5,8 @@ import com.example.rssanimereader.entity.FeedItem
 import java.io.InputStream
 
 class WebApi(
-    private val remoteDataParser: RemoteDataParser
+    private val remoteDataParser: RemoteDataParser,
+    private val imageSaver: NewImageSaver
 ) {
 
 
@@ -17,6 +18,11 @@ class WebApi(
             return data
         }
     }
+
+    fun saveImageFromWeb(urlPath: String,name: String){
+        imageSaver.saveImageToInternalStorage(urlPath,name)
+    }
+
 
 }
 

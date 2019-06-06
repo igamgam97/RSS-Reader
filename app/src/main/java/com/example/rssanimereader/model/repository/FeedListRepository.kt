@@ -14,7 +14,7 @@ class FeedListRepository(
 
 
     private fun getFeedsByChannelFromWebApi(linkChannel: String, hasInternet: Boolean) = if (hasInternet) {
-        feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsByChannelFromWeb(linkChannel)
+        feedListDataSourceFactory.provideFeedListRemoteDataSource().getFeedsAndChannelFromWeb(linkChannel)
     } else {
         throw IOException()
     }

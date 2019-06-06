@@ -8,11 +8,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
 import com.example.rssanimereader.entity.FeedItem
-import com.example.rssanimereader.model.dataSource.FeedDataSource
+import com.example.rssanimereader.usecase.SetIsFavoriteFeedsUseCase
+import com.example.rssanimereader.usecase.SetIsReadUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
-class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
+class FeedViewModel(
+    private val setIsFavoriteFeedsUseCase: SetIsFavoriteFeedsUseCase,
+    private val setIsReadUseCase: SetIsReadUseCase
+) : ViewModel() {
 
     lateinit var feedItem: ObservableField<FeedItem>
     lateinit var isFavorite: ObservableField<Boolean>
@@ -24,7 +28,6 @@ class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
              this.feedHTMLItem.value = feedHTMLItem
          }
      }*/
-
 
 
     fun onMenuItemClick(menuItem: MenuItem?): Boolean {
@@ -40,7 +43,7 @@ class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
     fun setFavoriteFeed() {
         feedItem.get()?.let {
             it.itemFavorite = !it.itemFavorite
-            val disposable = feedDataSource.setFavorite(it)
+            val disposable = setIsFavoriteFeedsUseCase(it)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ isFavorite.set(it.itemFavorite) }, ::handleError)
             compositeDisposable.add(disposable)
@@ -50,10 +53,10 @@ class FeedViewModel(private val feedDataSource: FeedDataSource) : ViewModel() {
 
     fun setIsReadFeed() {
         feedItem.get()?.let {
-            if (!it.isRead){
-                val disposable = feedDataSource.setIsRead(it)
+            if (!it.isRead) {
+                val disposable = setIsReadUseCase(it)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({it.isRead = true}, ::handleError)
+                    .subscribe({ it.isRead = true }, ::handleError)
                 compositeDisposable.add(disposable)
             }
         }

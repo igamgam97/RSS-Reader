@@ -12,8 +12,7 @@ import com.example.rssanimereader.web.ImageSaver
 import java.io.Closeable
 
 
-class DatabaseAPI(context: Context)
-    : Closeable, ChannelAndFeedApi{
+class DatabaseAPI(context: Context) : Closeable, ChannelAndFeedApi {
     private val dbHelper: DatabaseHelper =
         DatabaseHelper(context.applicationContext)
     private var database: SQLiteDatabase? = null
@@ -124,7 +123,7 @@ class DatabaseAPI(context: Context)
         return database!!.delete(DatabaseHelper.CHANNEL_TABLE, whereClause, whereArgs).toLong()
     }
 
-    override fun getAllUrlChannels():ArrayList<String>{
+    override fun getAllUrlChannels(): ArrayList<String> {
         val items = ArrayList<String>()
         val cursor = database!!.query(
             DatabaseHelper.CHANNEL_TABLE,
@@ -148,7 +147,7 @@ class DatabaseAPI(context: Context)
         cv.put(DatabaseHelper.FEED_COLUMN_LINK, item.itemLink)
         cv.put(DatabaseHelper.FEED_COLUMN_PUB_DATE, item.itemPubDate)
         /*cv.put(DatabaseHelper.FEED_COLUMN_LINK_CHANNEL, item.linkChannel)*/
-        return database!!.insertWithOnConflict(DatabaseHelper.FEED_TABLE, null, cv,SQLiteDatabase.CONFLICT_IGNORE)
+        return database!!.insertWithOnConflict(DatabaseHelper.FEED_TABLE, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
     }
 
     override fun insertChannel(channel: ChannelItem): Long {
@@ -158,11 +157,11 @@ class DatabaseAPI(context: Context)
             put(DatabaseHelper.CHANNEL_COLUMN_PATH_IMAGE, channel.urlImage)
             put(DatabaseHelper.CHANNEL_COLUMN_IMAGE, channel.pathImage!!)
         }
-        return database!!.insertWithOnConflict(DatabaseHelper.CHANNEL_TABLE, null, cv,SQLiteDatabase.CONFLICT_IGNORE)
+        return database!!.insertWithOnConflict(DatabaseHelper.CHANNEL_TABLE, null, cv, SQLiteDatabase.CONFLICT_IGNORE)
     }
 
 
-    override fun insertAllFeedsByChannel(items: List<FeedItem>, channel:String) {
+    override fun insertAllFeedsByChannel(items: List<FeedItem>, channel: String) {
         database?.beginTransaction()
         items.forEach {
             val cv = ContentValues().apply {
@@ -179,7 +178,6 @@ class DatabaseAPI(context: Context)
         database?.setTransactionSuccessful()
         database?.endTransaction()
     }
-
 
 
     override fun setFavoriteFeed(item: FeedItem): Long {
@@ -245,11 +243,9 @@ class DatabaseAPI(context: Context)
 
     override fun saveFeedsAndChannel(data: Pair<ArrayList<FeedItem>, ChannelItem>) {
         val (feeds, channel) = data
-        if (!isExistChannel((channel.linkChannel))) {
-            val path = ImageSaver.saveImageToInternalStorage(channel.urlImage, channel.nameChannel)
-            channel.pathImage = path.toString()
-            insertChannel(channel)
-        }
+        val path = ImageSaver.saveImageToInternalStorage(channel.urlImage, channel.nameChannel)
+        channel.pathImage = path.toString()
+        insertChannel(channel)
         insertAllFeedsByChannel(feeds, channel.linkChannel)
     }
 
