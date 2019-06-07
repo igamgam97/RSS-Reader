@@ -41,31 +41,37 @@
             />
         </LinearLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/channels_add_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="36dp"
-                android:src="@drawable/ic_add_circle"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:onClick="@{() -> channelListViewModel.addChannel()}"/>
-        <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/feed_rv"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:indeterminate="true"
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/special_button_container"
-                android:bgColorSwipeLeft="@{@color/colorPrimary}"
-                android:bgColorSwipeRight="@{@color/colorPrimary}"
-                android:drawableSwipeLeft="@{@drawable/ic_dashboard_black_24dp}"
-                android:drawableSwipeRight="@{@drawable/ic_dashboard_black_24dp}"
-                android:onItemSwipeLeft="@{(position) ->channelListViewModel.onItemSwipedLeft(position)}"
-                android:onItemSwipeRight="@{(position) -> channelListViewModel.onItemSwipedRight(position)}"
-                android:swipeEnabled="@{true}"/>
+                android:id="@+id/placeSnackBar">
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/feed_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:indeterminate="true"
+                    app:layout_constraintTop_toBottomOf="@+id/special_button_container"
+                    android:bgColorSwipeLeft="@{@color/colorAccent}"
+                    android:bgColorSwipeRight="@{@color/colorAccent}"
+                    android:drawableSwipeLeft="@{@drawable/ic_delete}"
+                    android:drawableSwipeRight="@{@drawable/ic_delete}"
+                    android:onItemSwipeLeft="@{(position) ->channelListViewModel.onItemSwipedLeft(position)}"
+                    android:onItemSwipeRight="@{(position) -> channelListViewModel.onItemSwipedRight(position)}"
+                    android:swipeEnabled="@{true}"/>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/channels_add_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:layout_margin="36dp"
+                    android:src="@drawable/ic_add_circle"
+                    android:onClick="@{() -> channelListViewModel.addChannel()}"/>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

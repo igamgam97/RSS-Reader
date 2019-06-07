@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -42,7 +43,7 @@ class ChannelListFragment : BaseFragment(), ChannelRecyclerViewAdapter.OnItemCli
         })
 
         addChannelDialogFragment = AddChannelDialogFragment()
-
+        setData()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -76,7 +77,7 @@ class ChannelListFragment : BaseFragment(), ChannelRecyclerViewAdapter.OnItemCli
 
 
     private fun showSnackbar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+        Snackbar.make(binding.placeSnackBar, message, Snackbar.LENGTH_LONG)
             .setAction("UNDO") {
                 retractSavedItem()
             }.show()

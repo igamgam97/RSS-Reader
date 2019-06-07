@@ -30,7 +30,7 @@ class SettingsFragment : BaseFragment() {
         settingsViewModel.settingsNightMode.observe(this, Observer {
             changeTheme()
         })
-
+        setData()
     }
 
     override fun onCreateView(

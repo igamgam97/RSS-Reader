@@ -37,12 +37,7 @@ class FeedFragment : BaseFragment() {
         feedViewModel.shareData.observe(this, Observer {
             startActivity(Intent.createChooser(it, "Share link!"))
         })
-        communicateViewModel.selectedFeed?.let {
-            feedViewModel.feedItem = ObservableField(it)
-            feedViewModel.isFavorite.set(it.itemFavorite)
-            feedViewModel.setIsReadFeed()
-        }
-
+        setData()
     }
 
     @SuppressLint("SetJavaScriptEnabled")

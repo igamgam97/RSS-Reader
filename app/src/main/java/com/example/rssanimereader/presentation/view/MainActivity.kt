@@ -1,5 +1,6 @@
 package com.example.rssanimereader.presentation.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,7 @@ import androidx.preference.PreferenceManager
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.ActivityMainLayoutBinding
 import com.example.rssanimereader.peridic_feed_manager.PeriodicDownloadFeedsWorkerUtils
+import com.example.rssanimereader.presentation.view.contracts.BaseFragment
 import com.example.rssanimereader.presentation.view_model.CommunicateViewModel
 
 
@@ -25,11 +27,8 @@ class MainActivity : AppCompatActivity() {
         applySettings()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main_layout)
         viewModel = ViewModelProviders.of(this).get(CommunicateViewModel::class.java)
-        openApplicationFromDeepLink()
         viewModel.listOfTypeFragment.observe(this, Observer {
-            it?.let { fragmentName ->
-                setFragment(fragmentName)
-            }
+            it?.let(::setFragment)
         })
         binding.mainViewModel = viewModel
 
@@ -38,9 +37,12 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    //todo добавить открытие по ссылке
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        openApplicationFromDeepLink()
+    }
+
     private fun openApplicationFromDeepLink() {
-        /*    val action: String? = intent?.action*/
         val data = intent?.data
         data?.let {
             viewModel.onFeedListFragmentStateFromSearchFragment(it.toString())
@@ -79,12 +81,12 @@ class MainActivity : AppCompatActivity() {
             }
             openFragment(fragment, tagFragment)
         } else {
-            replaceFragment(currentFragment, tagFragment)
+            replaceFragment(currentFragment as BaseFragment, tagFragment)
         }
     }
 
 
-    private fun replaceFragment(fragment: Fragment, tagFragment: ListOfTypeFragment) {
+    private fun replaceFragment(fragment: BaseFragment, tagFragment: ListOfTypeFragment) {
         if (tagFragment == ListOfTypeFragment.FeedListFragmentFromChannelListFragment ||
             tagFragment == ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment
         ) {
@@ -94,21 +96,10 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.frag_container, fragment, tagFragment.toString())
             .addToBackStack(null)
             .commit()
-        when (tagFragment) {
-            ListOfTypeFragment.FeedListFragmentFromChannelListFragment -> {
-                (fragment as FeedListFragment).setParamsFromChannelListFragment(viewModel.targetChannel)
-            }
-            ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment -> {
-                (fragment as FeedListFragment).setParamsFromAddChannelDealogFragment(viewModel.searchChannel)
-            }
-            ListOfTypeFragment.FeedFragment -> {
-                (fragment as FeedFragment).setParams(viewModel.selectedFeed)
-            }
-            ListOfTypeFragment.ChannelListFragment -> (fragment as ChannelListFragment).setParams()
-        }
+        fragment.setData()
     }
 
-    private fun openFragment(fragment: Fragment, tagFragment: ListOfTypeFragment) {
+    private fun openFragment(fragment: BaseFragment, tagFragment: ListOfTypeFragment) {
         if (tagFragment == ListOfTypeFragment.FeedListFragmentFromChannelListFragment ||
             tagFragment == ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment
         ) {
@@ -119,14 +110,13 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
     }
+
 
     override fun onBackPressed() {
         super.onBackPressed()
-        Log.d("bag", viewModel.mListOfTypeFragment.value.toString())
-        /*if (viewModel.mListOfTypeFragment.value == ListOfTypeFragment.FeedListFragment){
-            Log.d("bag",viewModel.mListOfTypeFragment.value.toString())
+        if (supportFragmentManager.backStackEntryCount == EMPTY_STACK) {
             finish()
-        }*/
+        }
         changeSelectedTabIcon()
     }
 
@@ -141,7 +131,9 @@ class MainActivity : AppCompatActivity() {
             binding.navigation.menu.findItem(itemID).isChecked = true
         }
     }
-
+    private companion object {
+        const val EMPTY_STACK = 0
+    }
 }
 
 

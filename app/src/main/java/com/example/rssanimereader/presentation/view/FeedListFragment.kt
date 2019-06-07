@@ -34,7 +34,6 @@ class FeedListFragment : BaseFragment(), FeedRecyclerViewAdapter.OnItemClickList
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
-
         viewModel = Injection.provideFeedListViewModel(this)
 
         viewModel.feeds.observe(this, Observer<ArrayList<FeedItem>> {
@@ -55,6 +54,7 @@ class FeedListFragment : BaseFragment(), FeedRecyclerViewAdapter.OnItemClickList
         viewModel.statusError.observe(this, Observer {
             it?.let(::showError)
         })
+        setData()
     }
 
 
@@ -113,7 +113,6 @@ class FeedListFragment : BaseFragment(), FeedRecyclerViewAdapter.OnItemClickList
                 viewModel.onRefresh()
             }
         }
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 
