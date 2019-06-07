@@ -12,13 +12,13 @@ import androidx.preference.PreferenceManager
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.ActivityMainLayoutBinding
 import com.example.rssanimereader.peridic_feed_manager.PeriodicDownloadFeedsWorkerUtils
-import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
+import com.example.rssanimereader.presentation.view_model.CommunicateViewModel
 
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityMainLayoutBinding
-    lateinit var viewModel: CommunicateViewModel
+    private lateinit var binding: ActivityMainLayoutBinding
+    private lateinit var viewModel: CommunicateViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

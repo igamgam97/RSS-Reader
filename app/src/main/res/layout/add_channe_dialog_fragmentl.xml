@@ -7,7 +7,7 @@
 
         <variable
                 name="addChannelViewModel"
-                type="com.example.rssanimereader.presentation.viewmodel.AddChannelViewModel"/>
+                type="com.example.rssanimereader.presentation.view_model.AddChannelViewModel"/>
 
     </data>
 

@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="pref_upload_quality_entries">
-        <item>16</item>
-        <item>20</item>
-        <item>24</item>
-        <item>28</item>
-    </string-array>
-    <string-array name="pref_upload_quality_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="sort">
-        <item>@string/sortFirstNew</item>
-        <item>@string/sortFirstOld</item>
-    </string-array>>
+<resources><![CDATA[
+
+
+    >
+    ]]>
     <string name="sortFirstNew">start with new</string>
     <string name="sortFirstOld">start with old</string>
 </resources>

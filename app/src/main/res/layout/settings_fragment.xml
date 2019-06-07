@@ -6,7 +6,7 @@
 
         <variable
                 name="settingsViewModel"
-                type="com.example.rssanimereader.presentation.viewmodel.SettingsViewModel"/>
+                type="com.example.rssanimereader.presentation.view_model.SettingsViewModel"/>
     </data>
     <LinearLayout
             xmlns:android="http://schemas.android.com/apk/res/android"

@@ -10,12 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.AddChanneDialogFragmentlBinding
 import com.example.rssanimereader.di.Injection
-import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
-import com.example.rssanimereader.presentation.viewmodel.AddChannelViewModel
+import com.example.rssanimereader.presentation.view_model.CommunicateViewModel
+import com.example.rssanimereader.presentation.view_model.AddChannelViewModel
 
 
 class AddChannelDialogFragment :DialogFragment(){
-    lateinit var addChannelViewModel:AddChannelViewModel
+    private lateinit var addChannelViewModel:AddChannelViewModel
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         Log.d("bag","there")
         val binding = AddChanneDialogFragmentlBinding.inflate(
@@ -48,7 +48,7 @@ class AddChannelDialogFragment :DialogFragment(){
         })
     }
 
-    fun onSearchClick() {
+    private fun onSearchClick() {
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         addChannelViewModel.targetChannel.get()?.let { communicateViewModel.onFeedListFragmentStateFromSearchFragment(it) }
         dismiss()

@@ -1,9 +1,9 @@
 package com.example.rssanimereader.adapter
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.drawable.Drawable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rssanimereader.adapter.util.ViewUtil
@@ -12,17 +12,15 @@ import com.example.rssanimereader.adapter.util.ViewUtil
 class SwipeItemTouchHelperCallback private constructor(dragDirs: Int, swipeDirs: Int) :
     ItemTouchHelper.SimpleCallback(dragDirs, swipeDirs) {
 
-    lateinit var drawableLeft: Drawable
-    lateinit var drawableRight: Drawable
-    lateinit var paintLeft: Paint
-    lateinit var paintRight: Paint
-    lateinit var onItemSwipeLeftListener: OnItemSwipeListener
-    lateinit var onItemSwipeRightListener: OnItemSwipeListener
-    var swipeEnabled: Boolean = false
+    private lateinit var drawableLeft: Drawable
+    private lateinit var drawableRight: Drawable
+    private var paintLeft: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var paintRight: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private lateinit var onItemSwipeLeftListener: OnItemSwipeListener
+    private lateinit var onItemSwipeRightListener: OnItemSwipeListener
+    private var swipeEnabled: Boolean = false
 
     private constructor(builder: Builder) : this(builder.dragDirs, builder.swipeDirs) {
-        paintLeft = Paint(Paint.ANTI_ALIAS_FLAG)
-        paintRight = Paint(Paint.ANTI_ALIAS_FLAG)
         setPaintColor(paintLeft, builder.bgColorSwipeLeft)
         setPaintColor(paintRight, builder.bgColorSwipeRight)
         drawableLeft = builder.drawableSwipeLeft!!

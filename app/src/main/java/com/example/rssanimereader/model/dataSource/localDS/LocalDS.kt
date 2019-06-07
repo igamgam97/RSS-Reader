@@ -7,6 +7,7 @@ import android.net.Uri
 import com.example.rssanimereader.ProvideContextApplication
 import com.example.rssanimereader.domain.entity.ChannelItem
 import com.example.rssanimereader.domain.entity.FeedItem
+import com.example.rssanimereader.model.dataSource.contracts.ILocalDS
 import com.example.rssanimereader.model.dataSource.localDS.dbAPI.FeedAndChannelApi
 import io.reactivex.Completable
 import io.reactivex.Observable
@@ -17,51 +18,53 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.io.OutputStream
 
-class LocalDS(private val feedAndChannelApi: FeedAndChannelApi) {
-    fun setFavoriteFeed(feed: FeedItem): Completable =
+class LocalDS(private val feedAndChannelApi: FeedAndChannelApi) : ILocalDS {
+    override fun setFavoriteFeed(feed: FeedItem): Completable =
         Completable.fromCallable { feedAndChannelApi.setFavoriteFeed(feed) }.subscribeOn(Schedulers.io())
 
-    fun setIsRead(feed: FeedItem): Completable =
+    override fun setIsRead(feed: FeedItem): Completable =
         Completable.fromCallable { feedAndChannelApi.setIsReadFeed(feed) }.subscribeOn(Schedulers.io())
 
-    fun getChannels(): Single<ArrayList<ChannelItem>> =
+    override fun getChannels(): Single<ArrayList<ChannelItem>> =
         Single.fromCallable { feedAndChannelApi.getAllChannels() }.subscribeOn(Schedulers.io())
 
-    fun deleteChannels(nameChannel: String):Completable =
+    override fun deleteChannels(nameChannel: String):Completable =
         Completable.fromCallable { feedAndChannelApi.deleteChannel(nameChannel) }
 
-    fun retractSaveChannel(channelItem: ChannelItem): Completable =
+    override fun retractSaveChannel(channelItem: ChannelItem): Completable =
         Completable.fromCallable { feedAndChannelApi.insertChannel(channelItem) }
 
-    fun isExistChannel(channel: String): Boolean = feedAndChannelApi.isExistChannel(channel)
+    override fun isExistChannel(channel: String): Boolean = feedAndChannelApi.isExistChannel(channel)
 
-    fun getFeedsByChannelFromDB(linkChannel: String) =
+    override fun getFeedsByChannelFromDB(linkChannel: String) : Single<ArrayList<FeedItem>> =
         Single
             .fromCallable { feedAndChannelApi.getFeedsByChannel(linkChannel) }
             .subscribeOn(Schedulers.io())
 
-    fun getChannelsLink(): Observable<String> =
+    override fun getChannelsLink(): Observable<String> =
         Observable
             .fromIterable(feedAndChannelApi.getAllUrlChannels())
             .subscribeOn(Schedulers.io())
 
-    fun saveFeedsByChannel(data: Pair<ArrayList<FeedItem>, ChannelItem>) =
+    override fun saveFeedsByChannel(data: Pair<ArrayList<FeedItem>, ChannelItem>):Completable =
         Completable
             .fromCallable { feedAndChannelApi.saveFeedsAndChannel(data) }
             .subscribeOn(Schedulers.io())
 
 
-    fun getFeedsByChannel(linkChannel: String) =
+    override fun getFeedsByChannel(linkChannel: String):Single<ArrayList<FeedItem>> =
         Single
             .fromCallable<ArrayList<FeedItem>> { feedAndChannelApi.getFeedsByChannel(linkChannel) }
             .subscribeOn(Schedulers.io())
 
-    fun getAllFeeds() = Single.fromCallable{feedAndChannelApi.getAllFeeds()}.subscribeOn(Schedulers.io())
+    override fun getAllFeeds():Single<ArrayList<FeedItem>> =
+        Single.fromCallable{feedAndChannelApi.getAllFeeds()}.subscribeOn(Schedulers.io())
 
-    fun getFavoriteFeeds() = Single.fromCallable{feedAndChannelApi.getFavoriteFeeds()}.subscribeOn(Schedulers.io())
+    override fun getFavoriteFeeds():Single<ArrayList<FeedItem>> =
+        Single.fromCallable{feedAndChannelApi.getFavoriteFeeds()}.subscribeOn(Schedulers.io())
 
 
-    fun saveImageToInternalStorage(bitmap: Bitmap, path: String): Uri {
+    override fun saveImageToInternalStorage(bitmap: Bitmap, path: String): Uri {
         val wrapper = ContextWrapper(ProvideContextApplication.applicationContext())
         var file = wrapper.getDir("Images", Context.MODE_PRIVATE)
         file = File(file, "$path.jpg")

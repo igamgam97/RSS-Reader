@@ -1,18 +1,19 @@
 package com.example.rssanimereader.domain.usecase
 
-import com.example.rssanimereader.model.repository.ChannelsRepository
-import com.example.rssanimereader.model.repository.FeedsRepository
+import com.example.rssanimereader.model.repository.ChannelsRepositoryI
+import com.example.rssanimereader.model.repository.IFeedsRepository
 import com.example.rssanimereader.util.NetManager
+import io.reactivex.Completable
 import java.io.IOException
 
 class SavePeriodicallyAllFeedsWebUseCase(
-    private val feedsRepository: FeedsRepository,
-    private val channelsRepository: ChannelsRepository,
+    private val feedsRepository: IFeedsRepository,
+    private val channelsRepository: ChannelsRepositoryI,
     private val netManager: NetManager
 ) {
-    operator fun invoke() =
+    operator fun invoke(): Completable =
         feedsRepository.getChannelsLinkFromDB("")
-            .concatMapCompletable { link -> getFeedsFromWeb(link)}
+            .concatMapCompletable { link -> getFeedsFromWeb(link) }
 
     private fun getFeedsFromWeb(linkChannel: String) =
         netManager

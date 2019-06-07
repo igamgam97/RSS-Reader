@@ -6,15 +6,15 @@ import android.content.Context
 import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import androidx.core.database.getStringOrNull
-import com.example.rssanimereader.model.dataSource.localDS.dbAPI.contracts.ChannelAndFeedApi
 import com.example.rssanimereader.model.dataSource.localDS.dbAPI.contracts.DBContract
 import com.example.rssanimereader.model.dataSource.webDS.webApi.web.ImageSaver
 import com.example.rssanimereader.domain.entity.ChannelItem
 import com.example.rssanimereader.domain.entity.FeedItem
+import com.example.rssanimereader.model.dataSource.localDS.dbAPI.contracts.IChannelAndFeedApi
 import java.io.Closeable
 
 
-class FeedAndChannelApi(context: Context) : Closeable, ChannelAndFeedApi {
+class FeedAndChannelApi(context: Context) : Closeable, IChannelAndFeedApi {
     private val dbHelper: DatabaseHelper =
         DatabaseHelper(context.applicationContext)
     private var database: SQLiteDatabase? = null

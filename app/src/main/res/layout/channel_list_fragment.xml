@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:binding="http://schemas.android.com/tools"
 >
 
     <data>
@@ -8,7 +7,7 @@
 
         <variable
                 name="channelListViewModel"
-                type="com.example.rssanimereader.presentation.viewmodel.ChannelListViewModel"/>
+                type="com.example.rssanimereader.presentation.view_model.ChannelListViewModel"/>
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,6 +27,7 @@
                     android:id="@+id/all_channels"
                     android:text="@string/all_feeds"
                     android:layout_weight="1"
+                    style="?android:attr/borderlessButtonStyle"
                     android:onClick="@{()-> channelListViewModel.onClickAllFeedsButton()}"
             />
             <Button
@@ -36,6 +36,7 @@
                     android:id="@+id/favorite_channels"
                     android:text="@string/favorite_feeds"
                     android:layout_weight="1"
+                    style="?android:attr/borderlessButtonStyle"
                     android:onClick="@{()-> channelListViewModel.onClickFavoriteFeedsButton()}"
             />
         </LinearLayout>

@@ -44,7 +44,7 @@ private object DetectHtml {
     const val tagEnd = "\\</\\w+\\>"
     const val tagSelfClosing = "\\<\\w+((\\s+\\w+(\\s*\\=\\s*(?:\".*?\"|'.*?'|[^'\"\\>\\s]+))?)+\\s*|\\s*)/\\>"
     const val htmlEntity = "&[a-zA-Z][a-zA-Z0-9]+;"
-    val htmlPattern = Pattern.compile(
+    val htmlPattern: Pattern = Pattern.compile(
         "($tagStart.*$tagEnd)|($tagSelfClosing)|($htmlEntity)",
         Pattern.DOTALL
     )

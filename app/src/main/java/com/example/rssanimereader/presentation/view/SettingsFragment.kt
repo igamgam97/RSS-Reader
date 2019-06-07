@@ -10,7 +10,8 @@ import androidx.lifecycle.Observer
 import com.example.rssanimereader.R
 import com.example.rssanimereader.databinding.SettingsFragmentBinding
 import com.example.rssanimereader.di.Injection
-import com.example.rssanimereader.presentation.viewmodel.SettingsViewModel
+import com.example.rssanimereader.presentation.view.contracts.BaseFragment
+import com.example.rssanimereader.presentation.view_model.SettingsViewModel
 
 
 
@@ -19,7 +20,7 @@ import com.example.rssanimereader.presentation.viewmodel.SettingsViewModel
  * A simple [Fragment] subclass.
  *
  */
-class SettingsFragment : Fragment() {
+class SettingsFragment : BaseFragment() {
 
     private lateinit var settingsViewModel: SettingsViewModel
 
@@ -39,10 +40,6 @@ class SettingsFragment : Fragment() {
         settingsViewModel = this@SettingsFragment.settingsViewModel
     }.root
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        retainInstance = true//toggle this
-    }
 
 
     private fun changeTheme() {
@@ -51,6 +48,10 @@ class SettingsFragment : Fragment() {
         startActivity(intent)
         activity?.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out)
         activity?.finish()
+    }
+
+    override fun setData() {
+
     }
 
     companion object {

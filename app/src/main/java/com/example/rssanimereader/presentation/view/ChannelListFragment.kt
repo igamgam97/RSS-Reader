@@ -13,19 +13,19 @@ import com.example.rssanimereader.adapter.ChannelRecyclerViewAdapter
 import com.example.rssanimereader.databinding.ChannelListFragmentBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.domain.entity.ChannelItem
-import com.example.rssanimereader.presentation.viewmodel.ChannelListViewModel
-import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
+import com.example.rssanimereader.presentation.view.contracts.BaseFragment
+import com.example.rssanimereader.presentation.view_model.ChannelListViewModel
+import com.example.rssanimereader.presentation.view_model.CommunicateViewModel
 import com.google.android.material.snackbar.Snackbar
 
 
-class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickListener{
+class ChannelListFragment : BaseFragment(), ChannelRecyclerViewAdapter.OnItemClickListener{
 
     private val channelRecyclerViewAdapter = ChannelRecyclerViewAdapter(arrayListOf(), this)
     private lateinit var viewModel: ChannelListViewModel
     private lateinit var communicateViewModel: CommunicateViewModel
     private lateinit var addChannelDialogFragment: AddChannelDialogFragment
     private lateinit var binding: ChannelListFragmentBinding
-    lateinit var tempItem: Pair<Int, ChannelItem>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,10 +55,6 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        retainInstance = true//toggle this
-    }
 
     override fun onItemClick(position: Int) {
         communicateViewModel.onFeedListFragmentState(viewModel.channels.value!![position].linkChannel)
@@ -91,13 +87,13 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
         channelRecyclerViewAdapter.add(viewModel.tempItem.first, viewModel.tempItem.second)
     }
 
-    fun onSwipeLeft() {
+    private fun onSwipeLeft() {
         channelRecyclerViewAdapter.remove(viewModel.positionOnDelete)
         communicateViewModel.targetChannel = ""
         showSnackbar("Swiped Left $viewModel.positionOnDelete")
     }
 
-    fun onSwipeRight() {
+    private fun onSwipeRight() {
         channelRecyclerViewAdapter.remove(viewModel.positionOnDelete)
         communicateViewModel.targetChannel = ""
         showSnackbar("Swiped Left $viewModel.positionOnDelete")
@@ -113,6 +109,10 @@ class ChannelListFragment : Fragment(), ChannelRecyclerViewAdapter.OnItemClickLi
         }
     }
     fun setParams() {
+        viewModel.getAllChannels()
+    }
+
+    override fun setData() {
         viewModel.getAllChannels()
     }
 

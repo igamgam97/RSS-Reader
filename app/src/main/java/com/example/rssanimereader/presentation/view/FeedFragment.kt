@@ -15,18 +15,19 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.FeedFragmentBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.domain.entity.FeedItem
-import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
-import com.example.rssanimereader.presentation.viewmodel.FeedViewModel
+import com.example.rssanimereader.presentation.view.contracts.BaseFragment
+import com.example.rssanimereader.presentation.view_model.CommunicateViewModel
+import com.example.rssanimereader.presentation.view_model.FeedViewModel
 
 
 /**
  * A simple [Fragment] subclass.
  *
  */
-class FeedFragment : Fragment() {
+class FeedFragment : BaseFragment() {
 
-    lateinit var communicateViewModel: CommunicateViewModel
-    lateinit var feedViewModel: FeedViewModel
+    private lateinit var communicateViewModel: CommunicateViewModel
+    private lateinit var feedViewModel: FeedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,13 +53,17 @@ class FeedFragment : Fragment() {
         feedViewModel = this@FeedFragment.feedViewModel
     }.root
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        retainInstance = true
-    }
 
     fun setParams(selectedFeed: FeedItem?) {
         selectedFeed?.let {
+            feedViewModel.feedItem = ObservableField(selectedFeed)
+            feedViewModel.isFavorite.set(selectedFeed.itemFavorite)
+            feedViewModel.setIsReadFeed()
+        }
+    }
+
+    override fun setData() {
+        communicateViewModel.selectedFeed?.let {selectedFeed ->
             feedViewModel.feedItem = ObservableField(selectedFeed)
             feedViewModel.isFavorite.set(selectedFeed.itemFavorite)
             feedViewModel.setIsReadFeed()

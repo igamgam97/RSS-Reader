@@ -15,19 +15,20 @@ import com.example.rssanimereader.adapter.FeedRecyclerViewAdapter
 import com.example.rssanimereader.databinding.FeedListFragmentBinding
 import com.example.rssanimereader.di.Injection
 import com.example.rssanimereader.domain.entity.FeedItem
-import com.example.rssanimereader.presentation.viewmodel.CommunicateViewModel
-import com.example.rssanimereader.presentation.viewmodel.FeedListViewModel
+import com.example.rssanimereader.presentation.view.contracts.BaseFragment
+import com.example.rssanimereader.presentation.view_model.CommunicateViewModel
+import com.example.rssanimereader.presentation.view_model.FeedListViewModel
 import java.io.IOException
 import java.sql.SQLException
 import java.text.ParseException
 
 
-class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener {
+class FeedListFragment : BaseFragment(), FeedRecyclerViewAdapter.OnItemClickListener {
 
     private val feedRecyclerViewAdapter =
         FeedRecyclerViewAdapter(arrayListOf(), this)
-    lateinit var communicateViewModel: CommunicateViewModel
-    lateinit var viewModel: FeedListViewModel
+    private lateinit var communicateViewModel: CommunicateViewModel
+    private lateinit var viewModel: FeedListViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,10 +69,6 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
             feedRv.adapter = feedRecyclerViewAdapter
         }.root
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        retainInstance = true
-    }
 
     override fun onItemClick(position: Int) {
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
@@ -95,6 +92,7 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
     }
 
     fun setParamsFromAddChannelDealogFragment(nameLink: String) {
+        Log.d("bag","dff")
         viewModel.channelLink.set(nameLink)
         viewModel.onRefresh()
     }
@@ -103,6 +101,22 @@ class FeedListFragment : Fragment(), FeedRecyclerViewAdapter.OnItemClickListener
         viewModel.channelLink.set(nameLink)
         viewModel.getFeedsFromCache()
     }
+
+    override fun setData() {
+        when(communicateViewModel.mListOfTypeFragment.value){
+            ListOfTypeFragment.FeedListFragmentFromChannelListFragment ->{
+                viewModel.channelLink.set(communicateViewModel.targetChannel)
+                viewModel.getFeedsFromCache()
+            }
+            ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment ->{
+                viewModel.channelLink.set(communicateViewModel.searchChannel)
+                viewModel.onRefresh()
+            }
+        }
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
 
     //todo retry when (doOnError)
 }

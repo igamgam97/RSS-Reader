@@ -12,13 +12,13 @@ import androidx.work.*
 import com.example.rssanimereader.R
 import com.example.rssanimereader.model.dataSource.localDS.dbAPI.FeedAndChannelApi
 import com.example.rssanimereader.model.dataSource.webDS.webApi.web.NewImageSaver
-import com.example.rssanimereader.model.dataSource.webDS.webApi.web.WebApi
-import com.example.rssanimereader.model.dataSource.webDS.webApi.web.RSSRemoteDataParser
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.IWebApi
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.RSSRemoteDataParserI
 import com.example.rssanimereader.domain.usecase.SavePeriodicallyAllFeedsWebUseCase
 import com.example.rssanimereader.model.dataSource.webDS.WebDS
 import com.example.rssanimereader.model.dataSource.localDS.LocalDS
-import com.example.rssanimereader.model.repository.ChannelsRepository
-import com.example.rssanimereader.model.repository.FeedsRepository
+import com.example.rssanimereader.model.repository.ChannelsRepositoryI
+import com.example.rssanimereader.model.repository.IFeedsRepository
 import com.example.rssanimereader.presentation.view.MainActivity
 import com.example.rssanimereader.util.NetManager
 import io.reactivex.disposables.CompositeDisposable
@@ -29,7 +29,7 @@ class PeriodicDownloadFeedsWorker(val context: Context, workerParams: WorkerPara
     Worker(context, workerParams) {
 
     private val compositeDisposable = CompositeDisposable()
-    fun showPeriodicNotificationOfDownloadFeeds(title: String, text: String, id: Int) {
+    private fun showPeriodicNotificationOfDownloadFeeds(title: String, text: String, id: Int) {
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra(Constants.EXTRA_ID, id)
@@ -55,13 +55,13 @@ class PeriodicDownloadFeedsWorker(val context: Context, workerParams: WorkerPara
 
     override fun doWork() = try {
         val dataBaseConnection = FeedAndChannelApi(context).open()
-        val rssRemoteDataParser = RSSRemoteDataParser()
+        val rssRemoteDataParser = RSSRemoteDataParserI()
         val imageSaver = NewImageSaver()
-        val webApi = WebApi(rssRemoteDataParser, imageSaver)
+        val webApi = IWebApi(rssRemoteDataParser, imageSaver)
         val webDS = WebDS(webApi)
         val localDS = LocalDS(dataBaseConnection)
-        val feedsRepository = FeedsRepository(webDS, localDS)
-        val channelsRepository = ChannelsRepository(webDS, localDS)
+        val feedsRepository = IFeedsRepository(webDS, localDS)
+        val channelsRepository = ChannelsRepositoryI(webDS, localDS)
         val netManager = NetManager(context)
         val savePeriodicallyAllFeedsWebUseCase =
             SavePeriodicallyAllFeedsWebUseCase(feedsRepository, channelsRepository, netManager)

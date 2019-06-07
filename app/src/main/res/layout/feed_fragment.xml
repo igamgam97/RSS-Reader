@@ -4,7 +4,7 @@
     <data>
         <variable
                 name="feedViewModel"
-                type="com.example.rssanimereader.presentation.viewmodel.FeedViewModel"/>
+                type="com.example.rssanimereader.presentation.view_model.FeedViewModel"/>
     </data>
     <androidx.appcompat.widget.LinearLayoutCompat android:layout_width="match_parent"
                                                   android:layout_height="match_parent"
@@ -24,12 +24,12 @@
                     android:background="@null"
                     android:onClick="@{() -> feedViewModel.setFavoriteFeed()}"
                     android:src="@{feedViewModel.isFavorite() ? @drawable/favorite_feed_icon : @drawable/no_favorite_feed_icon}"
-                    android:layout_gravity="end" android:contentDescription="favorite button"/>
+                    android:layout_gravity="end" android:contentDescription="@string/favorite_button_description"/>
         </androidx.appcompat.widget.Toolbar>
 
 
         <WebView
-                android:id="@+id/wvMindorks"
+                android:id="@+id/WVFeed"
                 android:loadData="@{feedViewModel.feedItem.itemDesc}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>

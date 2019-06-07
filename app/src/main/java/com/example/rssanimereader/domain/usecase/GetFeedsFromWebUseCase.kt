@@ -1,16 +1,18 @@
 package com.example.rssanimereader.domain.usecase
 
-import com.example.rssanimereader.model.repository.ChannelsRepository
-import com.example.rssanimereader.model.repository.FeedsRepository
+import com.example.rssanimereader.domain.entity.FeedItem
+import com.example.rssanimereader.model.repository.ChannelsRepositoryI
+import com.example.rssanimereader.model.repository.IFeedsRepository
 import com.example.rssanimereader.util.NetManager
+import io.reactivex.Observable
 import java.io.IOException
 
 class GetFeedsFromWebUseCase(
-    private val feedsRepository: FeedsRepository,
-    private val channelsRepository: ChannelsRepository,
+    private val feedsRepository: IFeedsRepository,
+    private val channelsRepository: ChannelsRepositoryI,
     private val netManager: NetManager
-    ) {
-    operator fun invoke(linkChannel: String) =
+) {
+    operator fun invoke(linkChannel: String): Observable<Pair<String, ArrayList<FeedItem>>> =
         feedsRepository.getChannelsLinkFromDB(linkChannel)
             .concatMapSingle { link -> getFeedsFromWeb(link).map { link to it } }
 

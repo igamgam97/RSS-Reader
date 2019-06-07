@@ -6,15 +6,15 @@ import com.example.rssanimereader.ProvideContextApplication
 import com.example.rssanimereader.model.dataSource.webDS.WebDS
 import com.example.rssanimereader.model.dataSource.localDS.LocalDS
 import com.example.rssanimereader.model.dataSource.settingsDS.SettingsDataSource
-import com.example.rssanimereader.model.repository.ChannelsRepository
-import com.example.rssanimereader.model.repository.FeedsRepository
+import com.example.rssanimereader.model.repository.ChannelsRepositoryI
+import com.example.rssanimereader.model.repository.IFeedsRepository
 import com.example.rssanimereader.presentation.view.*
-import com.example.rssanimereader.presentation.viewmodel.*
+import com.example.rssanimereader.presentation.view_model.*
 import com.example.rssanimereader.domain.usecase.*
 import com.example.rssanimereader.util.NetManager
 import com.example.rssanimereader.model.dataSource.webDS.webApi.web.NewImageSaver
-import com.example.rssanimereader.model.dataSource.webDS.webApi.web.WebApi
-import com.example.rssanimereader.model.dataSource.webDS.webApi.web.RSSRemoteDataParser
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.IWebApi
+import com.example.rssanimereader.model.dataSource.webDS.webApi.web.RSSRemoteDataParserI
 
 object Injection {
 
@@ -28,26 +28,26 @@ object Injection {
     var webDS: WebDS? = null
     var localDS: LocalDS? = null
     // todo опрокинуть подключение к бд
-    fun provideWebApi(): WebApi {
-        val rssRemoteDataParser = RSSRemoteDataParser()
+    private fun provideWebApi(): IWebApi {
+        val rssRemoteDataParser = RSSRemoteDataParserI()
         val imageSaver = NewImageSaver()
-        return WebApi(rssRemoteDataParser, imageSaver)
+        return IWebApi(rssRemoteDataParser, imageSaver)
     }
 
     /* fun provideFeedApi(datBaseConnection: FeedAndChannelApi): FeedApi {
          return FeedApi(datBaseConnection)
      }*/
 
-    fun provideWebDS(): WebDS? =
+    private fun provideWebDS(): WebDS? =
         if (webDS == null) {
-            val rssRemoteDataParser = RSSRemoteDataParser()
+            val rssRemoteDataParser = RSSRemoteDataParserI()
             val imageSaver = NewImageSaver()
-            val webApi = WebApi(rssRemoteDataParser, imageSaver)
+            val webApi = IWebApi(rssRemoteDataParser, imageSaver)
             webDS = WebDS(webApi)
             webDS
         } else webDS
 
-    fun provideLocalDS(): LocalDS? =
+    private fun provideLocalDS(): LocalDS? =
         if (localDS == null) {
             localDS = LocalDS(dataBaseConnection)
             localDS
@@ -59,8 +59,8 @@ object Injection {
         val webApi = provideWebApi()
         val webDS = WebDS(webApi)
         val localDS = LocalDS(dataBaseConnection)
-        val feedsRepository = FeedsRepository(webDS, localDS)
-        val channelsRepository = ChannelsRepository(webDS, localDS)
+        val feedsRepository = IFeedsRepository(webDS, localDS)
+        val channelsRepository = ChannelsRepositoryI(webDS, localDS)
         val getFeedsFromWebUseCase = GetFeedsFromWebUseCase(feedsRepository, channelsRepository, netManager)
         val getFeedsFromDBUseCase = GetFeedsFromDBUseCase(feedsRepository)
         val feedListViewModelFactory = FeedListViewModelFactory(getFeedsFromDBUseCase, getFeedsFromWebUseCase)
@@ -76,9 +76,9 @@ object Injection {
             val webApi = provideWebApi()
             val webDS = WebDS(webApi)
             val localDS = LocalDS(dataBaseConnection)
-            val channelRepository = ChannelsRepository(webDS, localDS)
+            val channelRepository = ChannelsRepositoryI(webDS, localDS)
             val checkIsChannelCorrectUseCase = CheckIsChannelExistUseCase(channelRepository)
-            val searchViewModelFactory = SearchViewModelFactory(checkIsChannelCorrectUseCase)
+            val searchViewModelFactory = AddChannelViewModelFactory(checkIsChannelCorrectUseCase)
             ViewModelProviders.of(fragment, searchViewModelFactory)
                 .get(AddChannelViewModel::class.java)
         } else {
@@ -90,7 +90,7 @@ object Injection {
             val webApi = provideWebApi()
             val webDS = WebDS(webApi)
             val localDS = LocalDS(dataBaseConnection)
-            val channelRepository = ChannelsRepository(webDS, localDS)
+            val channelRepository = ChannelsRepositoryI(webDS, localDS)
             val getChannelsUseCase = GetChannelsFromDBUseCase(channelRepository)
             val deleteChannelsUseCase = DeleteChannelsUseCase(channelRepository)
             val retractDeleteBySwipeChannelUseCase = RetractDeleteBySwipeChannelUseCase(channelRepository)
@@ -121,7 +121,7 @@ object Injection {
         val localDS = LocalDS(dataBaseConnection)
         val webApi = provideWebApi()
         val webDS = WebDS(webApi)
-        val feedsRepository = FeedsRepository(webDS, localDS)
+        val feedsRepository = IFeedsRepository(webDS, localDS)
         val setIsFavoriteFeeds = SetIsFavoriteFeedsUseCase(feedsRepository)
         val setIsRead = SetIsReadUseCase(feedsRepository)
         val feedViewModelFactory = FeedViewModelFactory(setIsFavoriteFeeds, setIsRead)
