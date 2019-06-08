@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
-import com.example.rssanimereader.model.dataSource.localDS.dbAPI.FeedAndChannelApi
+import com.example.rssanimereader.data.dataSource.localDS.dbAPI.FeedAndChannelApi
 
 
 class ProvideContextApplication : Application() {
@@ -23,7 +23,6 @@ class ProvideContextApplication : Application() {
 
 
     companion object {
-
         private lateinit var instance: ProvideContextApplication
         private lateinit var dbConnection: FeedAndChannelApi
         fun applicationContext(): Context = instance.applicationContext

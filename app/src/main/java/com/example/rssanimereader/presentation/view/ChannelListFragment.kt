@@ -109,9 +109,6 @@ class ChannelListFragment : BaseFragment(), ChannelRecyclerViewAdapter.OnItemCli
             TypeOfButtonChannelListFragment.SwipeLeft -> onSwipeLeft()
         }
     }
-    fun setParams() {
-        viewModel.getAllChannels()
-    }
 
     override fun setData() {
         viewModel.getAllChannels()

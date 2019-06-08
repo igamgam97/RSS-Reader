@@ -3,7 +3,7 @@ package com.example.rssanimereader.presentation.view_model
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.domain.entity.SettingsItem
-import com.example.rssanimereader.model.dataSource.settingsDS.SettingsDataSource
+import com.example.rssanimereader.data.dataSource.settingsDS.SettingsDataSource
 
 class SettingsViewModel(private val settingsDataSource: SettingsDataSource): ViewModel(){
 

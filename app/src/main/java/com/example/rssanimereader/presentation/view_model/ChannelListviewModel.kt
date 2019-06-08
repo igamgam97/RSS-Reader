@@ -3,12 +3,12 @@ package com.example.rssanimereader.presentation.view_model
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.rssanimereader.adapter.SwipeHandler
+import com.example.rssanimereader.adapter.util.SwipeHandler
 import com.example.rssanimereader.domain.entity.ChannelItem
 import com.example.rssanimereader.presentation.view.TypeOfButtonChannelListFragment
-import com.example.rssanimereader.domain.usecase.DeleteChannelsUseCase
-import com.example.rssanimereader.domain.usecase.GetChannelsFromDBUseCase
-import com.example.rssanimereader.domain.usecase.RetractDeleteBySwipeChannelUseCase
+import com.example.rssanimereader.domain.use_case.DeleteChannelsUseCase
+import com.example.rssanimereader.domain.use_case.GetChannelsFromDBUseCase
+import com.example.rssanimereader.domain.use_case.RetractDeleteBySwipeChannelUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 

@@ -2,9 +2,9 @@ package com.example.rssanimereader.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.rssanimereader.model.dataSource.settingsDS.SettingsDataSource
+import com.example.rssanimereader.data.dataSource.settingsDS.SettingsDataSource
 import com.example.rssanimereader.presentation.view_model.*
-import com.example.rssanimereader.domain.usecase.*
+import com.example.rssanimereader.domain.use_case.*
 
 class FeedListViewModelFactory(
     private val getFeedsFromDBUseCase: GetFeedsFromDBUseCase,

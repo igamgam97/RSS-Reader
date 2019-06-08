@@ -36,7 +36,6 @@ class FeedRecyclerViewAdapter(
         fun bind(feed: FeedItem, listener: OnItemClickListener?) {
             binding.feed = feed
             if (listener != null) binding.root.setOnClickListener { listener.onItemClick(layoutPosition) }
-
             binding.executePendingBindings()
         }
     }

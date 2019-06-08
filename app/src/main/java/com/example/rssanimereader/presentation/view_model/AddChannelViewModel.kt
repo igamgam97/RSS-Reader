@@ -5,7 +5,7 @@ import android.webkit.URLUtil
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.rssanimereader.domain.usecase.CheckIsChannelExistUseCase
+import com.example.rssanimereader.domain.use_case.CheckIsChannelExistUseCase
 
 class AddChannelViewModel(private val checkIsChannelExistUseCase: CheckIsChannelExistUseCase) : ViewModel() {
 

@@ -1,7 +1,7 @@
 package com.example.rssanimereader.util
 
 import com.example.rssanimereader.domain.entity.FeedItem
-import com.example.rssanimereader.model.dataSource.webDS.webApi.web.HTMLFormatter
+import com.example.rssanimereader.data.dataSource.webDS.webApi.web.HTMLFormatter
 import java.util.regex.Pattern
 
 class HTMLFeedFormatter : HTMLFormatter<FeedItem> {

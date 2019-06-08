@@ -3,18 +3,18 @@ package com.example.rssanimereader.di
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.example.rssanimereader.ProvideContextApplication
-import com.example.rssanimereader.model.dataSource.webDS.WebDS
-import com.example.rssanimereader.model.dataSource.localDS.LocalDS
-import com.example.rssanimereader.model.dataSource.settingsDS.SettingsDataSource
-import com.example.rssanimereader.model.repository.ChannelsRepositoryI
-import com.example.rssanimereader.model.repository.IFeedsRepository
+import com.example.rssanimereader.data.dataSource.localDS.LocalDS
+import com.example.rssanimereader.data.dataSource.settingsDS.SettingsDataSource
+import com.example.rssanimereader.data.dataSource.webDS.WebDS
+import com.example.rssanimereader.data.dataSource.webDS.webApi.web.IWebApi
+import com.example.rssanimereader.data.dataSource.webDS.webApi.web.NewImageSaver
+import com.example.rssanimereader.data.dataSource.webDS.webApi.web.RSSRemoteDataParserI
+import com.example.rssanimereader.data.repository.ChannelsRepository
+import com.example.rssanimereader.data.repository.FeedsRepository
+import com.example.rssanimereader.domain.use_case.*
 import com.example.rssanimereader.presentation.view.*
 import com.example.rssanimereader.presentation.view_model.*
-import com.example.rssanimereader.domain.usecase.*
 import com.example.rssanimereader.util.NetManager
-import com.example.rssanimereader.model.dataSource.webDS.webApi.web.NewImageSaver
-import com.example.rssanimereader.model.dataSource.webDS.webApi.web.IWebApi
-import com.example.rssanimereader.model.dataSource.webDS.webApi.web.RSSRemoteDataParserI
 
 object Injection {
 
@@ -25,21 +25,18 @@ object Injection {
     private lateinit var addChannelViewModel: AddChannelViewModel
     private lateinit var channelListViewModel: ChannelListViewModel
     private lateinit var settingViewModel: SettingsViewModel
-    var webDS: WebDS? = null
-    var localDS: LocalDS? = null
+
+    private lateinit var webDS: WebDS
+    private lateinit var localDS: LocalDS
+
+    private lateinit var feedsRepository: FeedsRepository
+    private lateinit var channelsRepository: ChannelsRepository
     // todo опрокинуть подключение к бд
-    private fun provideWebApi(): IWebApi {
-        val rssRemoteDataParser = RSSRemoteDataParserI()
-        val imageSaver = NewImageSaver()
-        return IWebApi(rssRemoteDataParser, imageSaver)
-    }
 
-    /* fun provideFeedApi(datBaseConnection: FeedAndChannelApi): FeedApi {
-         return FeedApi(datBaseConnection)
-     }*/
+    //todo раскидать фабрику на несколько если будет время
 
-    private fun provideWebDS(): WebDS? =
-        if (webDS == null) {
+    private fun provideWebDS(): WebDS =
+        if (!Injection::webDS.isInitialized) {
             val rssRemoteDataParser = RSSRemoteDataParserI()
             val imageSaver = NewImageSaver()
             val webApi = IWebApi(rssRemoteDataParser, imageSaver)
@@ -47,37 +44,39 @@ object Injection {
             webDS
         } else webDS
 
-    private fun provideLocalDS(): LocalDS? =
-        if (localDS == null) {
+    private fun provideLocalDS(): LocalDS =
+        if (!Injection::localDS.isInitialized) {
             localDS = LocalDS(dataBaseConnection)
             localDS
         } else localDS
 
 
-    fun provideFeedListViewModel(fragment: FeedListFragment) = if (!Injection::feedListViewModel.isInitialized) {
-        val netManager = NetManager(contextApplication)
-        val webApi = provideWebApi()
-        val webDS = WebDS(webApi)
-        val localDS = LocalDS(dataBaseConnection)
-        val feedsRepository = IFeedsRepository(webDS, localDS)
-        val channelsRepository = ChannelsRepositoryI(webDS, localDS)
-        val getFeedsFromWebUseCase = GetFeedsFromWebUseCase(feedsRepository, channelsRepository, netManager)
-        val getFeedsFromDBUseCase = GetFeedsFromDBUseCase(feedsRepository)
-        val feedListViewModelFactory = FeedListViewModelFactory(getFeedsFromDBUseCase, getFeedsFromWebUseCase)
-        ViewModelProviders.of(fragment, feedListViewModelFactory)
-            .get(FeedListViewModel::class.java)
-    } else {
-        feedListViewModel
-    }
+    private fun provideFeedsRepository(): FeedsRepository =
+        if (!Injection::feedsRepository.isInitialized) FeedsRepository(provideWebDS(), provideLocalDS())
+        else feedsRepository
+
+    private fun provideChannelsRepository(): ChannelsRepository =
+        if (!Injection::feedsRepository.isInitialized) ChannelsRepository(provideWebDS(), provideLocalDS())
+        else channelsRepository
+
+
+    fun provideFeedListViewModel(fragment: FeedListFragment): FeedListViewModel =
+        if (!Injection::feedListViewModel.isInitialized) {
+            val netManager = NetManager(contextApplication)
+            val getFeedsFromWebUseCase =
+                GetFeedsFromWebUseCase(provideFeedsRepository(), provideChannelsRepository(), netManager)
+            val getFeedsFromDBUseCase = GetFeedsFromDBUseCase(provideFeedsRepository())
+            val feedListViewModelFactory = FeedListViewModelFactory(getFeedsFromDBUseCase, getFeedsFromWebUseCase)
+            ViewModelProviders.of(fragment, feedListViewModelFactory)
+                .get(FeedListViewModel::class.java)
+        } else {
+            feedListViewModel
+        }
 
 
     fun provideAddChannelViewModel(fragment: AddChannelDialogFragment) =
         if (!Injection::addChannelViewModel.isInitialized) {
-            val webApi = provideWebApi()
-            val webDS = WebDS(webApi)
-            val localDS = LocalDS(dataBaseConnection)
-            val channelRepository = ChannelsRepositoryI(webDS, localDS)
-            val checkIsChannelCorrectUseCase = CheckIsChannelExistUseCase(channelRepository)
+            val checkIsChannelCorrectUseCase = CheckIsChannelExistUseCase(provideChannelsRepository())
             val searchViewModelFactory = AddChannelViewModelFactory(checkIsChannelCorrectUseCase)
             ViewModelProviders.of(fragment, searchViewModelFactory)
                 .get(AddChannelViewModel::class.java)
@@ -87,13 +86,9 @@ object Injection {
 
     fun provideChannelListViewModel(fragment: ChannelListFragment) =
         if (!Injection::channelListViewModel.isInitialized) {
-            val webApi = provideWebApi()
-            val webDS = WebDS(webApi)
-            val localDS = LocalDS(dataBaseConnection)
-            val channelRepository = ChannelsRepositoryI(webDS, localDS)
-            val getChannelsUseCase = GetChannelsFromDBUseCase(channelRepository)
-            val deleteChannelsUseCase = DeleteChannelsUseCase(channelRepository)
-            val retractDeleteBySwipeChannelUseCase = RetractDeleteBySwipeChannelUseCase(channelRepository)
+            val getChannelsUseCase = GetChannelsFromDBUseCase(provideChannelsRepository())
+            val deleteChannelsUseCase = DeleteChannelsUseCase(provideChannelsRepository())
+            val retractDeleteBySwipeChannelUseCase = RetractDeleteBySwipeChannelUseCase(provideChannelsRepository())
             val channelListViewModelFactory = ChannelListViewModelFactory(
                 getChannelsUseCase,
                 deleteChannelsUseCase,
@@ -106,8 +101,7 @@ object Injection {
         }
 
     fun provideSettingsViewModel(fragment: SettingsFragment) = if (!Injection::settingViewModel.isInitialized) {
-        val context = ProvideContextApplication.applicationContext()
-        val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+        val prefs = PreferenceManager.getDefaultSharedPreferences(contextApplication)
         val settingsDataSource = SettingsDataSource(prefs)
         val settingsViewModelFactory = SettingsViewModelFactory(settingsDataSource)
         ViewModelProviders.of(fragment, settingsViewModelFactory)
@@ -118,12 +112,8 @@ object Injection {
     }
 
     fun provideFeedViewModel(fragment: FeedFragment) = if (!Injection::feedViewModel.isInitialized) {
-        val localDS = LocalDS(dataBaseConnection)
-        val webApi = provideWebApi()
-        val webDS = WebDS(webApi)
-        val feedsRepository = IFeedsRepository(webDS, localDS)
-        val setIsFavoriteFeeds = SetIsFavoriteFeedsUseCase(feedsRepository)
-        val setIsRead = SetIsReadUseCase(feedsRepository)
+        val setIsFavoriteFeeds = SetIsFavoriteFeedsUseCase(provideFeedsRepository())
+        val setIsRead = SetIsReadUseCase(provideFeedsRepository())
         val feedViewModelFactory = FeedViewModelFactory(setIsFavoriteFeeds, setIsRead)
         ViewModelProviders.of(fragment, feedViewModelFactory)
             .get(FeedViewModel::class.java)

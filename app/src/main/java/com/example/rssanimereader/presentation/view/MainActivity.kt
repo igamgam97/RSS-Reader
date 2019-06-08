@@ -79,9 +79,10 @@ class MainActivity : AppCompatActivity() {
                 ListOfTypeFragment.ChannelListFragment -> ChannelListFragment()
                 ListOfTypeFragment.SettingsFragment -> SettingsFragment()
             }
-            openFragment(fragment, tagFragment)
+            replaceFragment(fragment, tagFragment)
         } else {
             replaceFragment(currentFragment as BaseFragment, tagFragment)
+            currentFragment.setData()
         }
     }
 
@@ -96,21 +97,7 @@ class MainActivity : AppCompatActivity() {
             .replace(R.id.frag_container, fragment, tagFragment.toString())
             .addToBackStack(null)
             .commit()
-        fragment.setData()
     }
-
-    private fun openFragment(fragment: BaseFragment, tagFragment: ListOfTypeFragment) {
-        if (tagFragment == ListOfTypeFragment.FeedListFragmentFromChannelListFragment ||
-            tagFragment == ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment
-        ) {
-            binding.navigation.menu.findItem(R.id.app_bar_feeds).isChecked = true
-        }
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.frag_container, fragment, tagFragment.toString())
-            .addToBackStack(null)
-            .commit()
-    }
-
 
     override fun onBackPressed() {
         super.onBackPressed()

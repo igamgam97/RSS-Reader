@@ -28,8 +28,7 @@ class SettingsFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         settingsViewModel = Injection.provideSettingsViewModel(this)
         settingsViewModel.settingsNightMode.observe(this, Observer {
-            changeTheme()
-        })
+            changeTheme()})
         setData()
     }
 
@@ -51,7 +50,6 @@ class SettingsFragment : BaseFragment() {
     }
 
     override fun setData() {
-
     }
 
     companion object {

@@ -4,7 +4,6 @@ package com.example.rssanimereader.presentation.view
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.rssanimereader.databinding.FeedFragmentBinding
 import com.example.rssanimereader.di.Injection
-import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.presentation.view.contracts.BaseFragment
 import com.example.rssanimereader.presentation.view_model.CommunicateViewModel
 import com.example.rssanimereader.presentation.view_model.FeedViewModel
@@ -31,7 +29,6 @@ class FeedFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("bag", "onCreate")
         communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         feedViewModel = Injection.provideFeedViewModel(this)
         feedViewModel.shareData.observe(this, Observer {
@@ -40,7 +37,6 @@ class FeedFragment : BaseFragment() {
         setData()
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,17 +44,8 @@ class FeedFragment : BaseFragment() {
         feedViewModel = this@FeedFragment.feedViewModel
     }.root
 
-
-    fun setParams(selectedFeed: FeedItem?) {
-        selectedFeed?.let {
-            feedViewModel.feedItem = ObservableField(selectedFeed)
-            feedViewModel.isFavorite.set(selectedFeed.itemFavorite)
-            feedViewModel.setIsReadFeed()
-        }
-    }
-
     override fun setData() {
-        communicateViewModel.selectedFeed?.let {selectedFeed ->
+        communicateViewModel.selectedFeed?.let { selectedFeed ->
             feedViewModel.feedItem = ObservableField(selectedFeed)
             feedViewModel.isFavorite.set(selectedFeed.itemFavorite)
             feedViewModel.setIsReadFeed()

@@ -9,8 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.R
 import com.example.rssanimereader.domain.entity.FeedItem
-import com.example.rssanimereader.domain.usecase.GetFeedsFromDBUseCase
-import com.example.rssanimereader.domain.usecase.GetFeedsFromWebUseCase
+import com.example.rssanimereader.domain.use_case.GetFeedsFromDBUseCase
+import com.example.rssanimereader.domain.use_case.GetFeedsFromWebUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 

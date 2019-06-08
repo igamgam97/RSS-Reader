@@ -30,8 +30,8 @@ class AddChannelDialogFragment :DialogFragment(){
             .setTitle("Search channel")
             .setMessage("PleaseChooseChannel")
             .setView(binding.root)
-            .setNegativeButton("negative") {_,_ ->  dismiss()}
-            .setPositiveButton("positive",null)
+            .setNegativeButton(CLOSE) { _, _ ->  dismiss()}
+            .setPositiveButton(SEARCH_CHANNEL,null)
             .create()
     }
 
@@ -52,5 +52,10 @@ class AddChannelDialogFragment :DialogFragment(){
         val communicateViewModel = ViewModelProviders.of(activity!!).get(CommunicateViewModel::class.java)
         addChannelViewModel.targetChannel.get()?.let { communicateViewModel.onFeedListFragmentStateFromSearchFragment(it) }
         dismiss()
+    }
+
+    private companion object {
+        const val SEARCH_CHANNEL = "search"
+        const val CLOSE = "close"
     }
 }

@@ -18,4 +18,7 @@
     <string name="favorite_feeds">избранные</string>
     <string name="favorite_button_description">favorite feed button</string>
 
+    <string name="no_internet_connection">нет подключения к интернету</string>
+    <string name="incorrect_data_from_server">проблемы с сервером</string>
+
 </resources>

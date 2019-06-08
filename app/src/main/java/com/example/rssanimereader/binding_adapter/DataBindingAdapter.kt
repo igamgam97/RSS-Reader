@@ -14,7 +14,7 @@ import androidx.databinding.BindingMethods
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.example.rssanimereader.adapter.SwipeItemTouchHelperCallback
+import com.example.rssanimereader.adapter.util.SwipeItemTouchHelperCallback
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
