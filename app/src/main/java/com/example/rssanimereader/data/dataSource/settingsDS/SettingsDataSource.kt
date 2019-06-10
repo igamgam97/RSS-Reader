@@ -10,7 +10,7 @@ class SettingsDataSource(private val sharedPreferences: SharedPreferences) {
         sharedPreferences.getBoolean(NIGHT_MODE_VALUE, false)
     )
 
-    fun saveNightModeValue(value:Boolean) {
+    fun saveNightModeValue(value: Boolean) {
         sharedPreferences.edit().apply {
             putBoolean(NIGHT_MODE_VALUE, value)
         }.apply()

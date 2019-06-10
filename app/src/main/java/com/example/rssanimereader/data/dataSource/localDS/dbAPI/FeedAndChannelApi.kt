@@ -7,10 +7,10 @@ import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import androidx.core.database.getStringOrNull
 import com.example.rssanimereader.data.dataSource.localDS.dbAPI.contracts.DBContract
+import com.example.rssanimereader.data.dataSource.localDS.dbAPI.contracts.IChannelAndFeedApi
 import com.example.rssanimereader.data.dataSource.webDS.webApi.web.ImageSaver
 import com.example.rssanimereader.domain.entity.ChannelItem
 import com.example.rssanimereader.domain.entity.FeedItem
-import com.example.rssanimereader.data.dataSource.localDS.dbAPI.contracts.IChannelAndFeedApi
 import java.io.Closeable
 
 
@@ -165,7 +165,7 @@ class FeedAndChannelApi(context: Context) : Closeable, IChannelAndFeedApi {
             put(DBContract.ChannelTable.COLUMN_LINK, channel.linkChannel)
             put(DBContract.ChannelTable.COLUMN_NAME, channel.nameChannel)
             put(DBContract.ChannelTable.COLUMN_PATH_IMAGE, channel.urlImage)
-            put(DBContract.ChannelTable.COLUMN_IMAGE, channel.pathImage!!)
+            put(DBContract.ChannelTable.COLUMN_IMAGE, channel.pathImage)
         }
         return database.insertWithOnConflict(
             DBContract.ChannelTable.TABLE_NAME,

@@ -14,8 +14,6 @@ import com.example.rssanimereader.presentation.view.contracts.BaseFragment
 import com.example.rssanimereader.presentation.view_model.SettingsViewModel
 
 
-
-
 /**
  * A simple [Fragment] subclass.
  *
@@ -28,7 +26,8 @@ class SettingsFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         settingsViewModel = Injection.provideSettingsViewModel(this)
         settingsViewModel.settingsNightMode.observe(this, Observer {
-            changeTheme()})
+            changeTheme()
+        })
         setData()
     }
 
@@ -40,7 +39,7 @@ class SettingsFragment : BaseFragment() {
     }.root
 
 
-
+    //todo придумать другой переход
     private fun changeTheme() {
         val intent = Intent(context, MainActivity::class.java)
         intent.putExtra(SETTING_FRAGMENT, true)

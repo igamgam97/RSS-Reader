@@ -4,6 +4,6 @@ import com.example.rssanimereader.domain.entity.ChannelItem
 import com.example.rssanimereader.domain.entity.FeedItem
 import java.io.InputStream
 
-interface IFeedAndChannelParser{
+interface IFeedAndChannelParser {
     fun parse(input: InputStream, source: String): Pair<ArrayList<FeedItem>, ChannelItem>
 }

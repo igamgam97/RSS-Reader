@@ -9,6 +9,6 @@ interface IFeedsRepository {
     fun setFavoriteFeed(feed: FeedItem): Completable
     fun setIsRead(feed: FeedItem): Completable
     fun getFeedsByChannelFromDB(linkChannel: String): Single<ArrayList<FeedItem>>
-    fun getFeedsFromCashe(linkChannel: String): Single<ArrayList<FeedItem>>
+    fun getFeedsFromCache(linkChannel: String): Single<ArrayList<FeedItem>>
     fun getChannelsLinkFromDB(linkChannel: String): Observable<String>
 }

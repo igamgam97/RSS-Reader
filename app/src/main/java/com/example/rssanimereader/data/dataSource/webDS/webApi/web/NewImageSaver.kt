@@ -12,7 +12,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.net.MalformedURLException
 
-class NewImageSaver{
+class NewImageSaver {
 
     @Throws(MalformedURLException::class)
     private fun downloadImage(urlPath: String): Bitmap {

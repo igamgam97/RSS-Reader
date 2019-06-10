@@ -5,7 +5,7 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 
-class StreamFromURLLoader  {
+class StreamFromURLLoader {
 
     @Throws(MalformedURLException::class)
     operator fun invoke(path: String): HttpURLConnection {
@@ -24,11 +24,11 @@ class StreamFromURLLoader  {
         } else throw ConnectException("Error connection")
     }
 
-object FeedUtilConstants {
-    const val READ_TIMEOUT_VALUE = 15000
-    const val CONNECT_TIMEOUT_VALUE = 10000
+    object FeedUtilConstants {
+        const val READ_TIMEOUT_VALUE = 15000
+        const val CONNECT_TIMEOUT_VALUE = 10000
 
-}
+    }
 
 }
 

@@ -3,8 +3,8 @@ package com.example.rssanimereader.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.rssanimereader.data.dataSource.settingsDS.SettingsDataSource
-import com.example.rssanimereader.presentation.view_model.*
 import com.example.rssanimereader.domain.use_case.*
+import com.example.rssanimereader.presentation.view_model.*
 
 class FeedListViewModelFactory(
     private val getFeedsFromDBUseCase: GetFeedsFromDBUseCase,
@@ -12,15 +12,13 @@ class FeedListViewModelFactory(
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FeedListViewModel::class.java)) {
-            return FeedListViewModel(getFeedsFromDBUseCase,getFeedsFromWebUseCase) as T
+            return FeedListViewModel(getFeedsFromDBUseCase, getFeedsFromWebUseCase) as T
         }
 
         throw IllegalArgumentException("Unknown ViewModel Class")
     }
 
 }
-
-
 
 
 class ChannelListViewModelFactory(

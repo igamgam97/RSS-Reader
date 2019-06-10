@@ -1,9 +1,9 @@
 package com.example.rssanimereader.data.repository
 
-import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.data.dataSource.contracts.ILocalDS
 import com.example.rssanimereader.data.dataSource.contracts.IWebDS
 import com.example.rssanimereader.data.repository.contracts.IFeedsRepository
+import com.example.rssanimereader.domain.entity.FeedItem
 import io.reactivex.Completable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -14,12 +14,12 @@ class FeedsRepository(
 ) : IFeedsRepository {
     override fun setFavoriteFeed(feed: FeedItem): Completable =
         localDS.setFavoriteFeed(feed)
-    override fun setIsRead(feed: FeedItem): Completable
-            = localDS.setIsRead(feed)
-    override fun getFeedsByChannelFromDB(linkChannel: String) : Single<ArrayList<FeedItem>>
-            = localDS.getFeedsByChannelFromDB(linkChannel)
 
-    override fun getFeedsFromCashe(linkChannel: String): Single<ArrayList<FeedItem>> =
+    override fun setIsRead(feed: FeedItem): Completable = localDS.setIsRead(feed)
+    override fun getFeedsByChannelFromDB(linkChannel: String): Single<ArrayList<FeedItem>> =
+        localDS.getFeedsByChannelFromDB(linkChannel)
+
+    override fun getFeedsFromCache(linkChannel: String): Single<ArrayList<FeedItem>> =
         when (linkChannel) {
             "" -> localDS.getAllFeeds()
             "favorite" -> localDS.getFavoriteFeeds()

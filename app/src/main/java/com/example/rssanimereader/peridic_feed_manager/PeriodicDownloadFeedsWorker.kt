@@ -38,8 +38,8 @@ class PeriodicDownloadFeedsWorker(val context: Context, workerParams: WorkerPara
         val disposable = savePeriodicallyAllFeedsWebUseCase()
             .subscribe({
                 NotificationsUtil.showPeriodicNotificationOfDownloadFeeds(
-                        "New feedsDownloads", "We downloads feeds for you",
-                        1
+                    "New feedsDownloads", "We downloads feeds for you",
+                    1
                 )
             }, { error -> onError() })
         compositeDisposable.add(disposable)
@@ -68,7 +68,7 @@ object PeriodicDownloadFeedsWorkerUtils {
         val constraints = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
-                /* .setRequiresDeviceIdle(false)*/
+                 .setRequiresDeviceIdle(false)
                 .build()
         } else {
             Constraints.Builder()
@@ -83,7 +83,7 @@ object PeriodicDownloadFeedsWorkerUtils {
             TimeUnit.MINUTES
         )
             .setConstraints(constraints)
-        /*.setInitialDelay(1, TimeUnit.HOURS)*/
+        .setInitialDelay(1, TimeUnit.HOURS)
         val myWork = myWorkBuilder.build()
         WorkManager.getInstance()
             .enqueueUniquePeriodicWork("jobTag", ExistingPeriodicWorkPolicy.KEEP, myWork)

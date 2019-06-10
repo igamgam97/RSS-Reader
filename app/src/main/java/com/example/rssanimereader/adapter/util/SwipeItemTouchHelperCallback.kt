@@ -22,11 +22,11 @@ class SwipeItemTouchHelperCallback private constructor(dragDirs: Int, swipeDirs:
     private constructor(builder: Builder) : this(builder.dragDirs, builder.swipeDirs) {
         setPaintColor(paintLeft, builder.bgColorSwipeLeft)
         setPaintColor(paintRight, builder.bgColorSwipeRight)
-        drawableLeft = builder.drawableSwipeLeft!!
-        drawableRight = builder.drawableSwipeRight!!
+        drawableLeft = builder.drawableSwipeLeft
+        drawableRight = builder.drawableSwipeRight
         swipeEnabled = builder.swipeEnabled
-        onItemSwipeLeftListener = builder.onItemSwipeLeftListener!!
-        onItemSwipeRightListener = builder.onItemSwipeRightListener!!
+        onItemSwipeLeftListener = builder.onItemSwipeLeftListener
+        onItemSwipeRightListener = builder.onItemSwipeRightListener
     }
 
     private fun setPaintColor(paint: Paint, color: Int) {
@@ -68,31 +68,31 @@ class SwipeItemTouchHelperCallback private constructor(dragDirs: Int, swipeDirs:
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
 
             val itemView = viewHolder.itemView
-            val height = itemView.bottom.toFloat() - itemView.top .toFloat()
+            val height = itemView.bottom.toFloat() - itemView.top.toFloat()
             val width = height / 3
 
             if (dX > 0) {
-                val background = RectF(itemView.left .toFloat(), itemView.top .toFloat(), dX, itemView.bottom .toFloat())
+                val background = RectF(itemView.left.toFloat(), itemView.top.toFloat(), dX, itemView.bottom.toFloat())
                 val iconDest = RectF(
-                    itemView.left .toFloat() + width,
-                    itemView.top .toFloat() + width,
-                    itemView.left .toFloat() + 2 * width,
-                    itemView.bottom .toFloat() - width
+                    itemView.left.toFloat() + width,
+                    itemView.top.toFloat() + width,
+                    itemView.left.toFloat() + 2 * width,
+                    itemView.bottom.toFloat() - width
                 )
                 c.drawRect(background, paintLeft)
                 c.drawBitmap(ViewUtil.getBitmap(drawableLeft), null, iconDest, paintLeft)
             } else {
                 val background = RectF(
-                    itemView.right .toFloat() + dX,
-                    itemView.top .toFloat(),
-                    itemView.right .toFloat(),
-                    itemView.bottom .toFloat()
+                    itemView.right.toFloat() + dX,
+                    itemView.top.toFloat(),
+                    itemView.right.toFloat(),
+                    itemView.bottom.toFloat()
                 )
                 val iconDest = RectF(
-                    itemView.right .toFloat() - 2 * width,
-                    itemView.top .toFloat() + width,
-                    itemView.right .toFloat() - width,
-                    itemView.bottom .toFloat() - width
+                    itemView.right.toFloat() - 2 * width,
+                    itemView.top.toFloat() + width,
+                    itemView.right.toFloat() - width,
+                    itemView.bottom.toFloat() - width
                 )
                 c.drawRect(background, paintRight)
                 c.drawBitmap(ViewUtil.getBitmap(drawableRight), null, iconDest, paintRight)
@@ -106,12 +106,12 @@ class SwipeItemTouchHelperCallback private constructor(dragDirs: Int, swipeDirs:
     }
 
     class Builder(val dragDirs: Int, val swipeDirs: Int) {
-        var drawableSwipeLeft: Drawable? = null
-        var drawableSwipeRight: Drawable? = null
+        lateinit var drawableSwipeLeft: Drawable
+        lateinit var drawableSwipeRight: Drawable
         var bgColorSwipeLeft: Int = 0
         var bgColorSwipeRight: Int = 0
-        var onItemSwipeLeftListener: OnItemSwipeListener? = null
-        var onItemSwipeRightListener: OnItemSwipeListener? = null
+        lateinit var onItemSwipeLeftListener: OnItemSwipeListener
+        lateinit var onItemSwipeRightListener: OnItemSwipeListener
         var swipeEnabled: Boolean = false
 
         fun drawableSwipeLeft(`val`: Drawable): Builder {

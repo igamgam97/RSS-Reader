@@ -18,7 +18,7 @@ class CommunicateViewModel : ViewModel() {
     var targetChannel = ""
     var searchChannel = ""
 
-    var selectedFeed:FeedItem? = null
+    var selectedFeed: FeedItem? = null
 
     init {
         mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragmentFromChannelListFragment
@@ -30,7 +30,7 @@ class CommunicateViewModel : ViewModel() {
         mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragmentFromChannelListFragment
     }
 
-    fun onFeedListFragmentStateFromSearchFragment(linkChannel:String){
+    fun onFeedListFragmentStateFromSearchFragment(linkChannel: String) {
         searchChannel = linkChannel
         mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragmentFromAddChannelDialogFragment
     }
@@ -41,20 +41,20 @@ class CommunicateViewModel : ViewModel() {
         mListOfTypeFragment.value = ListOfTypeFragment.FeedFragment
     }
 
-    fun onSettingsFragmentState() {
+    private fun onSettingsFragmentState() {
         mListOfTypeFragment.value = ListOfTypeFragment.SettingsFragment
     }
 
-    fun onChannelListFragmentState() {
+    private fun onChannelListFragmentState() {
         mListOfTypeFragment.value = ListOfTypeFragment.ChannelListFragment
     }
 
 
-    fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item!!.itemId) {
+    fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.app_bar_channels -> onChannelListFragmentState()
-            R.id.app_bar_settings-> onSettingsFragmentState()
-            R.id.app_bar_feeds ->  mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragmentFromChannelListFragment
+            R.id.app_bar_settings -> onSettingsFragmentState()
+            R.id.app_bar_feeds -> mListOfTypeFragment.value = ListOfTypeFragment.FeedListFragmentFromChannelListFragment
         }
 
         return true

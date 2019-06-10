@@ -18,7 +18,7 @@ class AddChannelViewModel(private val checkIsChannelExistUseCase: CheckIsChannel
     fun searchChannel() {
         Log.d("bag", targetChannel.get().toString())
         targetChannel.get()?.let {
-            if (!checkIsChannelExistUseCase(it)&& URLUtil.isValidUrl(it)) {
+            if (!checkIsChannelExistUseCase(it) && URLUtil.isValidUrl(it)) {
                 isClickSearchButton.value = !(isClickSearchButton.value ?: false)
             } else {
                 statusError.value = false

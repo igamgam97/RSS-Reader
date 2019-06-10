@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rssanimereader.adapter.util.SwipeHandler
 import com.example.rssanimereader.domain.entity.ChannelItem
-import com.example.rssanimereader.presentation.view.TypeOfButtonChannelListFragment
 import com.example.rssanimereader.domain.use_case.DeleteChannelsUseCase
 import com.example.rssanimereader.domain.use_case.GetChannelsFromDBUseCase
 import com.example.rssanimereader.domain.use_case.RetractDeleteBySwipeChannelUseCase
+import com.example.rssanimereader.presentation.view.TypeOfButtonChannelListFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 
@@ -47,15 +47,15 @@ class ChannelListViewModel(
     }
 
     fun addChannel() {
-        isTypeButtonClicked.value= TypeOfButtonChannelListFragment.ShowAddChannelDialogFragment
+        isTypeButtonClicked.value = TypeOfButtonChannelListFragment.ShowAddChannelDialogFragment
     }
 
     fun onClickAllFeedsButton() {
-        isTypeButtonClicked.value= TypeOfButtonChannelListFragment.ShowAllFeeds
+        isTypeButtonClicked.value = TypeOfButtonChannelListFragment.ShowAllFeeds
     }
 
     fun onClickFavoriteFeedsButton() {
-        isTypeButtonClicked.value= TypeOfButtonChannelListFragment.ShowFavoriteFeeds
+        isTypeButtonClicked.value = TypeOfButtonChannelListFragment.ShowFavoriteFeeds
     }
 
     fun retractSaveChannel(channelItem: ChannelItem) {
@@ -79,8 +79,10 @@ class ChannelListViewModel(
     }
 
     private fun saveAndRemoveItem(position: Int) {
-        tempItem = Pair(position, channels.value!![position])
-        deleteChannel(channels.value!![position].linkChannel)
+        channels.value?.let { channels->
+            tempItem = Pair(position, channels[position])
+            deleteChannel(channels[position].linkChannel)
+        }
     }
 
 

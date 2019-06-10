@@ -7,9 +7,9 @@ import com.example.rssanimereader.data.dataSource.localDS.dbAPI.contracts.DBCont
 
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(
-        context,
-        DBContract.DATABASE_NAME, null,
-        DBContract.SCHEMA
+    context,
+    DBContract.DATABASE_NAME, null,
+    DBContract.SCHEMA
 ) {
 
     override fun onCreate(db: SQLiteDatabase) {

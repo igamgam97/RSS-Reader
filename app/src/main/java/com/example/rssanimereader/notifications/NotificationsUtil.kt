@@ -12,8 +12,8 @@ import com.example.rssanimereader.R
 import com.example.rssanimereader.peridic_feed_manager.Constants
 import com.example.rssanimereader.presentation.view.MainActivity
 
-object NotificationsUtil{
-    fun showPeriodicNotificationOfDownloadFeeds(title: String, text: String, id: Int){
+object NotificationsUtil {
+    fun showPeriodicNotificationOfDownloadFeeds(title: String, text: String, id: Int) {
         val applicationContext = ProvideContextApplication.applicationContext()
         val intent = Intent(applicationContext, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

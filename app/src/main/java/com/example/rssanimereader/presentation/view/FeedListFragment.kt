@@ -44,7 +44,7 @@ class FeedListFragment : BaseFragment(), FeedRecyclerViewAdapter.OnItemClickList
 
         /*viewModel.progressOfDownload.observe(this, Observer {
             it?.let {
-                showProgresOfDownloads(it)
+                showProgressOfDownloads(it)
             }
 
         })*/

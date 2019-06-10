@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="feed_title_text_size">20sp</dimen>
+    <dimen name="channel_image_size">60dp</dimen>
+    <dimen name="channel_tex_min_size">60sp</dimen>
+    <dimen name="favorite_feed_image_size">30dp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
 </resources>

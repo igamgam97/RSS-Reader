@@ -7,8 +7,8 @@ import com.example.rssanimereader.databinding.FeedItemRvBinding
 import com.example.rssanimereader.domain.entity.FeedItem
 
 class FeedRecyclerViewAdapter(
-        private var items: ArrayList<FeedItem>,
-        private var listener: OnItemClickListener
+    private var feeds: ArrayList<FeedItem>,
+    private var listener: OnItemClickListener
 ) : RecyclerView.Adapter<FeedRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -17,12 +17,12 @@ class FeedRecyclerViewAdapter(
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position], listener)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(feeds[position], listener)
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = feeds.size
 
     fun replaceData(items: ArrayList<FeedItem>) {
-        this.items = items
+        this.feeds = items
         notifyDataSetChanged()
     }
 
@@ -31,7 +31,7 @@ class FeedRecyclerViewAdapter(
     }
 
     class ViewHolder(private var binding: FeedItemRvBinding) :
-            RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(feed: FeedItem, listener: OnItemClickListener?) {
             binding.feed = feed

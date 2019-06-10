@@ -2,21 +2,23 @@ package com.example.rssanimereader.data.dataSource.webDS.webApi.web
 
 import android.annotation.SuppressLint
 import android.util.Xml
+import com.example.rssanimereader.data.dataSource.webDS.webApi.web.contracts.IFeedAndChannelParser
 import com.example.rssanimereader.domain.entity.ChannelItem
 import com.example.rssanimereader.domain.entity.FeedItem
-import com.example.rssanimereader.data.dataSource.webDS.webApi.web.contracts.IFeedAndChannelParser
+import com.example.rssanimereader.exception.FailedParseFeedAndChannelException
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.IOException
 import java.io.InputStream
+import java.lang.Exception
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class RSSRemoteDataParserI: IFeedAndChannelParser {
-    private var source: String? = null
+class RSSRemoteDataParserI : IFeedAndChannelParser {
+    private lateinit var source: String
 
     override fun parse(input: InputStream, source: String): Pair<ArrayList<FeedItem>, ChannelItem> {
         this.source = source
@@ -77,7 +79,7 @@ class RSSRemoteDataParserI: IFeedAndChannelParser {
             }
         }
         if (channelTitle != null && channelImageURl != null) {
-            val channel = ChannelItem(source!!, channelTitle, channelImageURl)
+            val channel = ChannelItem(source, channelTitle, channelImageURl)
 
             return Pair(episodes, channel)
         } else {
@@ -98,6 +100,7 @@ class RSSRemoteDataParserI: IFeedAndChannelParser {
         var subtitle: String? = null
         var link: String? = null
         var publishedDate: String? = null
+        // todo добавить для кэширования
         var tempLink: String? = null
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.eventType != XmlPullParser.START_TAG) {
@@ -125,12 +128,6 @@ class RSSRemoteDataParserI: IFeedAndChannelParser {
                         parser,
                         TAG_PUBLISHED
                     )
-                    // todo придумать как конверить нестандратные dates
-                    /*Log.d("bag", publishedDate)
-                    val temp = "Thu Dec 17 15:37:43 GMT+05:30 2015"
-                    val dateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
-                    val convetedData = dateFormat.parse(publishedDate)
-                    Log.d("bag",convetedData.toString())*/
                 }
 
                 TAG_ENCLOSURE -> tempLink = readEnclosure(parser)
@@ -138,7 +135,10 @@ class RSSRemoteDataParserI: IFeedAndChannelParser {
                 else -> skip(parser)
             }
         }
-        val currentDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val currentDate = if (publishedDate != null) formatDateToStandardDate(
+            publishedDate,
+            0
+        ) else SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
             .format(Calendar.getInstance().time)
             .toString()
 
@@ -151,12 +151,11 @@ class RSSRemoteDataParserI: IFeedAndChannelParser {
                 publishedDate,
                 false,
                 currentDate,
-                /*   currentDateandTime,*/
                 "",
                 false
             )
         } else {
-            throw IOException()
+            throw FailedParseFeedAndChannelException()
         }
     }
 
@@ -238,6 +237,24 @@ class RSSRemoteDataParserI: IFeedAndChannelParser {
         }
     }
 
+    // todo перетащить на уровень выше (один раз определеять стандарт даты)
+    private fun formatDateToStandardDate(date: String, numberPattern: Int = 0): String {
+        while (numberPattern <= dataFormats.size) {
+            try {
+                return SimpleDateFormat(
+                    standardDataFormat,
+                    Locale.ENGLISH
+                ).format(SimpleDateFormat(dataFormats[numberPattern], Locale.ENGLISH).parse(date)).toString()
+            } catch (exception: Exception) {
+                formatDateToStandardDate(date, numberPattern + 1)
+            }
+        }
+        return SimpleDateFormat(standardDataFormat, Locale.ENGLISH)
+            .format(Calendar.getInstance().time)
+            .toString()
+    }
+
+
     private companion object {
         val ns: String? = null
         const val TAG_FEED = "rss"
@@ -251,6 +268,10 @@ class RSSRemoteDataParserI: IFeedAndChannelParser {
         const val TAG_PUBLISHED = "pubDate"
         const val TAG__CHANNEL_TITLE = "title"
         const val TAG_ENCLOSURE = "enclosure"
+        val dataFormats =
+            arrayListOf("EEE, dd MMM yyyy HH:mm:ss", "yyyy-MM-dd HH:mm:ss", "dd MMM yyyy HH:mm:ss")
+
+        const val standardDataFormat = "yyyy-MM-dd HH:mm:ss"
     }
 
 

@@ -4,8 +4,7 @@ import com.example.rssanimereader.domain.entity.ChannelItem
 import com.example.rssanimereader.domain.entity.FeedItem
 
 
-
-interface IChannelAndFeedApi{
+interface IChannelAndFeedApi {
     fun getAllFeeds(whereClause: String? = null, whereArgs: Array<String>? = null): ArrayList<FeedItem>
     val count: Long
     fun insertFeeds(item: FeedItem): Long

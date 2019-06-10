@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
-import com.example.rssanimereader.data.dataSource.localDS.dbAPI.FeedAndChannelApi
 
 
 class ProvideContextApplication : Application() {
@@ -18,19 +17,12 @@ class ProvideContextApplication : Application() {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
         instance = this
-        dbConnection = FeedAndChannelApi(instance.applicationContext).open()
     }
 
 
     companion object {
         private lateinit var instance: ProvideContextApplication
-        private lateinit var dbConnection: FeedAndChannelApi
         fun applicationContext(): Context = instance.applicationContext
-        fun getDataBaseConnection() = dbConnection
-
-
     }
-
-
 
 }

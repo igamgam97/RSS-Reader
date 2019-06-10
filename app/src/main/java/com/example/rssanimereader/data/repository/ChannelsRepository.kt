@@ -1,16 +1,16 @@
 package com.example.rssanimereader.data.repository
 
-import com.example.rssanimereader.domain.entity.ChannelItem
-import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.data.dataSource.contracts.ILocalDS
 import com.example.rssanimereader.data.dataSource.contracts.IWebDS
 import com.example.rssanimereader.data.repository.contracts.IChannelRepository
+import com.example.rssanimereader.domain.entity.ChannelItem
+import com.example.rssanimereader.domain.entity.FeedItem
 import io.reactivex.Completable
 import io.reactivex.Single
 
 class ChannelsRepository(
-    val webDS: IWebDS,
-    val localDS: ILocalDS
+    private val webDS: IWebDS,
+    private val localDS: ILocalDS
 ) : IChannelRepository {
     override fun isExistChannel(channel: String): Boolean =
         localDS.isExistChannel(channel)
@@ -24,6 +24,6 @@ class ChannelsRepository(
     override fun getFeedsAndChannelFromWeb(linkChannel: String): Single<Pair<ArrayList<FeedItem>, ChannelItem>> =
         webDS.getFeedsAndChannelFromWeb(linkChannel)
 
-    override fun saveFeedsByChannel(data: Pair<ArrayList<FeedItem>, ChannelItem>):Completable
-            = localDS.saveFeedsByChannel(data)
+    override fun saveFeedsByChannel(data: Pair<ArrayList<FeedItem>, ChannelItem>): Completable =
+        localDS.saveFeedsByChannel(data)
 }

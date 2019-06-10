@@ -5,8 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +18,7 @@ import com.example.rssanimereader.presentation.view_model.CommunicateViewModel
 import com.google.android.material.snackbar.Snackbar
 
 
-class ChannelListFragment : BaseFragment(), ChannelRecyclerViewAdapter.OnItemClickListener{
+class ChannelListFragment : BaseFragment(), ChannelRecyclerViewAdapter.OnItemClickListener {
 
     private val channelRecyclerViewAdapter = ChannelRecyclerViewAdapter(arrayListOf(), this)
     private lateinit var viewModel: ChannelListViewModel

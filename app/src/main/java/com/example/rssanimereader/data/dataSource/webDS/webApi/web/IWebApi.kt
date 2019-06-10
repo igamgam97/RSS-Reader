@@ -2,16 +2,16 @@ package com.example.rssanimereader.data.dataSource.webDS.webApi.web
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import com.example.rssanimereader.domain.entity.ChannelItem
-import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.data.dataSource.webDS.webApi.web.contracts.IFeedAndChannelParser
 import com.example.rssanimereader.data.dataSource.webDS.webApi.web.contracts.IWebApi
+import com.example.rssanimereader.domain.entity.ChannelItem
+import com.example.rssanimereader.domain.entity.FeedItem
 import java.io.InputStream
 
-class IWebApi (
+class IWebApi(
     private val IFeedAndChannelParser: IFeedAndChannelParser,
     private val imageSaver: NewImageSaver
-) : IWebApi{
+) : IWebApi {
 
 
     override fun getFeedsAndChannelFromWeb(urlPath: String): Pair<ArrayList<FeedItem>, ChannelItem> {
@@ -29,7 +29,6 @@ class IWebApi (
             return BitmapFactory.decodeStream(it)
         }
     }
-
 
 
 }

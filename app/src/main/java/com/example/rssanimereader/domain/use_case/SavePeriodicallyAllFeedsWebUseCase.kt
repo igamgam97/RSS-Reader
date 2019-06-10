@@ -5,7 +5,6 @@ import com.example.rssanimereader.data.repository.FeedsRepository
 import com.example.rssanimereader.exception.NoInternetException
 import com.example.rssanimereader.util.NetManager
 import io.reactivex.Completable
-import java.io.IOException
 
 class SavePeriodicallyAllFeedsWebUseCase(
     private val feedsRepository: FeedsRepository,

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
 import com.example.rssanimereader.ProvideContextApplication
 import com.example.rssanimereader.data.dataSource.localDS.LocalDS
+import com.example.rssanimereader.data.dataSource.localDS.dbAPI.FeedAndChannelApi
 import com.example.rssanimereader.data.dataSource.settingsDS.SettingsDataSource
 import com.example.rssanimereader.data.dataSource.webDS.WebDS
 import com.example.rssanimereader.data.dataSource.webDS.webApi.web.IWebApi
@@ -19,7 +20,7 @@ import com.example.rssanimereader.util.NetManager
 object Injection {
 
     private val contextApplication = ProvideContextApplication.applicationContext()
-    private val dataBaseConnection = ProvideContextApplication.getDataBaseConnection()
+    private lateinit var dataBaseConnection: FeedAndChannelApi
     private lateinit var feedListViewModel: FeedListViewModel
     private lateinit var feedViewModel: FeedViewModel
     private lateinit var addChannelViewModel: AddChannelViewModel
@@ -31,9 +32,13 @@ object Injection {
 
     private lateinit var feedsRepository: FeedsRepository
     private lateinit var channelsRepository: ChannelsRepository
-    // todo опрокинуть подключение к бд
 
     //todo раскидать фабрику на несколько если будет время
+
+    private fun provideDataBaseConnection(): FeedAndChannelApi =
+        if (!Injection::dataBaseConnection.isInitialized) {
+            FeedAndChannelApi(contextApplication).open()
+        } else dataBaseConnection
 
     private fun provideWebDS(): WebDS =
         if (!Injection::webDS.isInitialized) {
@@ -46,7 +51,7 @@ object Injection {
 
     private fun provideLocalDS(): LocalDS =
         if (!Injection::localDS.isInitialized) {
-            localDS = LocalDS(dataBaseConnection)
+            localDS = LocalDS(provideDataBaseConnection())
             localDS
         } else localDS
 

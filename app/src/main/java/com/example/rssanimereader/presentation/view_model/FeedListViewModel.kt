@@ -19,7 +19,6 @@ class FeedListViewModel(
     private val getFeedsFromDBUseCase: GetFeedsFromDBUseCase,
     private val getFeedsFromWebUseCase: GetFeedsFromWebUseCase
 ) : ViewModel() {
-    //todo убрать lateinit var
     private val compositeDisposable = CompositeDisposable()
     val isLoading = ObservableBoolean(false)
     val isLoadingFromCache = ObservableBoolean(false)
@@ -36,7 +35,7 @@ class FeedListViewModel(
 
     fun onRefresh() {
         isLoading.set(true)
-        Log.d("bag","on refresh")
+        Log.d("bag", "on refresh")
         channelLink.get()?.let { it ->
 
             val newFeeds = ArrayList<FeedItem>()

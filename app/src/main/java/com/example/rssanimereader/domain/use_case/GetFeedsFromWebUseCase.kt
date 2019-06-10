@@ -1,12 +1,11 @@
 package com.example.rssanimereader.domain.use_case
 
-import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.data.repository.ChannelsRepository
 import com.example.rssanimereader.data.repository.FeedsRepository
+import com.example.rssanimereader.domain.entity.FeedItem
 import com.example.rssanimereader.exception.NoInternetException
 import com.example.rssanimereader.util.NetManager
 import io.reactivex.Observable
-import java.io.IOException
 
 class GetFeedsFromWebUseCase(
     private val feedsRepository: FeedsRepository,

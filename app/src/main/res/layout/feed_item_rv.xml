@@ -33,16 +33,16 @@
                     tools:text="Modern Android App"/>
 
             <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/favorite_feed_image_size"
+                    android:layout_height="@dimen/favorite_feed_image_size"
                     android:layout_weight="1"
                     android:id="@+id/favorite_feed_image"
                     android:src="@drawable/ic_favorite_feed"
                     android:contentDescription="@string/channelImage"
                     android:visibility="@{feed.itemFavorite ? View.VISIBLE : View.GONE}"/>
             <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/favorite_feed_image_size"
+                    android:layout_height="@dimen/favorite_feed_image_size"
                     android:layout_weight="1"
                     android:id="@+id/no_favorite_feed_image"
                     android:src="@drawable/ic_no_favorite_feed"

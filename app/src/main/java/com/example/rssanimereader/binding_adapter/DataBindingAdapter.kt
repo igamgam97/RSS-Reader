@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.rssanimereader.adapter.util.SwipeItemTouchHelperCallback
+import com.example.rssanimereader.domain.entity.FeedItem
+import com.example.rssanimereader.util.FeedFormatter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
@@ -96,8 +98,9 @@ object SimpleBindingAdapter {
     @SuppressLint("SetJavaScriptEnabled")
     @BindingAdapter("android:loadData")
     @JvmStatic
-    fun loadDataFromHtml(webView: WebView, html: String) {
+    fun loadDataFromHtml(webView: WebView, feed:FeedItem) {
         /*webView.settings.loadWithOverviewMode = true*/
+
         webView.settings.javaScriptEnabled = true
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
@@ -118,9 +121,10 @@ object SimpleBindingAdapter {
                 webView.loadUrl(code)
             }
         }
+        val formattedHtml = FeedFormatter().generateHtml(feed)
         webView.setBackgroundColor(Color.parseColor("#424242"))
         webView.loadData(
-            "<style>img{display: inline;height: auto;max-width: 100%;}</style>$html",
+            "<style>img{display: inline;height: auto;max-width: 100%;}</style>$formattedHtml",
             "text/html",
             "UTF-8"
         )

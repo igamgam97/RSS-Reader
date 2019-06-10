@@ -6,10 +6,10 @@ import java.util.regex.Pattern
 
 
 object SaveImageForCashPage {
-    operator fun invoke(itemDesc: String,name:String) : Uri? {
+    operator fun invoke(itemDesc: String, name: String): Uri? {
         val link = getURLFromTagImage(itemDesc)
         return getURLFromTagImage(itemDesc)?.let {
-            ImageSaver.saveImageToInternalStorage(it,name)
+            ImageSaver.saveImageToInternalStorage(it, name)
         }
     }
 

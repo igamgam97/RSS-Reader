@@ -23,7 +23,7 @@ object ImageSaver {
         }
     }
 
-    fun saveImageToInternalStorage(urlPath: String,name: String): Uri {
+    fun saveImageToInternalStorage(urlPath: String, name: String): Uri {
         val bitmap = downloadImage(urlPath)
         val wrapper = ContextWrapper(ProvideContextApplication.applicationContext())
         var file = wrapper.getDir("Images", MODE_PRIVATE)

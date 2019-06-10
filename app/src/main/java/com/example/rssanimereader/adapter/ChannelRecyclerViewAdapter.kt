@@ -7,8 +7,8 @@ import com.example.rssanimereader.databinding.ChannelItemRvBinding
 import com.example.rssanimereader.domain.entity.ChannelItem
 
 class ChannelRecyclerViewAdapter(
-        private var items: ArrayList<ChannelItem>,
-        private var listener: OnItemClickListener
+    private var channels: ArrayList<ChannelItem>,
+    private var listener: OnItemClickListener
 ) : RecyclerView.Adapter<ChannelRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -17,22 +17,22 @@ class ChannelRecyclerViewAdapter(
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(items[position], listener)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(channels[position], listener)
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = channels.size
 
     fun replaceData(items: ArrayList<ChannelItem>) {
-        this.items = items
+        this.channels = items
         notifyDataSetChanged()
     }
 
     fun remove(position: Int) {
-        items.removeAt(position)
+        channels.removeAt(position)
         notifyItemRemoved(position)
     }
 
     fun add(position: Int, item: ChannelItem) {
-        items.add(position, item)
+        channels.add(position, item)
         notifyItemInserted(position)
     }
 
@@ -42,7 +42,7 @@ class ChannelRecyclerViewAdapter(
 
 
     class ViewHolder(private var binding: ChannelItemRvBinding) :
-            RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(channel: ChannelItem, listener: OnItemClickListener?) {
             binding.channel = channel
